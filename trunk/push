@@ -1,0 +1,127 @@
+#!/bin/sh -e
+# $Id: push,v 1.74 2008/11/13 22:17:46 abs Exp $
+
+NHOSTS="abs@muon.mono.org root@derek.absd.org abs@soldoutcity.com root@jeeves.deurmekaar.com"
+args=$(getopt Na:hloOqrs:ntv $*)
+if [ $? != 0 ]; then
+    opt_h=1
+fi
+set -- $args
+
+ROOT=/files/netbsd
+HOSTS=
+
+while [ $# != 0 ]; do
+    case "$1" in
+	-a )	opt_a=$2 ; shift ;;	# Set arch
+	-h )	opt_h=1 ;;		# Help
+	-l )	opt_l=1 ;;		# Loop
+	-n )	opt_n=1 ;;		# No action
+	-o )	opt_o=1 ;;		# Push to other OS/Arch
+	-O )	opt_O=1 ;;		# Work around for old rsync (no -y)
+	-q )	opt_q=1 ;;		# Quick
+	-r )	opt_r=1 ;;		# Receive
+	-s )	opt_s=$2 ; shift ;;	# Include src dirs
+	-t )	opt_t=1 ;;		# Use tar
+	-N )	HOSTS="$NHOSTS" ;;	# push to NHOSTS
+	-v )	opt_v=1 ;;		# Verbose
+	-- )	shift ;  break ;;
+	-* )	echo "Unknown argument: $1"; exit 1;;
+	*)	break;;
+    esac
+    shift
+done
+if [ -z "$HOSTS" ] ; then
+    HOSTS="$HOSTS $@"
+fi
+if [ -n "$opt_h" -o -z "$HOSTS" ]; then
+    cat << END
+Usage: push [opts] host [host2...]
+opts	-a arch Push comma separated arch list
+	-h	This help
+	-l	Loop
+	-n	No action
+	-o	Push to other OS/Arch
+	-q	Quick (exclude pkgsrc)
+	-r	Receive (pull)
+    	-s arch Push comma separated srcdir list
+	-t	Use tar, not rsync
+END
+    exit
+fi
+
+echo -n "Check:"
+uname=$(uname -sm)
+cd /
+for h in $HOSTS; do
+    echo -n " $h"
+    remote_uname=$(ssh $h "mkdir -p $ROOT ; uname -sm") || true
+    if [ -z "$remote_uname" ] ; then
+	echo " (non responsive)"
+	continue
+    elif [ "$remote_uname" != "$uname" ]; then
+	echo " (\"$uname\" vs \"$remote_uname\" - setting -o)"
+	opt_o=1
+    fi
+    OKHOSTS="$OKHOSTS $h"
+done
+echo
+HOSTS="$OKHOSTS"
+
+PARTIALDIR=.rsync-partial
+EXCL="$PARTIALDIR work OLD/"
+
+if [ -n "$opt_q" ] ; then
+    ROOT=$ROOT/pkgsrc
+    EXCL="$EXCL distfiles/" # XXX fix to exclude others
+else
+    EXCL="$EXCL export/ pkgsrc/distfiles/ arch/i386/destdir/ arch/i386/release/"
+
+    if [ -z "$opt_s" ] ; then
+	EXCL="$EXCL $(ls $ROOT|egrep -v '^(arch|pkgsrc)$' || true)"
+    fi
+
+    if [ -n "$opt_o" ] ; then
+	EXCL="$EXCL pkgsrc/packages/ arch/"
+    fi
+
+fi
+
+RSYNC="rsync -avH --delete-after --partial --partial-dir=$PARTIALDIR"
+EXCL="$(echo $EXCL|tr ' ' '\n'|sed 's/^/ --exclude /')"
+if [ -z "$opt_O" ]; then
+    RSYNC="$RSYNC -y"
+fi
+if [ -n "$opt_n" ]; then
+    RSYNC="$RSYNC -n"
+fi
+
+cd $ROOT
+while true ; do
+    for h in $HOSTS; do
+	echo "$h: $ROOT"
+	if [ -n "$opt_t" ] ; then
+	    if [ -n "$opt_n" ] ; then
+		echo tar cfvz - $EXCL .
+	    elif [ -n "$opt_r" ] ; then
+		ssh $h "cd $ROOT ; tar cfvz - $EXCL ." | tar xfpz -
+	    else
+		tar cfvz - $EXCL . | ssh $h "mkdir -p $ROOT && cd $ROOT && tar xfpz -"
+	    fi
+	else
+	    if [ -n "$opt_r" ] ; then
+		CMD="$RSYNC $EXCL $h:$ROOT/ $ROOT/"
+	    else
+		CMD="$RSYNC $EXCL $ROOT/ $h:$ROOT/"
+	    fi
+	    if [ -n "$opt_n" -o -n "$opt_v" ] ; then
+		echo $CMD
+	    fi
+	    $CMD | awk -v p="$h: " '{{printf p"%s \r",$0}if(!/\/$/){printf "\n"}}'
+	fi
+    done
+    if [ -z "$opt_l" ] ; then
+	break
+    fi
+    sleep 300
+done

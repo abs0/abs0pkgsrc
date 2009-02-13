@@ -1,0 +1,66 @@
+#!/bin/sh
+# $Id: onall,v 1.6 2007/06/04 13:02:01 abs Exp $
+
+# Run a command on all hosts listed in rconfig hosts.conf
+HOSTS_CONF=/files/rconfig/hosts.conf
+
+args=$(getopt QLhlo:rv $*)
+if [ $? != 0 ]; then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-h )	opt_h=1		;;
+	-l )	opt_l=1		;;
+	-o )	opt_o=$2; shift ;;
+	-Q )	opt_Q=-Q	;;
+	-r )	opt_r=1		;;
+	-v )	opt_v=1 	;;
+	-- )	shift ; break	;;
+    esac
+    shift
+done
+
+if [ -n "$opt_h" ] ; then
+    cat << END
+Usage: onall [opts] command
+[opts]	-h	This help
+	-r	Remote - exclude local host
+	-l	List hosts
+	-o dir	Output results into each dirs
+	-v	Verbose
+
+onall runs the specified command on all rconfig hosts
+END
+    exit
+fi
+
+fatal()
+    {
+    echo $@ >&2
+    exit 1
+    }
+
+if [ ! -f $HOSTS_CONF ] ; then
+    fatal "$HOSTS_CONF not found"
+fi
+
+if [ -n "$opt_r" ]; then
+    host=$(hostname -s)
+    HOSTS=$(sed 's/#.*//' <$HOSTS_CONF | awk -v h=$host '{if($1!=h){print $1}}')
+else
+    HOSTS=$(sed 's/#.*//' <$HOSTS_CONF | awk '{print $1}')
+fi
+if [ -n "$opt_l" ]; then
+    echo $HOSTS
+    exit
+fi
+OPTS="$opt_Q -S all -c"
+if [ -n "$opt_o" ] ; then
+    OPTS="-o $opt_o $OPTS"
+fi
+if [ -n "$opt_v" ] ; then
+    echo shmux $OPTS "$*" $HOSTS
+fi
+shmux $OPTS "$*" $HOSTS

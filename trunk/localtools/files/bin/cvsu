@@ -1,0 +1,83 @@
+#!/bin/sh -e
+# $Id: cvsu,v 1.4 2008/09/06 13:13:01 abs Exp $
+
+# Simple script to cvs update various modules from cvs.netbsd.org
+
+fatal()
+    {
+    echo $@ >&2
+    exit 1
+    }
+
+umask 002
+
+if [ -d /files/netbsd ];then
+    base=/files/netbsd
+elif [ -d /home/netbsd ];then
+    base=/home/netbsd
+else
+    fatal "No /files/netbsd, nor /home/netbsd - aborting"
+fi
+
+args=$(getopt d:hl $*)
+if [ $? != 0 ]; then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-d )	base=$2; shift ;;
+	-h )	opt_h=1 ;;
+	-l )	opt_l=1 ;;
+	-- )	shift ; break ;;
+    esac
+    shift
+done
+
+cvs_cmd="cvs -q up -d -P -I ! -I CVS"
+log=$base/update.log
+
+if [ -n "$opt_h" ] ; then
+    cat << END
+Usage: cvsu [opts] [dirs]
+[opts]	-d dir	Set basedir to -d ($base)
+	-h	This help
+	-l	List logfile
+
+cvsu runs '$cvs_cmd' in subdirectories of $base
+generating log '$log'. The log is listed minus U or P lines
+END
+    exit
+fi
+if [ -n "$opt_l" ] ; then
+    egrep '^([^UP] |>>)' $log
+    exit
+fi
+
+if [ $# != 0 ];then
+    FILES=$@
+else
+    cd $base
+    FILES="$(echo */CVS | sed 's:/CVS::g' | sed 's/pkgsrc[^ ]*//g')"
+    # Ensure pkgsrc is at the front
+    if [ -d pkgsrc/wip ] ; then
+	FILES="pkgsrc/wip $FILES"
+    fi
+    if [ -d pkgsrc ] ; then
+	FILES="pkgsrc $FILES"
+    fi
+    echo $FILES
+fi
+
+rm -f $log
+for d in $FILES ; do
+    cd $base/$d
+    (echo ">> $d" && $cvs_cmd && touch $log.ok ) | tee -a $log
+done
+egrep '^([^UP] |>>)' $log
+if [ ! -f $log.ok ] ; then
+    fatal "cvs update failed"
+fi
+rm -f $log.ok
+date
+exit 0

@@ -1,0 +1,131 @@
+# $Id: pkgchk.mono,v 1.116 2008/05/10 19:46:43 abs Exp $
+#
+# Software for installation on mono.org cluster
+
+# First priorities
+devel/cpuflags			*
+pkgtools/pkg_chk		*		# to use this file
+local/localtools		*		# Useful tools
+shells/standalone-tcsh		NetBSD		# Login shell
+shells/zsh			*		# Login shell
+net/srsh			*		# (xfermail)
+misc/screen			*		# Text sessions
+pkgtools/pkglint		*		# pkgsrc admin
+security/sudo			*		# root access
+pkgtools/pkg_alternatives	*		# java wrapper etc
+
+# Apache2 and related packages
+www/apache22			*
+
+# Mail delivery/webmail
+mail/procmail			*
+mail/spamassassin		*
+mail/p5-Mail-SPF-Query		*
+mail/exim			*
+mail/roundcube			webmail		# Webmail
+mail/squirrelmail		*
+
+#	Server fun
+databases/postgresql83		*
+databases/postgresql83-client	*
+net/mrstat			*
+mail/majordomo			*
+security/sudo			*
+mail/dovecot			*
+net/openvpn			*
+
+www/ap-php			*
+databases/php-pgsql		*		# must be after postgresql83
+mail/fetchmail			*
+
+# Apache
+www/apachetop			*
+
+#	Terribly bloody useful
+#
+editors/joe			*
+editors/pico			*		# Simple editor
+mail/alpine			*		# Email client
+mail/pine-pgp-filters		*		# gpg etc pine filters
+net/mtr				*
+net/netcat			*
+security/msu			*
+security/msudir			*
+sysutils/pstree			*
+sysutils/rconfig		*
+sysutils/shmux			*
+www/elinks			*
+
+#	Perl modules
+archivers/p5-Archive-Zip	*
+converters/p5-MIME-Base64	*
+databases/p5-DBD-CSV		*		# flippy
+databases/p5-DBD-postgresql	*
+devel/p5-Class-ObjectTemplate	*
+devel/p5-Config-IniFiles	*
+devel/p5-Date-Manip		*		# fuzzy
+devel/p5-IO-Stty		*		# mono::bot
+devel/p5-IO-Tty			*		# mono::bot
+devel/p5-Perl-Tidy		*		# Reformat perl 
+mail/p5-MIME-Lite		*		# stig
+mail/p5-MIME-tools		*
+math/p5-Number-Latin		*		# used by link cgi script
+security/p5-Digest-MD5		*
+security/p5-Digest-SHA1		*		# wanted by live
+textproc/p5-Text-CSV-Hash	*
+textproc/p5-Text-Substitute	*		# Used by many cgi & systemconf
+textproc/p5-XML-Parser		*		# wanted by live
+textproc/p5-XML-RSS		*		# wanted by norm
+textproc/p5-XML-Simple		*		# worm uses for TV listings
+textproc/p5-XML-Xerces		*
+time/p5-Time-HiRes		*
+www/p5-CGI-Minimal		*
+www/p5-FCGI			*
+www/p5-HTML-Template		*		# clout for web page script
+www/p5-URI			*
+www/p5-libwww			*		# q*
+
+
+#	Handy, but not earth shattering
+#
+archivers/unzip			*
+archivers/zip			*
+benchmarks/bonnie++		*
+benchmarks/ttcp			*
+converters/unix2dos		*
+devel/dmalloc			*
+editors/bvi			*
+editors/nvi			*
+editors/vilearn			*
+games/frotz			*
+games/nethack-tty		*
+graphics/aview			*
+graphics/optipng		*
+mail/mutt			*
+misc/figlet			*
+misc/figlet-fonts		*
+net/GeoIP			*
+net/bmon			*		# Simplistic net traffic
+net/dlint			*
+net/flodo			*		# Simplistic net traffic
+net/fping			*		# Fast/parallel ping
+net/iftop			*		# Simplistic net traffic
+net/ipw				*
+net/nmap			*		# Port mapping/OS fingerprint
+net/rsync			*
+net/wget			*
+pkgtools/pkgdiff		*
+pkgtools/pkgsurvey		*		# pkgsrc admin tool
+pkgtools/url2pkg		*
+security/gnupg			*
+shells/bash			*
+sysutils/dirvish		*		# Remote backup
+sysutils/rename			*	
+sysutils/smartmontools		i386		# Monitor disks
+textproc/ispell-british		*
+www/htmlfix			*
+www/wdg-validate		*
+
+#	Clutter
+#
+www/lynx			*

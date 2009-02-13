@@ -1,0 +1,43 @@
+#!/bin/sh -e
+# $Id: rcsvi,v 1.1 2005/06/21 20:21:40 abs Exp $
+# Note: Does not handle filenames with spaces - see 'XXX: spaces break'
+
+fatal()
+    {
+    echo "$@" >&2
+    exit 1
+    }
+
+if [ "$1" = -i ] ; then
+    RCS_INIT=1
+    shift
+fi
+if [ $# = 0 ] ; then
+    echo "Usage: rcsvi [-i] [filenames]"
+    echo "-i : Create RCS subdirectory and ,v file if needed"
+    exit
+fi
+for orig ; do
+    f=$orig
+    loop=0
+    while [ -h $f ] ; do
+	f=$(ls -l $f | awk '{print $NF}')	# XXX: spaces break
+	loop=$(($loop + 1))
+	[ $loop = 20 ] && fatal "Symlink loop for $orig: aborting"
+    done
+    dir=$(dirname $f)
+    file=$(basename $f)
+    if [ ! -f $dir/RCS/$file,v ] ; then
+	[ -n "$RCS_INIT" ] || fatal "Use -i to create $dir/RCS for $f"
+	mkdir -p $dir/RCS
+	ci -u "-t-$orig" $f
+    fi
+    newlist="$newlist $f"			# XXX: spaces break
+done
+
+# XXX: spaces break this
+rcsdiff -uq $newlist || fatal "** File does not match checked in version *"
+co -l $newlist
+vi $newlist
+rcsdiff -u $newlist || true
+ci -u $newlist

@@ -1,0 +1,26 @@
+#!/bin/sh
+# $Id: erasespace,v 1.1 2005/06/21 20:21:40 abs Exp $
+
+data()
+    {
+    while cat DATA ; do
+        count=$(($count + ${SIZE}))
+        printf "Pass $loop, ${count}M\r" >&2
+    done
+    }
+SIZE=8
+loop=0
+while true ; do
+    loop=$(($loop + 1))
+    echo Start $loop
+    dd if=/dev/urandom of=DATA bs=${SIZE}m count=1 2> /dev/null
+    count=0
+    data > SPACE
+    echo
+    rm SPACE
+    sync
+    sleep 5
+    sync
+    sleep 5
+done
+

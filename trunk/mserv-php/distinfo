@@ -1,0 +1,11 @@
+$NetBSD$
+
+SHA1 (mserv-php-090.tgz) = 12f3cc4dc70c0c923bfcf3fb65cfd0195f112cef
+RMD160 (mserv-php-090.tgz) = 9e4dbc38943f3203beaa25418694dc104ad4808a
+Size (mserv-php-090.tgz) = 15374 bytes
+SHA1 (patch-aa) = c1cce58365d118e9f964fa97967a924fb3034701
+SHA1 (patch-ab) = 698303fb9f7c3714739216ffa57469b988c6341c
+SHA1 (patch-ac) = 4447db9ae68e2d210a8954d7f4a534b073a2b4eb
+SHA1 (patch-ad) = 78112ffb95d276ea9ac17697adc21ba2f5c75a58
+SHA1 (patch-ae) = 496c26d0a7332f89c8cf356e81f2b611cc0afa40
+SHA1 (patch-af) = 99d97e786d893f7bbee8db4ff9ded55fc0156960

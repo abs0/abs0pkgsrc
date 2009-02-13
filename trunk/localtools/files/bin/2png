@@ -1,0 +1,168 @@
+#!/usr/pkg/bin/perl
+# $Id: 2png,v 1.15 2008/01/08 15:10:34 abs Exp $
+
+use strict;
+use warnings;
+use Getopt::Std;
+use File::Find;
+use File::Copy;
+
+my %opt;
+my @match = qw(bmp gif tiff tif);
+
+if ( !getopts( 'fhknq9rstv', \%opt ) || $opt{h} || !@ARGV ) {
+    print "Usage: 2png [opts] [files]
+opts:	-9 Try much harder to compress
+	-f Force conversion even if .png version already present
+	-h This help
+	-k Keep original file (defaults to removing)
+	-n No action - just list the files that would be changed
+	-q Quiet (do not display anything if files unchanged)
+	-r Recursively change files ending (@match) (non case)
+	-s Shrink down to 1000x700 or less
+	-t Keep original timestamps
+	-v Verbose
+
+2png uses ImageMagick to convert the files specified to .png (if
+not already in that format), then optipng to optimise the size.
+The resultant file should be pixel for pixel identical to the
+source.
+
+";
+    exit;
+}
+
+my ( $total_oldsize, $total_newsize, @todo_list );
+my $match = '\.(' . join( '|', @match ) . ')$';
+my $getfilecount = 1;
+
+if ( $opt{r} ) { find( \&wanted, @ARGV ); }    # Sets @todo_list
+else           { @todo_list = @ARGV; }
+foreach my $file (@todo_list) { convert2png($file); }
+
+if ( $total_newsize
+    && ( @ARGV > 1 || ( $opt{q} && $total_oldsize != $total_newsize ) ) )
+{
+    printf(
+        "%s -> %s (%s %.1f%%)\n",
+        size($total_oldsize), size($total_newsize),
+        size( $total_oldsize - $total_newsize ),
+        100 - $total_newsize * 100 / $total_oldsize
+    );
+}
+
+sub convert2png {
+    my ($file) = @_;
+
+    verbose("$file\n");
+    progress( $file . ': ' );
+
+    return if $file =~ m#(/|^)(\._[^/]+$|\.AppleDouble/)#;
+    my $oldsize  = -s $file;
+    my $oldmtime = ( stat($file) )[9];
+    if ( !$oldmtime ) {
+        progress("(not found)\n");
+        return;
+    }
+    if ( !$oldsize ) {
+        progress("(zero length)\n");
+        return;
+    }
+    progress( size($oldsize) );
+
+    my $finalfile = $file;
+    my $tmpfile   = $file;
+
+    if ( $file !~ /\.png$/i || $opt{s} ) {
+        $finalfile =~ s/(\.[^.]*|)$/.png/;
+        if ( $finalfile ne $file && -f $finalfile && !$opt{f} ) {
+            progress(" $finalfile already present\n");
+            return;
+        }
+        open( IDENTIFY, "identify '$file'|" ) || die("identity failed: $!");
+        my @identify = <IDENTIFY>;
+        close(IDENTIFY);
+        if ( @identify > 1 ) {
+            progress( ' contains ' . scalar(@identify) . " images\n" );
+            return;
+        }
+        my @convert = qw(convert);
+        push( @convert, qw(-geometry 1000x700>) ) if $opt{s};
+        $tmpfile = filter( $file, $file, @convert );
+        progress( ' -> ' . size( -s $tmpfile ) );
+    }
+
+    my $optipng = 'optipng -q';
+    if   ( $opt{9} ) { $optipng .= " -o 7"; }
+    else             { $optipng .= " -o 5"; }
+    system("$optipng '$tmpfile'") && exit 1;
+
+    utime $oldmtime, $oldmtime, $tmpfile if $opt{t};
+    my $newsize = -s $tmpfile;
+    $total_oldsize += $oldsize;
+    $total_newsize += $newsize;
+
+    if ( $newsize == $oldsize ) { progress(" (no change)\n"); }
+    else {
+        progress(
+            sprintf(
+                " -> %s - %.1f%%\n",
+                size( -s $tmpfile ),
+                100 - $newsize * 100 / $oldsize
+            )
+        );
+        if ( !$opt{n} && $tmpfile ne $file ) {
+            safe_move( $tmpfile, $finalfile );
+        }
+    }
+    safe_unlink($tmpfile) if $tmpfile ne $file && -f $tmpfile;
+    if ( !$opt{n} && !$opt{k} && $file ne $finalfile && -f $file ) {
+        safe_unlink($file);
+    }
+}
+
+sub filter {
+    my ( $orig, $tmpfile, @filter ) = @_;
+    my $newfile = getfilename();
+
+    verbose("@filter $tmpfile $newfile\n");
+    open( FILTER, '-|', @filter, $tmpfile, $newfile );
+    <FILTER>;    # Do something here
+    close(FILTER);
+    die("'@filter' did not write $newfile") if !-s $newfile;
+    safe_unlink($tmpfile) if $tmpfile ne $orig;
+    $newfile;
+}
+
+sub getfilename {
+    my ($ext) = @_;
+    $ext ||= '.png';
+    "/tmp/2png_tmp_" . $$ . "_" . ( ++$getfilecount ) . "$ext";
+}
+
+sub progress { $opt{q} || print @_; }
+
+sub safe_move {
+    my ( $from, $to ) = @_;
+    verbose("move($from, $to)");
+    move( $from, $to ) || die("move($from, $to) failed: $!");
+}
+
+sub safe_unlink {
+    my ($file) = @_;
+    verbose("unlink($file)");
+    unlink($file) || die("unlink($file) failed: $!");
+}
+
+sub size {
+    my ($size) = @_;
+    if    ( $size > 1024 * 1024 ) { sprintf( '%.1fM', $size / 1024 / 1024 ); }
+    elsif ( $size > 1024 )        { sprintf( '%.1fK', $size / 1024 ); }
+    else                          { $size; }
+}
+
+sub verbose { $opt{v} && print @_; }
+
+sub wanted {
+    push( @todo_list, $File::Find::name ) if /$match/;
+}

@@ -1,0 +1,378 @@
+#!/bin/sh -e
+# $Id: pkg_update,v 1.92 2008/07/14 14:43:37 abs Exp $
+PATH=/usr/pkg/sbin:/usr/pkg/bin:/usr/sbin:/sbin:$PATH
+PKGSRC=/pkgsrc
+PKG_UPDATE_SPOOL=/var/run/pkg_update
+
+umask 022
+
+if [ $(uname) != NetBSD ] ; then
+    MAKE=bmake
+else
+    MAKE=make
+fi
+
+orig_args="$@"
+args=$(getopt bhklrsuvD:IU:P: $*)
+if [ $? != 0 ]; then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-D )    opt_D="$2" ; shift;;	# Set extra defines for pk_chk
+	-I )    opt_I=1 ;;		# Internal flag - install from stream
+	-P )    opt_P="$2" ; shift;;	# Set packages dir
+	-U )    opt_U="$2" ; shift;;	# Set extra undefines for pk_chk
+	-b )	opt_b=-b ;;		# Binary
+	-h )	opt_h=1 ;;		# Help
+	-k )	opt_k=-k ;;		# Keep going
+	-l )	opt_l=1 ;;		# List
+	-r )	opt_r=-r ;;		# Force remove before install
+	-s )	opt_s=-s ;;		# Source (default)
+	-u )	opt_u=1 ;;		# Run cvs Update
+	-v )	opt_v=-v ;;		# Verbose
+	-- )	shift ;  break ;;
+	-* )	echo "Unknown argument: $1"; exit 1;;
+	*)	break;;
+    esac
+    shift
+done
+if [ -n "$opt_h" ]; then
+    cat << END
+Usage: pkg_update [opts] [hosts]
+opts	
+	-D def	Set extra defines for pkg_chk
+	-P dir	Set packages dir
+	-U def	Unset extra defines for pkg_chk
+	-b	Use binary packages
+	-h	This help
+	-k	Keep going on errors (for -b)
+	-l	List packages that would be copied/installed (only for remote)
+	-r	Rotate /usr/pkg to /usr/OLDpkg
+	-u    	Run cvs Update
+	-v    	Verbose
+
+END
+    exit
+fi
+
+if [ $(id -u) != 0 ] ; then
+    if [ -n "$opt_u" ] ; then
+	cvsu pkgsrc pkgsrc/wip
+	if [ -f /usr/pkg/sbin/download-vulnerability-list ] ; then
+	    sudo -H env FETCH_PROTO=http download-vulnerability-list  >/dev/null
+	fi
+    fi
+    exec sudo -H $0 $orig_args "$@"
+fi
+
+handle_opt_r()
+    {
+    if grep -q '^[^#]*/emul/linux/proc' /etc/fstab ; then
+	LINUX_PROC_MOUNT=1
+	umount -f /emul/linux/proc || true
+    fi
+    echo rm -rf /usr/OLDpkg
+    rm -rf /usr/OLDpkg
+    sync	# Delay as long as possible before removing live packages
+    mkdir -p /usr/OLDpkg/db
+    if [ -d /usr/pkg ] ; then
+	echo mv /usr/pkg /usr/OLDpkg
+	mv /usr/pkg /usr/OLDpkg
+    fi
+    mkdir -p /usr/OLDpkg/db
+    [ -d /var/db/pkg ]	    && mv /var/db/pkg /usr/OLDpkg/db
+    [ -d /var/db/pkg.refcount ] && mv /var/db/pkg.refcount /usr/OLDpkg/db
+    if [ "$LINUX_PROC_MOUNT" = 1 ] ; then
+	mkdir -p /usr/pkg/emul/linux/proc
+	mkdir -p /emul
+	ln -sf /usr/pkg/emul/linux /emul/linux
+	mount /emul/linux/proc
+    fi
+    }
+
+determine_PKGBINDIR()
+    {
+    if [ -n "$opt_P" ]; then
+	PKGBINDIR=$opt_P/All
+    elif [ -d /pkgsrc/pkgtools/pkg_chk ] ; then
+	PKGBINDIR=$(show_var PACKAGES)
+	# XXX Ugly hack for when cpuflags not installed - just try to
+	# find any directory which matches
+	if [ ! -d $PKGBINDIR ] ; then
+	    echo "* Unable to locate $PKGBINDIR"
+	    PKGBINDIR=$(echo $PKGBINDIR* | sed 's/ .*//')
+	    echo "* Using $PKGBINDIR"
+	fi
+	PKGBINDIR=$PKGBINDIR/All
+    else
+	PKGBINDIR=.
+    fi
+    }
+
+fatal()
+    {
+    echo $* >&2
+    exit 1
+    }
+
+install_from_stream()
+    {
+    cd $PKG_UPDATE_SPOOL
+    echo -n " (read)" 
+    pax -r $opt_v
+    echo -n " (install)" 
+
+    if [ -n "$opt_r" ] ; then
+	handle_opt_r
+    else
+	pkg_add -uf pkg_chk
+	pkg_chk -Brb -C pkgchk.conf -P $(pwd)
+    fi
+
+    pkg_add *.t?z
+    postrun
+    cd /
+    rm -rf $PKG_UPDATE_SPOOL
+    echo " Done"
+    }
+
+pkg_check_install()
+    {
+    PKGNAME=$1
+    PKGDIR=$2
+    CHECKFILE=$3
+    if [ ! -x $CHECKFILE ]  ; then
+	cd $PKGSRC/$PKGDIR
+	if [ -n "$opt_b" ]; then
+	    echo "update $PKGNAME from $PKGBINDIR..."
+	    if [ -d $PKGBINDIR ] ; then
+		RECENT=$(ls $PKGBINDIR | grep ^$PKGNAME | tail -1)
+		if [ -n "$RECENT" ] ; then
+		    echo pkg_add $PKGBINDIR/$RECENT
+		    pkg_add $PKGBINDIR/$RECENT
+		    if [ ! -x $CHECKFILE ]  ; then
+			fatal "$CHECKFILE not found after install"
+		    fi
+		else
+		    fatal "Unable to find any $PKGNAME"
+		fi
+	    else
+		fatal "Unable to locate dir '$PKGBINDIR'"
+	    fi
+	fi
+	if [ -n "$LOG" ] ; then
+	    if [ ! -x $CHECKFILE ] && ! ($MAKE clean && $MAKE update) \
+						>$LOG 2>&1 < /dev/null ; then
+		cat $LOG
+		exit 1
+	    else
+		echo "build $PKGNAME..."
+		($MAKE clean && $MAKE update) || exit 1
+	    fi
+	fi
+    fi
+    }
+
+postrun()
+    {
+    # Ensure we have the latest versions
+    cp /usr/pkg/share/examples/rc.d/* /etc/rc.d
+
+    if [ -x /usr/pkg/bin/update-config ] ; then
+	/usr/pkg/bin/update-config
+    fi
+    }
+
+show_var()
+    {
+    cd /pkgsrc/pkgtools/pkg_chk
+    ${MAKE} show-var VARNAME=$1
+    }
+
+stream_to_remote_hosts()
+    {
+    PKGCHK_CONF=$(show_var PKGCHK_CONF)
+    if [ -z ${PKGCHK_CONF} ] ; then
+	PKGCHK_CONF=$(show_var PKGSRCDIR)/pkgchk.conf
+    fi
+    cd $PKGBINDIR
+    HOST=$(hostname -s)
+    for h; do
+	echo -n "$h: "
+	PKGLIST=$(pkg_chk -b -l -U $HOST,/etc/X11/XF86Config -D $h -P $PKGBINDIR || echo 'FAILED')
+	case "$PKGLIST" in
+	    *FAILED*)
+		echo "pkg_chk -b -l -U $HOST,/etc/X11/XF86Config -D $h -P $PKGBINDIR failed:"
+		echo "$PKGLIST"
+		exit 1 ;;
+	esac
+	if [ -n "$opt_l" ] ; then
+	    echo $PKGLIST
+	else
+	    echo -n " (transfer)"
+	    ssh $h "rm -rf $PKG_UPDATE_SPOOL ; mkdir -p $PKG_UPDATE_SPOOL"
+	    scp /pkgsrc/local/pkg_update $h:$PKG_UPDATE_SPOOL/pkg_update
+	    scp $PKGCHK_CONF $h:$PKG_UPDATE_SPOOL/pkgchk.conf
+	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkg_update -I $opt_r $opt_v
+	fi
+    done
+    }
+
+if mount | grep -q ' /tmp .*noexec' ; then
+    export PKG_TMPDIR=/var/run
+fi
+
+if [ -n "$opt_I" ]; then
+    install_from_stream
+    exit
+fi
+
+if [ ! -d $PKGSRC ];then
+    case $0 in
+	/*)
+	    ln -sf $(echo $0 | sed 's:/local/pkg_update::') $PKGSRC
+	    ;;
+	*)  fatal "Initial call to pkg_update must use full path"
+	    ;;
+    esac
+fi
+
+if [ ! -d $PKGSRC -a -d /files/netbsd/pkgsrc ] ; then
+   ln -sf /files/netbsd/pkgsrc $PKGSRC
+fi
+
+if [ ! -f /etc/mk.conf ]; then
+    ln -sf $PKGSRC/local/config/mk.conf /etc/mk.conf
+fi
+
+if [ $# != 0 ] ; then
+    determine_PKGBINDIR
+    stream_to_remote_hosts "$@"
+    exit
+fi
+
+if [ -n "$opt_U" ]; then
+    PKG_CHK_FLAGS="$PKG_CHK_FLAGS -U $opt_U"
+fi
+if [ -n "$opt_D" ]; then
+    PKG_CHK_FLAGS="$PKG_CHK_FLAGS -D $opt_D"
+fi
+
+if [ -n "$opt_r" ] ; then
+    if [ -n "$opt_b" ] ; then
+	# Try to reduce time without packages to a minimum
+	# Before deleting anything, work out what packages will be needed
+	determine_PKGBINDIR
+	pkg_delete cpuflags || true
+	pkg_delete -r pkg_chk  || true
+	pkg_check_install cpuflags	devel/cpuflags	  /usr/pkg/bin/cpuflags
+	determine_PKGBINDIR
+	pkg_check_install pkg_chk	pkgtools/pkg_chk  /usr/pkg/sbin/pkg_chk
+	opt_r_PKGS=$(pkg_chk $PKG_CHK_FLAGS -lb $opt_k)
+    fi
+    handle_opt_r
+fi
+
+# Install via bootstrap if necessary
+#
+if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
+    opsys=`uname -s`
+    osrev=`uname -r`
+    ospro=`uname -p`
+    bootstrap=/pkgsrc/packages/bootstrap-pkgsrc-$opsys-$osrev-$ospro-*.tar
+    # XXX Check for multiple matches
+    if [ -n "$opt_b" -a -f $bootstrap ] ; then
+	echo "Installing binary bootstrap"
+	cd / ; tar xpf $bootstrap
+	if [ ! -d /usr/pkg ] ; then
+	    fatal "/usr/pkg not found in $bootstrap"
+	fi
+    else
+	echo "Building bootstrap from source"
+	cd /pkgsrc/bootstrap
+	rm -f /etc/mk.conf # Is overwritten
+	./mkbinarykit
+	mv bootstrap-pkgsrc-*.tar /pkgsrc/packages
+    fi
+    rm -f /usr/pkg/etc/mk.conf
+    ln -sf $PKGSRC/local/config/mk.conf /etc/mk.conf
+fi
+
+# Must be after -r and bootstrap
+determine_PKGBINDIR
+
+PKG_CHK_FLAGS="$PKG_CHK_FLAGS -P $PKGBINDIR"
+
+if [ -n "$opt_b" ] ; then
+    pkg_check_install cpuflags	devel/cpuflags		/usr/pkg/bin/cpuflags
+    pkg_check_install pkg_chk	pkgtools/pkg_chk	/usr/pkg/sbin/pkg_chk
+
+    PKG_CHK_FLAGS="$PKG_CHK_FLAGS -b"
+
+    if [ -n "$opt_r" ] ; then
+	cd $PKGBINDIR
+	pkg_add $opt_r_PKGS
+	postrun
+	exit
+    fi
+
+    pkg_add -uf $PKGBINDIR/pkg_chk
+    echo "pkg_chk -Brb -P $PKGBINDIR"
+    pkg_chk -Brb -P $PKGBINDIR
+
+else	# $opt_s
+
+    # Check and upgrade pkg_tools if necessary
+    #
+    PKGTOOLS_REQD=$(show_var PKGTOOLS_REQD)
+    PKGTOOLS_VER=$(pkg_info -V)
+    if [ $PKGTOOLS_REQD -gt $PKGTOOLS_VER ] ; then
+	echo "Updating pkg_install"
+	rm -rf /var/db/pkg/pkg_install-*
+	(cd /pkgsrc/pkgtools/pkg_install && ${MAKE} clean && ${MAKE} install)
+    fi
+
+    # Extract and wipe WRKOBJDIR
+    #
+    WRKOBJDIR=$(show_var WRKOBJDIR)
+    if [ ! -n "$WRKOBJDIR" ] ; then
+	WRKOBJDIR=/var/obj/pkg
+    fi
+    if [ -d $WRKOBJDIR ] ; then
+	echo "rm -rf $WRKOBJDIR ..."
+	mv $WRKOBJDIR $WRKOBJDIR.old
+	rm -rf $WRKOBJDIR.old &
+    fi
+    mkdir -p $WRKOBJDIR
+    LOG=$WRKOBJDIR/update.log
+    PKG_CHK_FLAGS="$PKG_CHK_FLAGS -s -L $LOG"
+
+    if [ -z "$opt_r" -a -x /usr/pkg/sbin/pkg_chk ] ; then
+	echo "pkg_chk -Br"
+	pkg_chk -Br -P $PKGBINDIR
+    else
+	later_pkg_chk_remove=1
+    fi
+
+    pkg_check_install cpuflags		devel/cpuflags	 /usr/pkg/bin/cpuflags
+    pkg_check_install pkg_chk		pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
+    pkg_check_install localtools	local/localtools /usr/pkg/bin/rcsvi
+
+    if [ -n "$later_pkg_chk_remove" ] ; then
+	pkg_chk -Br -P $PKGBINDIR
+    fi
+
+fi
+
+PKG_CHK_FLAGS="$PKG_CHK_FLAGS -ak"
+
+echo "pkg_chk $PKG_CHK_FLAGS..."
+nice pkg_chk $PKG_CHK_FLAGS < /dev/null
+if [ ! -n "$opt_b" ] ; then
+    echo "Update pkg_summary.gz"
+    ( cd PKGBINDIR && pkg_info -X *.t?? | gzip -9 > pkg_summary.gz )
+fi
+
+postrun

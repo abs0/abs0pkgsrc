@@ -1,0 +1,6 @@
+# $Id$
+
+include 	"arch/i386/conf/_PF_"
+
+no cpu* at mainbus?
+cpu0 at mainbus?

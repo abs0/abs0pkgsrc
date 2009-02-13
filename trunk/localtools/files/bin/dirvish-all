@@ -1,0 +1,25 @@
+#!/bin/sh -e
+# $Id: dirvish-all,v 1.11 2006/12/11 11:52:42 abs Exp $
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+PATH=$PATH:/usr/local/bin:/usr/pkg/bin:/usr/local/sbin:/usr/pkg/sbin
+
+# We must have the correct HOME for ssh to work. This is an issue with cron
+# which can call us with HOME=/var/log
+HOME=$(eval echo ~$USER)
+
+MASTER_CONF=/etc/dirvish/master.conf
+RUNALL_CONF=/etc/dirvish/runall
+
+dirvish-expire --quiet $@
+
+CONFLIST="$(echo $RUNALL_CONF*)"
+if [ "$CONFLIST" = $RUNALL_CONF'*' ] ; then
+    dirvish-runall --config $MASTER_CONF
+else
+    # Run each runall-* file in parallel
+    for conf in $CONFLIST ; do
+	true # Without this true the loop does not run correctly
+	dirvish-runall --config $conf $@ &
+    done
+fi  

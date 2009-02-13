@@ -1,0 +1,407 @@
+#!/usr/pkg/bin/perl
+# $Id: scr,v 1.3 2006/11/10 11:40:59 abs Exp $
+
+# PURPOSE
+#	Resume a GNU screen session, allowing for different configurations on
+#	different machines, and more than one session on a single machine.
+#
+# USAGE
+#	scr [-n] [-f] [0-9] [name]
+#
+#	'scr' by itself will start screen running if it is not already, or
+#	resume an existing screen session.
+#
+#	'scr X' is the command, where X is a number between 0 and 9, the
+#	relevant command for that window is extracted from the screenrc file
+#	and executed.
+#
+#	'scr name' will use a differently named screenrc file, or resume
+#	a screen with that name.  To use this feature, you must have in the
+#	screenrc file the command 'sessionname XXX' where XXX is the same
+#	as the filename.  Otherwise things get confusing.
+#
+#	To start a new screen session with the same screenrc as an already
+#	running screen, use 'scr -n' (otherwise it will just try and reattach
+#	that running screen).
+#
+#	To get short feedback, set an environment variable SCR_FEEDBACK with
+#	any value before running it, or pass the argument -f.
+#
+# FILES
+#	The default screenrc for 'scr' is stored in $HOME/.screen/rc,
+#	as opposed to $HOME/.screerc as a simple 'screen' command would
+#	assume.  This is so that other files can be added, without cluttering
+#	up $HOME.
+#
+# ENVIRONMENT
+#	SCR_TERM	set this to a terminal type that will accept
+#			xterm-style arguments to set the title (I use vt102
+#			for use in CRT which supports this).
+#	SCR_FEEDBACK	set this to any value for simple feedback from scr.
+#
+# HISTORY
+#	Based on a shell script written by David Brownlee <abs@mono.org>,
+#	versions 2.0 onwards are the result of gratuitous fiddling performed
+#	by NoRM <norm@alces.net>.
+#
+# VERSION
+# 2.0   complex shell script                                        circa 1997
+# 3.0	re-written from scratch in perl to conserve process resources
+#                                                             Sun, May 23 1999
+# 3.1	heavy commenting, added feature to re-spawn a screen 'window' using
+#	using the screenrc file to determine the command to run
+#                                                             Wed, Jul 28 1999
+# 3.2	introduced named screenrcs                            Sun, Nov  7 1999
+#
+#
+#
+# This work is copyright Norman McBride <norm@alces.net> 1999.
+# Available for free redistribution as long as no code is changed.  Please
+# report all bugs and suggestions to the author.
+#
+# http://www.alces.net/~norm/scripts/
+
+use strict;
+use warnings;
+
+my ( $curscr, @curscr, $CRTHACK, $CRTTERM, $screenrcdir, $hostname );
+my ( $feedback, $pid, $default, $cur, $ok );
+my ( $window, $filename, $new_screen, $attscr, $detscr, $screen, $cmd, $scr );
+my ( %scr, %scrtitle, %titlescr, $numscr );
+
+$window     = "";
+$filename   = "";
+$new_screen = 0;
+$numscr     = 0;
+
+# CRT (and possibly other terminal emulators) allows you to set its
+# titlebar, using the same system as 'xterm' under X Windows.
+# I use vt102 as the terminal type to detect for, and set up all my CRT
+# sessions using vt102 - not many vt102s in use anymore.
+if ( $ENV{'SCR_TERM'} ) {
+    $CRTHACK = 1;
+    $CRTTERM = $ENV{'SCR_TERM'};
+}
+
+# the location of the screenrc file, hostname is used figuring out
+# different configs for different hosts
+$screenrcdir = "$ENV{'HOME'}/.screen";
+chop( $hostname = `hostname -s` );
+
+# make sure our titlebars are set quickly :)
+$| = 1;
+
+# two instances of the 'resume' commandline, for grabbing already
+# attached screens, and previously detached ones
+#    -A adapt size of screen to new ; -O optimal output ; -R attempt to
+#    resume, or start new ; -d detach
+$attscr = "screen -A -O -R -d";
+$detscr = "screen -A -O -R";
+
+# if SCR_FEEDBACK is set, fake the -f argument
+unshift( @ARGV, "-f" ) if ( defined( $ENV{SCR_FEEDBACK} ) );
+
+# fake the default screen name into @ARGV
+unshift( @ARGV, "rc" );
+
+while ( defined( $ARGV[0] ) ) {
+    if ( $ARGV[0] eq "-f" ) {
+        $feedback = 1;
+        shift;
+        next;
+    }
+
+    if ( $ARGV[0] eq "-n" ) {
+        $new_screen = 1;
+        shift;
+        next;
+    }
+
+    # if an argument is given, a number 0 through 9, use that to re-issue
+    # the command for that window.  This by-passes the normal screen
+    # start/resume cycle and assumes that screen is already running where
+    # you're calling it from.  Caveat scriptor.
+    if ( $ARGV[0] =~ m/^[0-9]$/ ) {
+        $window = shift;
+
+        # check what screen we're running within
+        if ( defined( $ENV{'STY'} ) ) {
+            ( $pid, $screen ) = split( /\./, $ENV{'STY'}, 2 );
+
+            if ( $screen =~ m/^tty..\.$hostname/ ) {
+                $screen = "rc";
+            }
+            else {
+                feedback("within screen '$screen'");
+            }
+
+            if ( -f "$screenrcdir/${screen}.$hostname" ) {
+                $filename = "$screenrcdir/${screen}.$hostname";
+            }
+            else {
+                $filename = "$screenrcdir/${screen}";
+            }
+        }
+        else {
+            print STDERR "Must be running within screen to issue "
+              . "a window command.\n";
+            exit 1;
+        }
+
+        # using the current screen name, open a specific host's file
+        # in preference to a generic one
+        if ( !open( SCR, "$filename" ) ) {
+            print STDERR "Cannot open $filename: $!\n";
+            exit(1);
+        }
+
+        $cmd = "";
+        while (<SCR>) {
+
+            # ick.  This matches a line in the screenrc that matches
+            # "screen [-t title] X command" where X is the window provided
+            if (m/(^\s*screen.*\s+$window\s+.*$)/) {
+                $cmd = $_;
+                chop($cmd);
+            }
+        }
+        if ( $cmd ne "" ) {
+            feedback("$cmd");
+            system($cmd );
+
+            # exit immediately - would be nice to issue 'scr 1 2 3' but
+            # screen doesn't obey :/
+            exit 0;
+        }
+        else {
+            feedback("$window not defined in $filename");
+        }
+    }
+    else {
+
+        # assume it to be the screen's name
+        $screen = shift;
+
+        # fill in the filename variable
+        if ( -f "$screenrcdir/${screen}.$hostname" ) {
+            $filename = "$screenrcdir/${screen}.$hostname";
+        }
+        else {
+            $filename = "$screenrcdir/${screen}";
+        }
+        feedback("using screen '$screen'");
+    }
+}
+
+# list the current screens running
+open( SCR, "screen -list |" ) || die("Unable to run screen: $!");
+while (<SCR>) {
+    next if m/^\s*$/;
+    chop;
+
+    # "26695.ttyp1.marvin      (Attached)" is the format of the
+    # currently running screen sessions
+    if (m/(\d+)\.(\S+)\s+\((.*)\)/) {
+
+        # load up %scr with the status (attached/detached) of the
+        # individual sessions - used to decide which command to issue
+        $scr{$1}      = $3;
+        $scrtitle{$2} = $1;
+        $titlescr{$1} = $2;
+        $numscr++;
+    }
+}
+close(SCR);
+
+if ( $screen ne "rc" ) {
+    if ( $scrtitle{$screen} != 0 ) {
+        if ( !$new_screen ) {
+            feedback("using already registered process $scrtitle{$screen}");
+            runscreen( $scrtitle{$screen} );
+        }
+        else {
+            runscreen();
+        }
+    }
+    else {
+        feedback("no pid registered - starting a new instance");
+        runscreen();
+    }
+}
+else {
+    if ( ( $numscr == 0 ) || $new_screen ) {
+        runscreen();
+    }
+    elsif ( $numscr > 1 ) {
+        print "There are screens already running.  Please enter the PID or "
+          . "title of the\nscreen you wish to resume, "
+          . "or 'new' for a new instance:\n\n";
+
+        # the next bit works out which screen to suggest as the
+        # default.  It'll pick a detached one over an attached
+        # one, offering the highest PID if they're all detached
+        # on the assumption that it's the most 'recent'.
+        @curscr  = sort keys %scr;
+        $default = $curscr[0];
+        foreach $cur ( reverse sort keys %scr ) {
+            next if ( $scr{$cur} eq "Attached" );
+            $default = $cur;
+        }
+
+        for $curscr ( sort keys %scr ) {
+            printf( "        %6s %-20s %s\n",
+                $curscr, $titlescr{$curscr}, $scr{$curscr} );
+        }
+
+        $ok = 0;
+        while ( !$ok ) {
+            print "Choose [$default]: ";
+            chop( $pid = <> );
+            if ( $pid eq "" ) {
+                $pid = $default;
+            }
+
+            for $curscr ( sort keys %scr ) {
+                if ( $curscr eq $pid || $titlescr{$curscr} eq $pid ) {
+                    $ok  = 1;
+                    $pid = $curscr;
+                }
+            }
+
+            # allow for uppercase
+            $pid =~ tr/A-Z/a-z/;
+
+            if ( $pid eq "quit" ) {
+                exit 0;
+            }
+
+            if ( $pid eq "new" ) {
+                $pid = "";
+                $ok  = 1;
+            }
+
+            if ( !$ok ) {
+                print "Must be from the above list, 'new' or 'quit'.\n";
+            }
+        }
+        $screen = $titlescr{$pid};
+        runscreen($pid);
+    }
+    else {
+
+        # only one screen running - go to 'simple' mode
+        feedback("single screen running - resuming");
+        foreach $cur ( keys %scr ) {
+            runscreen($cur);
+        }
+    }
+}
+
+exit 0;
+
+#
+#     {
+# 	next if m/^\s*$/;
+# 	chop;
+#
+# 	    # "26695.ttyp1.marvin      (Attached)" is the format of the
+# 	    # currently running screen sessions
+# 	if( m/(\d+)\..*\((.*)\)/ )
+# 	{
+# 		# load up %scr with the status (attached/detached) of the
+# 		# individual sessions - used to decide which command to issue
+# 	    $scr{$1}= $2;
+# 	}
+#     }
+#
+# 	else
+# 	{
+# 	    m/(\d+) Socke[ts]+ in/;
+#
+# 	    if( $1 eq 1 )
+# 	    {
+# 		    # if there's only one screen running, no decision to make
+# 		@curscr= keys %scr;
+# 		$pid= $curscr[0];
+# 	    }
+# 	    else
+# 	    {
+# 	    }
+# 	}
+#     }
+#
+#     if( $scr{$pid} eq "Attached" )
+# 	{ sysscr( "$attscr $pid" ); }
+#     else
+# 	{ sysscr( "$detscr $pid" ); }
+# }
+# else
+# {
+# 	# no screen sessions running, so start a new one
+#     sysscr( "$detscr" );
+# }
+#
+# print `clear`;
+# exit;
+
+# this subroutine handles the actual screen command line, and will alter
+# the title bar of an xterm to reflect the current status
+sub sysscr {
+    my ($cmd) = @_;
+    my ( $titlebar, $icon ) = 0;
+
+    # for an xterm, set the title bar to 'host screen <scree>'
+    if ( $ENV{'TERM'} eq "xterm" || ( $CRTHACK && $ENV{'TERM'} eq $CRTTERM ) ) {
+        $titlebar = "\e]2;$hostname screen ";
+        $icon     = "\e]1;scr: ";
+        if ( $screen ne "rc" ) {
+            $titlebar .= "[$screen] ";
+            $icon     .= "[$screen] ";
+        }
+        $titlebar .= "\a";
+        $icon     .= "$hostname\a";
+
+        print "$icon";
+        print "$titlebar";
+    }
+
+    # at last!  the meat in the sandwich, run the screen command
+    feedback("$cmd");
+    system("$cmd");
+
+    # 'reset' the title bar to simply 'host' when the screen
+    # session finishes, or is detached
+    if ($titlebar) {
+        print "\e]1;$hostname\a";
+        print "\e]2;$hostname\a";
+    }
+}
+
+sub runscreen {
+    my ($pid) = @_;
+
+    if ($pid) {
+        if ( $scr{$pid} eq "Attached" ) {
+            sysscr("$attscr $pid");
+        }
+        else {
+            sysscr("$detscr $pid");
+        }
+    }
+    else {
+        if ( !-r $filename ) {
+            print STDERR "Cannot read $filename: $!\n";
+            exit 1;
+        }
+        sysscr("screen -c $filename");
+    }
+
+}
+
+sub feedback {
+    my ($text) = @_;
+
+    if ($feedback) {
+        print "++ $text\n";
+    }
+}

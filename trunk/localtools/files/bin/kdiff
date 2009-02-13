@@ -1,0 +1,31 @@
+#!/bin/sh
+# $Id: kdiff,v 1.2 2008/10/03 10:24:10 abs Exp $
+# Trivial script to diff local kernel configs.
+# In config comment out with '#@ ', and suffix uncommented lines with '#@ Un'
+# Uses the NetBSD tag to determine the original file, then displays diff
+
+fatal()
+    {
+    echo $@ >&2
+    exit 1
+    }
+
+[ -n "$1" ] || fatal "Usage: kdiff kernel_config"
+
+for conf; do
+    if [ ! -f "$conf" ] ; then
+	cd /sys/arch/$(uname -m)/conf
+    fi
+    [ -f "$conf" ] || fatal "Unable to locate kernel config $conf"
+
+    CONFIG=$(awk '/NetBSD/{f=$3;sub(",v","",f);print f;exit}' $conf)
+    [ -n "$CONFIG" ] || fatal "Unable to locate NetBSD tag in $conf"
+
+    CONFIG=$(dirname $conf)/$CONFIG
+    [ -f "$CONFIG" ] || fatal "Unable to locate $CONFIG (from NetBSD tag in $conf)"
+
+    sed -e "s/^#@ //" \
+	-e "s/\(.*[^	 ]\)[ 	]*#@ Un.*/#\1/" \
+	-e "s/[ 	]*#@.*//" \
+	$conf | diff -u $CONFIG -
+done

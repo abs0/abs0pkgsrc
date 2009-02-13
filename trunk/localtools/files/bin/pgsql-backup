@@ -1,0 +1,145 @@
+#!/usr/pkg/bin/perl
+# $Id: pgsql-backup,v 1.1 2008/07/24 15:35:51 abs Exp $
+
+use strict;
+use warnings;
+use File::Copy;
+use File::Path;
+use Getopt::Std;
+use IPC::Open3;
+
+$ENV{PATH} = '/bin:/usr/bin:/usr/pkg/bin:/usr/local/bin';
+$ENV{PATH} .= '/sbin:/usr/sbin:/usr/pkg/sbin:/usr/local/sbin';
+
+my %opt;
+my $full_delay = 15;
+my $datadir    = '/var/pgsql/data';
+my $tmpdir;
+my $compression = '9';
+my ( @all_dbs, @dbs );
+
+usage() if !getopts( 'ad:fhnvD:E:I:N123456789', \%opt ) || $opt{h};
+usage() if !$opt{a} && !$opt{E} && !$opt{I} && !@ARGV;
+
+if ( $opt{f} && !$opt{D} ) { $opt{D} = $full_delay; }
+else                       { $opt{D} ||= 0; }
+
+for ( my $i = 1 ; $i <= 9 ; ++$i ) {
+    if ( $opt{$i} ) {
+        $compression = $i;
+        last;
+    }
+}
+
+@all_dbs = db_list();
+
+if (@ARGV) {
+    foreach my $db (@ARGV) {
+        if ( !grep( $_ eq $db, @all_dbs ) ) { die("Invalid DB: $db"); }
+    }
+    @dbs = @ARGV;
+}
+else { @dbs = @all_dbs; }
+@dbs = grep( $_ !~ /$opt{E}/, @dbs ) if $opt{E};
+@dbs = grep( $_ =~ /$opt{I}/, @dbs ) if $opt{I};
+if ( $opt{v} ) {
+    if ( @all_dbs != @dbs ) { print "All Databases: @all_dbs\n"; }
+    print "Databases: @dbs\n";
+}
+
+if ( $opt{d} && !$opt{n} ) {
+    $tmpdir = $opt{d} . '.tmp';
+    mkpath( $tmpdir, 0, 0700 );
+    chdir($tmpdir) || die("Unable to chdir($tmpdir): $!");
+}
+
+foreach my $db (@dbs) {
+    db_backup($db) if !$opt{N} || !-f $db;
+    db_cleanup($db)  if $opt{f};
+    sleep( $opt{D} ) if !$opt{n};
+}
+if ( $opt{f} && @all_dbs != @dbs ) {
+    foreach my $db (@all_dbs) {
+        db_cleanup($db) if !grep( $_ eq $db, @dbs );
+        sleep( $opt{D} ) if !$opt{n};
+    }
+}
+if ( $opt{f} ) {
+    copy( "$datadir/pg_hba.conf",     '.' );
+    copy( "$datadir/pg_ident.conf",   '.' );
+    copy( "$datadir/postgresql.conf", '.' );
+}
+if ( $opt{d} && !$opt{n} ) {
+    rmtree( $opt{d} );
+    rename( $tmpdir, $opt{d} );
+}
+
+exit;
+
+sub compress_cmd {
+    my ($file) = @_;
+
+    # Ensure datasize unlimited so 7zip does not fail
+    return q{sh -c 'ulimit -d $(ulimit -Hd);ulimit -d;}
+      . "7z a -bd -ms=on -mx=$compression -si $file.7z'";
+}
+
+sub db_backup {
+    my ($db) = @_;
+    run_cmd( "pg_dump $db | " . compress_cmd($db) );
+}
+
+sub db_list {
+    my (@dbs);
+    foreach my $line ( run_cmd('psql -lt') ) {
+        push( @dbs, $1 ) if $line =~ /(\S+)/ && $1 ne 'template0';
+    }
+    die 'No databases found' unless @dbs;
+    sort @dbs;
+}
+
+sub db_cleanup {
+    my ($db) = @_;
+    mkdir( 'cleanup', 0755 );
+    run_cmd( "pgsql-cleanup $db | " . compress_cmd("$db.log") );
+}
+
+sub run_cmd {
+    my ($cmd) = @_;
+
+    if ( $opt{n} || $opt{v} ) { print "$cmd\n"; }
+    if ( $opt{n} ) { return; }
+
+    my $pid = open3( \*WTRFH, \*RDRFH, \*ERRFH, $cmd );
+    close(WTRFH);
+
+    # XXX does not pick up some error returns from 7z
+    my @errs = <ERRFH>;
+    close(ERRFH);
+    my @output = <RDRFH>;
+    close(RDRFH);
+    warn "Output: " . join( '', @output ) if $opt{v};
+    die "'$cmd' failed: @errs" if @errs;
+
+    return @output;
+}
+
+sub usage {
+    print "Usage: pgsql-backup [opts] [databases]
+opts	-a	Backup all databases
+	-d dir	Use dir instead of cwd
+	-f    	Full. Implies -D $full_delay, will cleanup and copy config
+	-h	This help
+	-n	No action - just display commands
+	-v    	Verbose
+	-D sec	Delay between each backup in secs. Default 0.
+	-E rex	Exclude databases matching regex 'rex'
+	-I rex	Exclude databases matching regex 'rex'
+	-N	New - only backup databases if existing file not present
+
+pgsql-backup will backup postgres databases and configuration into
+the current or specified directory.
+";
+    exit;
+}
+

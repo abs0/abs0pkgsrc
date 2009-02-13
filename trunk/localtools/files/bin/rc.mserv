@@ -1,0 +1,70 @@
+#!/bin/sh -e
+# $Id: rc.mserv,v 1.3 2005/10/03 09:37:00 abs Exp $
+PATH=/usr/bin:/bin:/usr/pkg/bin:/usr/sbin:/sbin:/usr/pkg/sbin
+HOST=$(hostname -s)
+AUDIODIR=/usr/pkg/share/local/audio
+
+play()
+    {
+    DEV=$1
+    DIR=$2
+
+    FILE=$(ls $AUDIODIR/$DIR | grep -v CVS | shuffle -f - | head -1)
+    /usr/pkg/bin/play123 audioplay -d /dev/audio$DEV $AUDIODIR/$DIR/$FILE
+    }
+
+start_mserv()
+    {
+    DEV=$1
+    VOL=$2
+    PORT=$((4444 + $DEV))
+    MIXER=/dev/mixer$DEV
+    echo Starting mserv on audio$DEV, port $PORT, volume $VOL
+    if ! mixerctl -d $MIXER outputs.master 2>/dev/null ; then
+	echo "$MIXER not configured"
+	return
+    fi
+    if [ -n "$(mixerctl -d $MIXER inputs.dac 2>/dev/null)" ] ; then
+	mixerctl -d $MIXER -w outputs.master=255
+	mixerctl -d $MIXER -w inputs.dac=$VOL
+    else
+	mixerctl -d $MIXER -w outputs.master=$VOL
+    fi
+    play $DEV start &
+    if [ $DEV = 0 ] ; then
+	CONFIGDIR=.mserv
+	rm -f $CONFIGDIR/log
+    else
+	CONFIGDIR=.mserv-audio$DEV
+	rm -rf $CONFIGDIR
+	mkdir -p $CONFIGDIR
+	ln -sf ../.mserv/acl ../.mserv/trackinfo ../.mserv/webacl $CONFIGDIR
+	sed -e "s:audio0:audio$DEV:" -e "s:mixer0:mixer$DEV:" \
+					.mserv/config > $CONFIGDIR/config
+    fi
+    mserv -r $CONFIGDIR -p $PORT &
+    sleep 3
+    if mservcmd -h localhost:$PORT info ; then
+	play $DEV ready &
+    else
+	play $DEV error &
+    fi
+    }
+
+pkill mserv || true
+pkill irman_name || true
+pkill -f 'perl -wT /usr/pkg/bin/mserv_irman' || true
+pkill mpg123 || true
+pkill ogg123 || true
+HOME=$(awk -F: '$1=="mserv"{print $6}' /etc/passwd)
+cd $HOME
+exec > log.$HOST 2>&1 
+if [ -f start_mserv ] ; then
+    . ./start_mserv
+else
+    start_mserv 0 31
+fi
+mserv_irman -c $HOME/mserv_irman.conf -v 2>&1 &
+if [ -f post_mserv ] ; then
+    ./post_mserv &
+fi

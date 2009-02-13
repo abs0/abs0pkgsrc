@@ -1,0 +1,29 @@
+lang/perl			*
+net/rsync			*
+audio/mserv_irman		*
+local/mserv-php			*
+audio/mpg123			*
+
+www/ap-php			*
+www/apache22			*
+
+net/samba			*
+local/localtools		*
+
+databases/postgresql83		*
+databases/p5-DBD-postgresql	*
+databases/p5-Rose-DB-Object 	*
+devel/p5-Perl-Tidy		*			# Reformat perl
+textproc/p5-Text-CSV_XS		*
+devel/p5-Date-Manip		*
+www/p5-URI			*
+www/p5-WWW-Mechanize		*
+
+databases/p5-DBD-SQLite		cgi
+devel/p5-Module-Refresh		cgi
+mail/p5-Email-Send		cgi
+mail/p5-Email-Valid		cgi
+www/ap2-fcgid			cgi
+www/p5-CGI-Session		cgi
+www/p5-FCGI			cgi
+www/p5-Template-Toolkit		cgi

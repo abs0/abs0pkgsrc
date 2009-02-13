@@ -1,0 +1,71 @@
+#!/bin/sh -e
+# $Id: config+,v 1.5 2008/01/03 10:26:59 abs Exp $
+
+# configure and build kernel (in /tmp), then install
+
+config_build()
+    {
+    CONF=$1
+    [ -f $CONF ] || fatal "Unable to locate $CONF in $CONFDIR"
+    rm -rf /tmp/$CONF
+    echo "Config /tmp/$CONF"
+    config -s /sys -b /tmp/$CONF $CONF
+    cd /tmp/$CONF
+    echo "Building $CONF"
+    if ! make > LOG 2>&1 ; then
+	cat LOG
+	exit
+    fi
+    echo "Gzip kernel to /kernels/$CONF.gz"
+    mkdir -p /kernels
+    echo cp -p netbsd /kernels/$CONF
+    cp -p netbsd /kernels/$CONF
+    gzip -9f /kernels/$CONF
+    if [ -n "$opt_i" ]; then
+	make install
+    fi
+    cd /
+    rm -rf /tmp/$CONF
+    }
+
+fatal()
+    {
+    echo $@ >&2
+    exit 1
+    }
+
+if ! args=$(getopt hi $*); then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-h )	opt_h=1			;;
+	-i )	opt_k=1			;;
+	-- )	shift; break		;;
+    esac
+    shift
+done
+
+if [ -n "$opt_h" ] ; then
+    cat <<END
+Usage: config+ [-hi] [conf]
+  -h	This help
+  -i	Install kernel as /netbsd
+END
+    exit
+fi
+
+CONFDIR=/sys/arch/$(uname -m)/conf
+cd $CONFDIR
+
+if [ $# = 0 ] ; then
+    CONF=$(uname -a | sed -e 's/.*(//' -e 's/).*//')
+    echo "Assuming existing kernel config '$CONF' - ^C to abort"
+    config_build $CONF
+else
+    for CONF in $* ; do
+	config_build $CONF
+    done
+fi
+

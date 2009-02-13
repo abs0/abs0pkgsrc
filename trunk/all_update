@@ -1,0 +1,20 @@
+#!/bin/sh -e
+# $Id: all_update,v 1.13 2005/04/13 12:13:19 abs Exp $
+
+if [ $(id -u) != 0 ] ; then
+    SUDO="sudo -H"
+else
+    SUDO=""
+fi
+
+if [ -z "$1" ] ; then
+    FLAGS=-s
+else
+    FLAGS=
+fi
+
+if [ $(uname) = NetBSD ] ; then
+    $SUDO /pkgsrc/local/os_update $FLAGS "$@"
+fi
+
+$SUDO /pkgsrc/local/pkg_update $FLAGS "$@"

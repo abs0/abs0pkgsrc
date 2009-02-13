@@ -1,0 +1,77 @@
+#!/usr/pkg/bin/perl
+# $Id: mergelog,v 1.5 2007/01/31 17:07:02 abs Exp $
+
+# Merge split webserver logs
+
+use strict;
+use warnings;
+use Cwd;
+
+my $tmpfile = 'TMP.mergelog';
+
+sub mergedir {
+    my ( $dir, @files ) = @_;
+    my %target;
+    my $olddir = getcwd;
+    chdir($dir);
+    if ( !@files ) {
+        opendir( DIR, '.' ) || die("Unable to opendir '$dir': $!");
+        push( @files, grep( $_ ne '.' && $_ ne '..', readdir(DIR) ) );
+        closedir(DIR);
+    }
+    foreach my $file (@files) {
+        die("Unparsable filename '$file'")
+          if $file !~ /^(.+\.\d{4})(\.\d\d|)(.*)(bz2|gz)$/;
+        my ( $base, $month, $extra, $ext ) = ( $1, $2, $3, $4 );
+        my $targetfile = "$base$month.$ext";
+        push( @{ $target{$targetfile} }, $file );
+    }
+    foreach my $targetfile ( sort keys %target ) {
+        my $numfiles = @{ $target{$targetfile} };
+        print "$targetfile: ";
+        if ( $numfiles == 1 && $target{$targetfile}[0] =~ /\.(bz2|gz)$/ ) {
+            if ( $target{$targetfile}[0] eq $targetfile ) { print "ok\n"; }
+            elsif ( -f $targetfile ) {
+                print "*** $targetfile already present\n";
+            }
+            else {
+                print "rename\n";
+                safe_rename( $target{$targetfile}[0], $targetfile );
+            }
+        }
+        else {
+            print "($numfiles) recompress";
+            my $cmd;
+            if ( $targetfile =~ m/\.bz2$/ ) {
+                $cmd = "bzcat @{$target{$targetfile}} | bzip2 -9 > $tmpfile";
+            }
+            else { $cmd = "zcat @{$target{$targetfile}} | gzip -9 > $tmpfile"; }
+
+            die("creation of $tmpfile failed: $!") if system($cmd);
+            die("$tmpfile too small")              if -s $tmpfile < 100;
+            safe_rename( $tmpfile, $targetfile );
+            foreach my $file ( @{ $target{$targetfile} } ) {
+                ( $file ne $targetfile ) && safe_unlink($file);
+            }
+            print "\n";
+        }
+    }
+    chdir($olddir);
+}
+
+my @files;
+foreach my $arg (@ARGV) {
+    if ( -d $arg ) { mergedir($arg); }
+    else { push( @files, $arg ); }
+}
+@files && mergedir( '.', @files );
+
+sub safe_rename {
+    my ( $to, $from ) = @_;
+    rename( $to, $from ) || die("rename($to, $from) failed: $!");
+}
+
+sub safe_unlink {
+    my (@files) = @_;
+    unlink(@files) || die("unlink(@files) failed: $!");
+}

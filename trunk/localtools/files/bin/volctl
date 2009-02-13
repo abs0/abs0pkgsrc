@@ -1,0 +1,42 @@
+#!/bin/sh
+# $Id: volctl,v 1.2 2008/04/20 23:22:32 abs Exp $
+
+# Trivial script to control volume
+
+if [ $# = 2 ] ; then
+    DEV="-d /dev/mixer$1"
+    shift
+fi
+
+toggle_mute()
+    {
+    case $(mixerctl $DEV -n outputs.master.mute) in
+	off) mixerctl $DEV -w outputs.master.mute=on ;;
+	on) mixerctl $DEV -w outputs.master.mute=off ;;
+    esac
+    }
+
+eval $(mixerctl $DEV -a | awk -F= /master=/'{print "VAR="$1}')
+VOL=$(mixerctl $DEV -n $VAR | sed 's/,.*//')
+case "$1" in
+    "")
+	echo $VOL
+	exit
+	;;
+    +)
+	VOL=$(($VOL + 1)) ;;
+    -)
+	VOL=$(($VOL - 8)) ;;
+    +* | -*)
+	VOL=$(($VOL + $1)) ;;
+    mute)
+	toggle_mute; exit ;;
+    *)
+	VOL=$1 ;;
+esac
+if [ $VOL -lt 0 ] ; then
+    VOL=0
+elif [ $VOL -gt 255 ] ; then
+    VOL=255
+fi
+mixerctl $DEV -w $VAR=$VOL

@@ -1,0 +1,139 @@
+#!/bin/sh
+# $Id: ssh-init,v 1.6 2006/11/10 11:40:59 abs Exp $
+#
+# Setup ssh environment/agent to use consistent ssh socket.
+# SSH_AGENT_HOSTS specifies a colon delimited set of hosts on which to create
+# an agent if not already present.
+#
+# Add to startup scripts
+# t?csh: 	setenv SSH_AUTH_SOCK `ssh-init -p`
+# {ba,k,}sh: 	export SSH_AUTH_SOCK=$(ssh-init -p)
+
+auth_sock_canonify()
+    {
+    if [ $SSH_AUTH_SOCK != $REAL_SOCK ] ; then
+	dir=$(dirname $REAL_SOCK)
+	if [ -d $dir ] ; then
+	    eval $(stat -L -s $dir)
+	    if [ $st_uid != $(id -u) ] ; then
+		fatal "$dir already present and owned by another user"
+	    fi
+	    chmod 700 $dir
+	else
+	    verbose "mktemp -q -d $dir"
+	    mktemp -d $dir > /dev/null
+	fi
+	verbose "rename($SSH_AUTH_SOCK,$REAL_SOCK)"
+	mv -f $SSH_AUTH_SOCK $REAL_SOCK
+	export SSH_AUTH_SOCK=$REAL_SOCK
+    else
+	verbose "auth sock already $REAL_SOCK"
+    fi
+    }
+
+fatal()
+    { echo $*; exit 1; }
+
+ssh_agent_client()
+    {
+    verbose Client...
+    # Just rename any current SSH_AUTH_SOCK to REAL_SOCK
+    if [ -n "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != $REAL_SOCK ]; then
+	auth_sock_canonify
+    fi
+    }
+
+ssh_agent_server()
+    {
+    verbose Server...
+    export SSH_AUTH_SOCK=$REAL_SOCK
+
+    if [ ! -e $REAL_SOCK ]; then
+	verbose "SSH_AUTH_SOCK not defined - running ssh-agent"
+	if [ -n "$opt_v" ] ; then
+	    eval $(ssh-agent -s)
+	else
+	    eval $(ssh-agent -s | grep -v '^echo')
+	fi
+	auth_sock_canonify
+	ssh-add $SSH_KEY
+    else
+	verbose "SSH_AUTH_SOCK defined..."
+	# Ignore any non 'REAL_SOCK' SSH_AUTH_SOCK, and create new if needed
+	if [ -n "$opt_f" -o "$TERM" != screen -o "$WINDOW" -eq 1 ] ;then
+	    verbose "Not in screen WINDOW !=1... (or -f given)"
+	    SSH_ADD=$(ssh-add -l 2>&1)
+	    verbose "SSH_ADD=$SSH_ADD"
+	    case "$SSH_ADD" in
+		# Create new ssh agent, and add default identity
+		"Could not open a connection to your authentication agent." )
+		    eval $(ssh-agent -s)
+		    auth_sock_canonify
+		    ssh-add $SSH_KEY
+		    ;;
+		# Add identity to agent
+		"The agent has no identities.")
+		    ssh-add $SSH_KEY
+		    ;;
+		# All OK
+		*$SSH_KEY\ *)
+		    ;;
+	    esac
+	fi
+    fi
+    }
+
+verbose()
+    {
+    [ -n "$opt_v" ] && echo $@ >&2
+    }
+
+args=$(getopt fhpv $*)
+if [ $? != 0 ]; then
+    opt_error=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-f )    opt_f=1 ;;
+	-h )    opt_h=1 ;;
+	-p )    opt_p=1 ;;
+	-v )    opt_v=1 ;;
+	-- )	shift ; break ;;
+    esac
+    shift
+done
+
+if [ -n "$opt_h" -o -n "$opt_error" ] ; then
+    cat << END
+Usage: ssh-init [-hv]
+opts:	-f Force key input
+	-h This help
+	-p Print out the value of SSH_AUTH_SOCK
+	-v Verbose
+END
+    [ -z "$opt_error" ] 
+    exit
+fi
+
+REAL_SOCK=/tmp/.ssh-$USER/sock
+thishost=$(hostname -s)
+HOST_TYPE=client
+for h in $(echo $SSH_AGENT_HOSTS | tr ':' ' ') ; do
+    if [ $h = $thishost ] ; then
+	HOST_TYPE=server
+    fi
+done
+
+if [ -n "$opt_p" ];then
+    if [ $HOST_TYPE = client ] ; then
+	ssh_agent_client
+    fi
+    echo $REAL_SOCK
+    exit
+fi
+
+case $HOST_TYPE in
+    client)	ssh_agent_client ;;
+    server)	ssh_agent_server ;;
+esac

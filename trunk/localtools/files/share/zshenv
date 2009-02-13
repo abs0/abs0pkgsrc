@@ -1,0 +1,30 @@
+# $Id: zshenv,v 1.1 2008/02/11 13:43:21 abs Exp $
+
+## 'common' settings
+
+# Keep the EXINIT in non interactive in case running pine or similar in screen
+#
+export EXINIT="set ai sh=/bin/sh sw=4 redraw report=2"
+export EXINIT="map g 1G|$EXINIT"
+export EXINIT="map  :s/^#.//j|$EXINIT"
+export EXINIT="map  0i# j|$EXINIT"
+export EXINIT="map\!  0i|$EXINIT"
+export EXINIT="map\!  A|$EXINIT"
+export EXINIT="map \f !}fmt 76 77|$EXINIT"
+
+if [ "$OSTYPE" = netbsdelf ] ; then
+    export EXINIT="set filec=	|$EXINIT"
+    export LC_CTYPE=en_US.UTF-8
+    export PTHREAD_DIAGASSERT=AeL
+fi
+
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/pkg/bin:/usr/games:/usr/sbin:/sbin
+export PATH=$PATH:/usr/local/sbin:/usr/pkg/sbin:/usr/pkg/xorg/bin:/usr/X11R6/bin
+
+export BLOCKSIZE=1k
+export CVS_RSH=/usr/bin/ssh
+export PAGER=/usr/bin/less
+export RCMD_CMD=/usr/pkg/bin/srsh
+export RSYNC_RSH=/usr/bin/ssh
+
+umask 002
