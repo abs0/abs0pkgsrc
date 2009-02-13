@@ -1,0 +1,161 @@
+#!/bin/sh -e
+# $Id: os_update,v 1.58 2008/11/18 15:01:54 abs Exp $
+
+PATH=/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+
+if [ $(sysctl -n kern.ostype) != NetBSD ] ; then
+    echo "This can only be run on NetBSD"
+    exit 1
+fi
+
+FILEDIR=/files/netbsd/arch/$(sysctl -n hw.machine)
+KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/).*//').gz
+OSVER=$(sysctl -n kern.osrelease | sed -e 's/[^0-9].*//')
+HOST=$(sysctl -n kern.hostname | sed 's:\..*::')
+DESTDIR=/
+
+if [ -x /usr/bin/getopt ]; then
+    args=$(getopt D:bd:fhk:no:su $*)
+    if [ $? != 0 ]; then
+	opt_h=1
+    fi
+    set -- $args
+    while [ $# != 0 ]; do
+	case "$1" in
+	    -D )	opt_D="$2"; TARDIR="$2" shift ;;
+	    -d )	opt_d="$2"; DESTDIR="$2"; shift ;;
+	    -f )	opt_f=-f ;;
+	    -h )	opt_h=1 ;;
+	    -k )	KERNEL="kernels/$2.gz"; shift ;;
+	    -n )	opt_n=1 ;;
+	    -o )	OSVER="$2"; shift ;;
+	    -b )	opt_b=1 ;;
+	    -s )	opt_s=1 ;;
+	    -u )	opt_u=-u ;;
+	    -- )	shift; break ;;
+	esac
+	shift
+    done
+
+
+    if [ -n "$opt_h" ] ; then
+	echo "Usage: os_update [opts] [hosts]
+opts:   -D dir Read source tarfiles and script from dir, and delete after 
+	-b     Install from binaries (default)
+	-d dir Full distribution (including etc set)
+	-f     Force (ignore value of /etc/release)
+	-h     This help
+	-k nam Override name of kernel to install
+	-n     No write (do not actually make any changes)
+	-o ver Set OS version to build
+	-s     Rebuild from source
+	-u	Run cvsu before building
+";
+	exit
+    fi
+
+    if [ -n "$opt_s" ] ; then
+	nbbuild $opt_u -t $OSVER
+    fi
+fi
+
+# Must be after nbbuild -u
+if [ -x /usr/bin/id -a $(id -u) != 0 ] ; then
+    exec sudo -H $0 "$@"
+fi
+
+if [ "$1" = -d	]; then
+    DESTDIR=$2
+    shift ; shift;
+fi
+
+if [ -z "$TARDIR" ] ; then
+    TARDIR=$(ls $FILEDIR/$OSVER-*/kernels.tbz | sed -n -e 's:/kernels.tbz::' -e '$p')
+    if [ -z "$TARDIR" ] ; then
+	echo "Unable to locate $FILEDIR/$OSVER-*/kernels.tbz"
+	exit 1
+    fi
+fi
+
+TARFILES="$(echo $TARDIR/*.tbz | fmt 1 | grep -v kernels.tbz)"
+
+extract()
+    {
+    DESTDIR=$1
+    cd "$DESTDIR"
+    if [ ! -d $DESTDIR/etc ] ; then
+	extract_etc=1
+    fi
+    if [ -z "$opt_f" -a -f etc/release ] && \
+		tar xzfO $TARDIR/etc.tbz etc/release 2>/dev/null | \
+		cmp -s etc/release - ; then
+	echo "$HOST:$DESTDIR etc/release matches existing version ($TARDIR)"
+	if [ -n "$opt_D" ] ; then
+	    for tarfile in $TARDIR/kernels.tbz $TARFILES ; do
+		run "rm -f $tarfile"
+	    done
+	fi
+	return
+    fi
+
+    if [ -z "$opt_d" -a -z "$extract_etc" ] ; then
+	EXTRACT_TARFILES="$(echo $TARFILES | fmt 1 | grep -v etc.tbz)"
+    else
+	EXTRACT_TARFILES=$TARFILES
+    fi
+
+    [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
+    [ -d kernels.old ] &&	run "rm -rf kernels.old"
+    [ -d kernels ] &&		run "mv kernels kernels.old"
+				run "pax -rz -pe < $TARDIR/kernels.tbz"
+    [ -n "$opt_D" ] &&		run "rm -f $TARDIR/kernels.tbz"
+    if [ -z "$opt_n" -a ! -f $KERNEL ] ; then
+	echo "**** Unable to locate $KERNEL"
+	KERNEL=kernels/GENERIC.gz
+    fi
+				run "gzcat $KERNEL > netbsd.new"
+				run "mv netbsd.new netbsd"
+
+    for tarfile in $EXTRACT_TARFILES ; do
+				run "pax -rz -pe < $tarfile"
+    [ -n "$opt_D" ] &&		run "rm -f $tarfile"
+    done
+				run "usr/sbin/postinstall -s $TARDIR/etc.tbz -d $DESTDIR fix || true"
+				run "(cd dev && ./MAKEDEV all)"
+				run "rm -rf kernels.old"
+
+    if [ -n "$extract_etc" ] ; then
+				run "cd / ; pax -rvw bin/tcsh etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db bin/tcsh $DESTDIR"
+    fi
+    if [ ! -f boot ] ; then
+				run "cp -p usr/mdec/boot boot"
+				echo "*** Run installboot, check ssh keys, rc.conf, fstab ***"
+    fi
+				run "tar xzf $TARDIR/etc.tbz etc/release"
+    }
+
+run()
+    {
+    echo "$HOST:$DESTDIR $@"
+    if [ -z "$opt_n" ] ; then
+	sh -c "$*"
+    fi
+    }
+
+if [ -n "$1" ] ; then
+    for host ; do
+	echo
+	run scp /pkgsrc/local/os_update $TARDIR/* $host:/var/run
+	run ssh $host /var/run/os_update $opt_f -D /var/run
+    done
+    exit 0
+fi
+
+[ -n "$opt_D" ] &&	run "rm -f $opt_D/os_update"
+extract $DESTDIR
+
+if [ -f $DESTDIR/altroot/netbsd ] || mount | grep -q ' on /altroot ' ; then
+    DESTDIR=$DESTDIR/altroot
+    extract $DESTDIR
+fi
+exit 0

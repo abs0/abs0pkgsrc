@@ -1,0 +1,65 @@
+#!/bin/sh -e
+# $Id: raid1-setup,v 1.4 2006/03/11 14:56:18 abs Exp $
+TMPFILE=$(mktemp /tmp/${0##*/}.XXXXXX) || exit 1
+
+fatal()
+    {
+    rm -f $TMPFILE
+    echo $@ >&2
+    exit 1
+    }
+
+if [ $# != 3 ] ; then
+    cat <<END
+Usage: raid1-setup raiddev dev1 dev2
+
+    eg: raid1-setup raid0 wd1a wd2a
+
+raid1-setup can be given an invalid second device, in which case it will
+setup a degraded raid1 set.
+END
+    exit
+fi
+
+RAID=$1
+DEV1=$2
+DEV2=$3
+
+[ -w /dev/${RAID}a ] || fatal "Unable to access /dev/${RAID}a"
+[ -w /dev/$DEV1 ] || fatal "Unable to write to /dev/$DEV1"
+[ -w /dev/$DEV2 ] || fatal "Unable to write to /dev/$DEV2"
+
+# Generate a random serial number
+SERIAL=$(dd if=/dev/urandom bs=4 count=1 2>/dev/null | od -I | awk '{print $2}')
+
+cat >$TMPFILE << END
+# Sample raid config for setting up a raid mirror
+
+START array
+# numRow numCol numSpare
+1 2 0
+
+START disks
+/dev/$DEV1
+/dev/$DEV2
+
+START layout
+# sectPerSU SUsPerParityUnit SUsPerReconUnit RAID_level_1
+128 1 1 1
+
+START queue
+fifo 100
+END
+
+raidctl -C $TMPFILE $RAID || fatal "Unable to configure raid $RAID"
+raidctl -I $SERIAL $RAID || fatal "Unable to set raid serial ($SERIAL)"
+raidctl -i $RAID || fatal "Unable to initialise raid $RAID"
+raidctl -A yes $RAID || fatal "Unable to set raid to automconfigure"
+
+rm -f $TMPFILE
+
+# Inelegant method to write default disklabel
+export EDITOR=cat
+disklabel $RAID | disklabel -eI $RAID
+
+echo "$RAID setup as RAID1 mirror on $DEV1 and $DEV2, with default disklabel"

@@ -1,0 +1,31 @@
+#!/usr/pkg/bin/perl
+# $Id: perlmodules,v 1.4 2007/02/14 15:15:20 abs Exp $ - abs@absd.org
+
+# Tiny dumb script to find all the valid module names, for use in perldoc
+# uniqs both @INC and the list of found modules.
+
+# Use in tcsh with:
+#	complete perldoc 'p@*@`perlmodules`@'
+
+use strict;
+use warnings;
+use File::Find;
+
+my %INC;
+my %names;
+my $base;
+map { ++$INC{$_} } @INC;
+foreach my $dir ( keys %INC ) {
+    $base = $dir;
+    find( \&wanted, $base ) if -d $base;
+}
+print join( "\n", keys %names );
+
+sub wanted {
+    /\.pm$/ || return;
+    my $name = $File::Find::name;
+    $name =~ s#^$base/##;
+    $name =~ s/\.pm$//;
+    $name =~ s#/#::#g;
+    ++$names{$name};
+}

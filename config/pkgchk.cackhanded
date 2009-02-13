@@ -1,0 +1,94 @@
+# /pkgsrc/local/config/pkgchk.sandbox
+# $Id: pkgchk.cackhanded,v 1.4 2005/05/17 17:10:59 abs Exp $
+
+	# first things first
+devel/cpuflags			*
+shells/standalone-tcsh		*
+misc/screen			*
+pkgtools/xpkgwedge		x11
+
+
+	# system essentials
+net/speedtouch			southpaw
+audio/mpg123			southpaw
+net/srsh			*
+net/rsync			*
+lang/perl5			*
+sysutils/skill			*
+mail/spamassassin		skiffle southpaw
+local/exim			skiffle southpaw
+mail/procmail			skiffle southpaw
+www/apache			skiffle southpaw
+databases/postgresql-server	skiffle southpaw
+databases/postgresql-client	*
+mail/imap-uw			skiffle southpaw
+net/samba			southpaw
+sysutils/cdrecord		southpaw
+local/abcde-lame		southpaw
+audio/mp3info			southpaw
+
+
+	# perl modules
+databases/p5-DBD-postgresql	*
+www/p5-libwww			*
+security/p5-Digest-MD5		*
+databases/p5-DBD-CSV		*
+textproc/p5-Text-CSV-Hash	*
+textproc/p5-Text-Substitute	*
+devel/p5-Storable		*
+time/p5-Time-HiRes		*
+devel/p5-IO-Tty			*		# mono::bot testing
+devel/p5-IO-Stty		*		# mono::bot testing
+
+
+	# other programs
+www/elinks			*
+www/lynx			*
+security/msu			*
+security/msudir			*
+mail/pine			*
+mail/mutt			*
+mail/demime			*
+net/ipw				*
+textproc/ispell-british		*
+archivers/zip			*
+archivers/unzip			*
+converters/unix2dos		*
+net/wget			*
+pkgtools/pkgdiff		storm skiffle
+pkgtools/pkglint		storm skiffle
+pkgtools/url2pkg		storm skiffle
+www/wdg-validate		*
+# textproc/sp			*
+security/pgp5			*
+
+
+
+	# local machine stuff
+local/bindzeb			skiffle
+
+
+	# miscellaneous crap
+benchmarks/dhrystone		*
+benchmarks/whetstone		*
+benchmarks/ttcp			*
+benchmarks/bonnie		*
+misc/figlet			*
+# graphics/aview			*
+net/nmap			* 		# Port mapping/OS fingerprint
+
+
+	# x11 toys and things
+x11/xwit			x11
+sysutils/xmeter			x11
+
+
+	# the big boys
+www/opera6			southpaw
+www/mozilla			southpaw
+www/galeon			southpaw
+x11/kde3			southpaw
+
+
+	# kde3 toys
+

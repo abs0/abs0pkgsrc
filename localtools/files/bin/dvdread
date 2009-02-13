@@ -1,0 +1,21 @@
+#!/bin/sh -e
+# $Id: dvdread,v 1.1 2005/06/21 20:21:40 abs Exp $
+
+if [ -d /files/video ] ; then
+    cd /files/video
+else
+    cd /home/video
+fi
+    
+disc=$1
+mkdir -p $disc
+cd $disc
+title=1
+while true; do
+    echo $title...
+    mplayer -dumpstream -dvd $title -dumpfile $title.mpg
+    if [ ! -f $title.mpg ] ; then
+	break
+    fi
+    title=$(( $title + 1 ))
+done

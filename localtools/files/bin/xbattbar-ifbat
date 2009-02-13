@@ -1,0 +1,16 @@
+#!/bin/sh
+# $Id: xbattbar-ifbat,v 1.2 2006/11/10 11:40:59 abs Exp $
+
+# Run xbattbar iff we find a battery
+
+if egrep -q ^acpibat /var/run/dmesg.boot ; then
+    have_battery=1
+elif grep -q ^apm0 /var/run/dmesg.boot ; then
+    if apm | grep -q 'Number of batteries: [1-9]' ; then
+	have_battery=1
+    fi
+fi
+
+if [ -n "$have_battery" ] ; then
+    exec /usr/pkg/bin/xbattbar "$@"
+fi

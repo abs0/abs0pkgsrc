@@ -1,0 +1,127 @@
+#!/usr/pkg/bin/perl
+# $Id: listdup,v 1.4 2006/11/10 11:40:59 abs Exp $
+
+use strict;
+use warnings;
+use Getopt::Std;
+
+my ( %size, %md5, %sha1, %opt, $minsize, @dups );
+
+$minsize = 0;
+
+if ( !getopts( 'hnrs:E:I:vq', \%opt ) || $opt{h} || !@ARGV ) {
+    print "Usage: listdup [opts]
+opts:	-h	 This help
+	-n	 No action - do not make any changes
+	-r	 Remove duplicate files
+	-s size  Set minimum size to check. Can take k or m suffix
+	-I regex Only include files that match regex in remove list
+	-E regex Exclude files that match regex from remove list
+	-q	 Quiet - no output unless errors
+	-v	 Verbose
+
+Listdup uses size, md5, and sha1 to check for a match
+XXX Should perform a final paranoia read and check
+";
+    exit(1);
+}
+
+if ( $opt{s} ) {
+    if    ( $opt{s} =~ /(.*)k/i ) { $minsize = $1 * 1024; }
+    elsif ( $opt{s} =~ /(.*)m/i ) { $minsize = $1 * 1024 * 1024; }
+    else { $minsize = $opt{s}; }
+}
+
+# List duplicate files (currently just checks size & md5's match)
+
+foreach my $path (@ARGV) {
+    -e $path || die("Unable to access $path: $!");
+    add($path);
+}
+
+foreach my $size ( sort { $a <=> $b } keys %size ) {
+    if ( @{ $size{$size} } > 1 ) {
+        verbose( "size $size\n\t",
+            join( "\n\t", sort @{ $size{$size} } ), "\n" );
+        my $cmd = 'md5';
+        foreach my $file ( @{ $size{$size} } ) {
+            $cmd .= ' ' . quotemeta($file);
+        }
+        open( MD5, $cmd . '|' );
+        foreach (<MD5>) {
+            if (/MD5 \((.*)\) = (\S+)/) { push( @{ $md5{"$size.$2"} }, $1 ); }
+        }
+        close(MD5);
+    }
+}
+verbose("\n");
+
+foreach my $md5 ( sort keys %md5 ) {
+    if ( @{ $md5{$md5} } > 1 ) {
+        verbose( "md5 $md5\n\t", join( "\n\t", sort @{ $md5{$md5} } ), "\n" );
+        my $cmd = 'sha1';
+        foreach my $file ( @{ $md5{$md5} } ) { $cmd .= ' ' . quotemeta($file); }
+        open( SHA1, $cmd . '|' );
+        foreach (<SHA1>) {
+            if (/SHA1 \((.*)\) = (\S+)/) { push( @{ $sha1{"$md5.$2"} }, $1 ); }
+        }
+        close(SHA1);
+    }
+}
+verbose("\n");
+
+foreach my $sha1 ( keys %sha1 ) {
+    if ( @{ $sha1{$sha1} } > 1 ) {
+        my @files = sort @{ $sha1{$sha1} };
+        push( @dups, { size => -s ${ $sha1{$sha1} }[0], files => \@files } );
+    }
+}
+
+foreach my $ent ( sort { $a->{size} <=> $b->{size} } @dups ) {
+    if ( $ent->{size} > 1024 ) {
+        progress( sprintf( "%dK\n", $ent->{size} / 1024 ) );
+    }
+    else { progress("$ent->{size}\n"); }
+    my @remove;
+    foreach my $file ( @{ $ent->{files} } ) {
+        if (   ( $opt{I} && $file !~ /$opt{I}/ )
+            || ( $opt{E} && $file =~ /$opt{E}/ ) )
+        {
+            progress("\texclude $file\n");
+        }
+        else { push( @remove, $file ); }
+    }
+    if ( $opt{r} ) {
+        if ( @remove == @{ $ent->{files} } ) {
+            progress( "\tkeep    ", shift @remove, "\n" );
+        }
+        foreach my $file (@remove) {
+            progress("\tremove  $file\n");
+            if ( !$opt{n} ) {
+                unlink($file) || die("Unlink($file) failed: $!");
+            }
+        }
+    }
+    else { progress( join( "\n", @remove ), "\n\n" ); }
+}
+
+exit;
+
+sub add {
+    my ($path) = @_;
+
+    -l $path && return;
+    if ( -d $path ) {
+        my (@list);
+
+        if ( !opendir( DIR, $path ) ) { die("Unable to opendir($path): $!"); }
+        @list = grep( $_ ne '.' && $_ ne '..', readdir(DIR) );
+        closedir(DIR);
+        foreach (@list) { add("$path/$_"); }
+    }
+    elsif ( -s $path > $minsize ) { push( @{ $size{ -s $path } }, $path ); }
+}
+
+sub progress { print @_ unless $opt{q}; }
+
+sub verbose { print @_ if $opt{v}; }

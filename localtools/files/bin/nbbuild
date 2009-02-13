@@ -1,0 +1,167 @@
+#!/bin/sh -e
+# $Id: nbbuild,v 1.19 2008/11/18 15:01:18 abs Exp $
+
+# Simple script to build NetBSD plus (locally defined) useful kernels
+# Cannot use release until problem overflowing tiny boot floppy resolved
+
+TARGET=distribution # sets
+VERSION=$(ls -l /usr/src | sed 's:.*/::')
+
+SAVED_ARGS="$@"
+if ! args=$(getopt CURhknt:uv $*); then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-C )	VERSION=current		;;
+	-t )    VERSION="$2" ; shift	;;
+	-R )	TARGET=release		;;
+	-h )	opt_h=1			;;
+	-k )	opt_k=1			;;
+	-n )	opt_n=1			;;
+	-u )	opt_u=1			;;
+	-v )	opt_v=1			;;
+	-U )	opt_U=1			;;
+	-- )	shift; break		;;
+    esac
+    shift
+done
+
+if [ -n "$opt_h" ] ; then
+    cat <<END
+Usage: nbbuild [opts] [arch]
+[opts]	-C     Build 'current' directory
+	-R     Build a release
+	-h     This help
+	-k     Build kernels
+	-n     Do not actually do anything
+	-t tag Build 'tag' directory
+	-u     CVS update
+	-U     Set UPDATE
+END
+    exit
+fi
+
+NBHOME=$(cd /files/netbsd ; pwd)
+export BSDSRCDIR=$NBHOME/$VERSION
+if [ -n "$opt_u" ] ; then
+    cvsu $VERSION
+fi
+
+if [ $(id -u) != 0 ] ; then
+    exec sudo -H $0 "$SAVED_ARGS"
+fi
+
+build()
+    {
+    MACHINE=$1
+    ARCHHOME=$NBHOME/arch/$MACHINE
+    OBJDIR=/var/obj/$MACHINE
+    LOG=$OBJDIR/build.log
+
+    mkdir -p $OBJDIR
+    cd $BSDSRCDIR
+
+    # Determine LASTMOD and TAG
+    #
+    if [ ! -f CVS/Entries ] ; then
+	echo "No CVS/Entries - unable to determine last mod date"
+    fi
+    LASTMOD=$(stat -t %F -f %Sm */CVS/Entries | sort -r | head -1)
+    if [ -f CVS/Tag ] ; then
+	TAG=$(cat CVS/Tag | sed -e 's/^T//' -e 's/^netbsd-//')
+    else
+	TAG=current
+    fi
+
+    DESTDIR=$ARCHHOME/destdir/$TAG
+    RELEASEDIR=$ARCHHOME/release/$TAG
+
+    ARGS="-m $MACHINE -M $OBJDIR -D $DESTDIR -R $RELEASEDIR -T /var/obj/tools"
+    if [ $(id -u) != 0 ] ; then
+	ARGS="$ARGS -U"
+    fi
+    if [ -n "$opt_U" ] ; then
+	ARGS="$ARGS -u"
+    fi
+
+    if [ -z "$opt_k" ] ; then
+	if [ -z "$opt_n" ] ; then
+	    rm -rf $DESTDIR $RELEASEDIR		# Cleanout any old build
+	fi
+	echo "Building $(uname) $VERSION $TARGET for $MACHINE"
+	if [ -n "$opt_n" -o -n "$opt_v" ] ; then
+	    echo ./build.sh $ARGS $TARGET
+	fi
+	if [ -z "$opt_n" ] ; then
+	    if ! ./build.sh $ARGS $TARGET > $LOG 2>&1 ; then
+		tail -50 $LOGMACHINE
+		exit 1
+	    fi
+	fi
+    fi
+
+    cd $BSDSRCDIR/sys/arch/$MACHINE/conf
+    KERNLIST="$(echo _*_)"
+    if [ "$KERNLIST" = '_*_' ] ; then
+	KERNLIST="GENERIC"
+    else
+	KERNLIST="$KERNLIST GENERIC"
+    fi
+    echo "Kernel list: $KERNLIST"
+    mkdir -p $DESTDIR/kernels
+    for conf in $KERNLIST ; do
+	cd $BSDSRCDIR
+	KERNEL=$OBJDIR/$NBHOME/$VERSION/sys/arch/$MACHINE/compile/$conf/netbsd
+	if [ -n "$opt_n" ] ; then
+	    echo ./build.sh $ARGS kernel=$conf
+	    echo $KERNEL $DESTDIR/netbsd$conf
+	else
+	    if ! ./build.sh $ARGS kernel=$conf >> $LOG 2>&1 ; then
+		tail -50 $LOG
+		exit 1
+	    fi
+	    cp -p $KERNEL $DESTDIR/kernels/$conf
+	    if [ -f $KERNEL.aout ] ; then	# shark
+		cp -p $KERNEL.aout $DESTDIR/kernels/$conf.aout
+	    fi
+	    gzip -9 $DESTDIR/kernels/$conf
+	fi
+    done
+
+    if [ -z "$opt_n" ] ; then
+	cd $DESTDIR
+	KERNELS_LIST="kernels"
+	ETC_LIST="
+	    .cshrc \
+	    .profile \
+	    root/.cshrc \
+	    root/.login \
+	    var/cron \
+	    etc \
+	    "
+	TARDIR=$ARCHHOME/$TAG-$LASTMOD
+	mkdir -p $TARDIR
+	pax -w $KERNELS_LIST | bzip2 -9 > $TARDIR/kernels.tbz
+	rm -rf $KERNELS_LIST
+	if [ -n "$opt_k" ] ; then
+	    echo "Generated $TARDIR/kernels.tbz"
+	else
+	    pax -w $ETC_LIST | bzip2 -9 > $TARDIR/etc.tbz
+	    rm -rf $ETC_LIST
+	    pax -w * | bzip2 -9 > $TARDIR/userland.tbz
+	    rm -rf *
+	    echo "Generated $TARDIR/{kernels,userland,etc}.tbz"
+	fi
+    fi
+    }
+
+if [ -z "$1" ] ; then
+    build $(uname -m)
+else
+    for m ; do
+	build $m
+    done
+fi
+

@@ -1,0 +1,433 @@
+#!/usr/pkg/bin/perl
+# $Id: mserv_admin,v 1.5 2006/11/10 11:40:59 abs Exp $
+
+use strict;
+use warnings;
+use File::Find;
+use Getopt::Std;
+
+my %opt;
+my $informat;
+my $outformat;
+my %config;
+my %user_delete;
+
+if (
+    !getopts( 'D:c:dfhlm:nt:v', \%opt )
+    || (   !$opt{d}
+        && !$opt{l}
+        && !$opt{m}
+        && !$opt{t} )
+  )
+{
+    $opt{h} = 1;
+}
+if ( $opt{m} && $opt{t} ) {
+    print "Cannot specify -m and -t\n";
+    $opt{h} = 1;
+}
+if ( $opt{h} ) {
+    print "Usage: mserv_admin [opts]
+[opts]	
+	-c	  Specify config file (default \$HOME/.mserv/config)
+	-d	  List possibly duplicated tracks
+		  If called with two filenames will merge the .trk info from
+		  the first into the second, then delete both the .trk and
+		  datafile for the first
+	-f	  Force -t - ignore extra old or new .trk enties
+	-h	  This help
+	-l	  List summary of user ratings
+	-m dir	  Merge trackinfo data from specified directory
+	-n	  Do not make any changes, just display what would happen
+	-t in:out Transfer .trk info from albums in .in format to those in .out
+		  Deletes source .trk files and their matching audio files
+	-v	  Verbose output
+	-D list	  Colon separated list of users to delete
+";
+    exit;
+}
+if ( $opt{t} ) {
+    ( $informat, $outformat ) = split( ':', $opt{t} );
+    if ( !$outformat ) { die('-t must be of the form informat:outformat'); }
+}
+if ( $opt{D} ) {
+    foreach my $user ( split( ':', $opt{D} ) ) { $user_delete{$user} = 1; }
+}
+
+parse_mserv_config( $opt{c} || "$ENV{HOME}/.mserv/config" );
+
+if ( $opt{d} ) {
+    if    ( @ARGV == 1 ) { die('-d cannot be called with one argument'); }
+    elsif ( @ARGV > 1 )  {
+        foreach my $file (@ARGV) {
+            if ( $file !~ /\.trk$/ ) { $file .= '.trk'; }
+            if ( substr( $file, 0, 1 ) ne '/' && !-f $file ) {
+                $file = "$config{path_trackinfo}/$file";
+            }
+        }
+        ratings_merge(@ARGV);
+        pop(@ARGV);
+        ratings_delete(@ARGV);
+    }
+    else { trackinfo_duplicates( $config{path_trackinfo} ); }
+}
+
+if ( $opt{m} ) { trackinfo_merge( $opt{m} ); }
+
+if ( $opt{t} ) {
+    trackinfo_verify_writable( $config{path_trackinfo} );
+
+    if ( !chdir( $config{path_trackinfo} ) ) {
+        die("Unable to chdir($config{path_trackinfo}): $!");
+    }
+
+    if (@ARGV) { trackinfo_transfer_dir( $informat, $outformat, @ARGV ); }
+    else { trackinfo_transfer( $config{path_trackinfo} ); }
+}
+
+if ( $opt{l} ) { ratings_users_print_summary(); }
+exit;
+
+my @list_all_trackinfo_files_list;
+
+sub list_all_trackinfo_files {
+    my ($dir) = @_;
+    @list_all_trackinfo_files_list = ();
+
+    if ( !-d $dir ) { die("Cannot read trackinfo $dir"); }
+    find(
+        {
+            wanted          => \&list_all_trackinfo_files_wanted,
+            untaint         => 1,
+            untaint_pattern => qr|^([-+@\w./\(\) \&\'\!\[\],]+)$|
+        },
+        $dir
+    );
+
+    return @list_all_trackinfo_files_list;
+}
+
+sub list_all_trackinfo_files_wanted {
+    if ( !/\.trk$/ || !-f $_ ) { return; }
+    push( @list_all_trackinfo_files_list, $File::Find::name );
+}
+
+sub parse_mserv_config {
+    my ($file) = @_;
+    open( FILE, $file ) || die("Unable to read config '$file': $!");
+    while (<FILE>) {
+        s/#.*//;
+        chomp;
+        if (/(.+)=(.+)/) { $config{$1} = $2; }
+    }
+    close(FILE);
+    if ( !-d $config{path_trackinfo} ) {
+        die("path_trackinfo not a directory: $config{path_trackinfo}");
+    }
+    if ( !-d $config{path_tracks} ) {
+        die("path_tracks not a directory: $config{path_tracks}");
+    }
+}
+
+my %ratings_users;
+my $ratings_users_total_trk_files;
+
+sub ratings_delete {
+    my ($trk_file) = @_;
+    my $data_file = $trk_file;
+    if ( $data_file !~ s:$config{path_trackinfo}:$config{path_tracks}: ) {
+        $data_file = "$config{path_tracks}/$data_file";
+    }
+    $data_file =~ s/\.trk$//;
+
+    unlink_and_rmdir($data_file);
+    unlink_and_rmdir($trk_file);
+}
+
+sub ratings_merge {
+    my (@files) = @_;
+    my ( %ratings, $name );
+
+    my $message = '';
+    $name = $files[-1];
+    $name =~ s/\.trk$//;
+    $name =~ s#.*/##;
+    $name =~ s#\.[^.]+$##;
+
+    foreach my $file ( reverse @files ) {
+        if (%ratings) { $ratings{message} .= ' |'; }
+        ratings_read( $file, \%ratings );
+    }
+    printf( "%-30.30s", $name );
+    if ( $ratings{changed} ) { print "$ratings{message}\n"; }
+    else { print " --No change--\n"; }
+    if ( $ratings{changed} && !$opt{n} ) {
+        ratings_write( $files[-1], \%ratings );
+    }
+}
+
+# - Merges user ratings. Latest non-zero wins.
+# - Merges metatdata. Will only overwrite if original zero.
+sub ratings_read {
+    my ( $file, $ratings ) = @_;
+    open( FILE, $file ) || die("Unable to read $file: $!");
+    while (<FILE>) {
+        if ( !$ratings )  { ++$ratings_users_total_trk_files; }
+        if (/(_.+)=(.+)/) {
+            if ( defined( $ratings->{keys}{$1}{full} )
+                && !$ratings->{keys}{$1}{full} )
+            {
+                $ratings->{changed} = 1;
+            }
+            $ratings->{keys}{$1}{full} ||= $_;
+            next;
+        }
+        $_ = lc($_);
+        /(.*)=(\d):(.*)/ || next;
+        my ( $user, $rating, $time ) = ( $1, $2, $3 );
+        $ratings->{message} .= " $user=$rating";
+        if ( $user_delete{$user} ) {
+            $ratings->{message} .= "(del)";
+            if ( !$ratings->{files} ) { $ratings->{changed} = 1; }
+            next;
+        }
+        if ( $ratings->{keys}{$user} ) {
+            if ( $ratings->{keys}{$user}{rating}
+                && ( !$rating || $time <= $ratings->{keys}{$user}{time} )
+                || ( $ratings->{keys}{$user}{rating} == $rating ) )
+            {
+                $ratings->{message} .= "(skip)";
+                next;
+            }
+        }
+        ++$ratings_users{$user}[$rating];
+        if ( $ratings->{files} ) { $ratings->{changed} = 1; }
+        $ratings->{keys}{$user}{time}   = $time;
+        $ratings->{keys}{$user}{rating} = $rating;
+        $ratings->{keys}{$user}{full}   = $_;
+    }
+    ++$ratings->{files};
+    close(FILE);
+}
+
+sub ratings_users_print_summary {
+    my ($utotal)      = '|total|';
+    my ($max_userlen) = length($utotal);
+    my (@rating_name) = qw(Unrated Awful Bad Neutral Good Superb TOTAL);
+    my ($total)       = @rating_name - 1;
+
+    if ( !%ratings_users ) {
+        foreach my $file ( list_all_trackinfo_files( $config{path_trackinfo} ) )
+        {
+            ratings_read($file);
+        }
+    }
+    foreach my $user ( sort keys %ratings_users ) {
+        if ( length($user) > $max_userlen ) { $max_userlen = length($user); }
+        for ( my $rating = 0 ; $rating < $total ; ++$rating ) {
+            if ( !$ratings_users{$user}[$rating] ) {
+                $ratings_users{$user}[$rating] = 0;
+            }
+            $ratings_users{$user}[$total]    += $ratings_users{$user}[$rating];
+            $ratings_users{$utotal}[$total]  += $ratings_users{$user}[$rating];
+            $ratings_users{$utotal}[$rating] += $ratings_users{$user}[$rating];
+        }
+    }
+    printf( "%-${max_userlen}s", "User" );
+    foreach my $name ( @rating_name, '|Unheard' ) { printf( " %7s", $name ); }
+    print "\n";
+    foreach my $user ( sort keys %ratings_users ) {
+        printf( "%-${max_userlen}s", $user );
+        for ( my $rating = 0 ; $rating < @rating_name ; ++$rating ) {
+            printf( " %7d", $ratings_users{$user}[$rating] );
+        }
+        if ( $user ne $utotal ) {
+            printf( " |%7d",
+                $ratings_users_total_trk_files - $ratings_users{$user}[$total]
+            );
+        }
+        print "\n";
+    }
+}
+
+sub ratings_write {
+    my ( $file, $ratings ) = @_;
+    $file =~ /(.*)/;    # Untaint XXX
+    open( OUT, ">$1" ) || die("Cannot write $file: $!");
+    foreach my $key ( sort keys %{ $ratings->{keys} } ) {
+        print OUT $ratings->{keys}{$key}{full};
+    }
+    close(OUT);
+}
+
+sub trackinfo_duplicates {
+    my ($dir) = @_;
+    my ( %map, %printmap );
+    foreach my $file ( list_all_trackinfo_files($dir) ) {
+        $file =~ m#(.*)/([^/]+)#;
+        my $key   = lc($2);
+        my $value = $file;
+
+        # $value =~ s#^$dir/##;
+        $key   =~ s/\.[^.]+.trk$//;
+        $key   =~ s/^(\d+)\s*-\s*//;
+        $key   =~ s/[\(\)\?\!'"]//g;
+        $key   =~ s/\s+/_/g;
+        $key   =~ s/^_+//g;
+        $key   =~ s/_+$//g;
+        $value =~ s/\.trk$//;
+        $value =~ s:^$config{path_trackinfo}/::;
+        push( @{ $map{$key} }, $value );
+
+        if ( $key =~ s/.*-_// )    # Handle 'author - track'
+        {
+            push( @{ $map{$key} }, $value );
+        }
+        if ( $key =~ s/&/and/ )    # Try with & replaced by 'and'
+        {
+            push( @{ $map{$key} }, $value );
+        }
+    }
+    foreach my $list ( values %map ) {
+        if ( @{$list} > 1 ) {
+            @{$list} = sort @{$list};
+            $printmap{ ${$list}[0] } = $list;
+        }
+    }
+    foreach my $key ( sort keys %printmap ) {
+        print 'mserv_admin -d ';
+        if ( $opt{c} ) { print "-c $opt{c} "; }
+        print '"', join(
+            "\"\t\"",
+            sort {
+                ( ( -M "$config{path_tracks}/$b" )
+                    ? -M "$config{path_tracks}/$b"
+                    : 1 )
+                  <=> ( ( -M "$config{path_tracks}/$a" )
+                    ? -M "$config{path_tracks}/$a"
+                    : 1 )
+              } @{ $printmap{$key} }
+          ),
+          '"' . "\n";
+    }
+}
+
+sub trackinfo_merge {
+    my ($dir) = @_;
+
+    foreach my $file ( list_all_trackinfo_files($dir) ) {
+        my $outfile;
+        $file =~ m:^$dir/(.*):;
+        $outfile = "$config{path_trackinfo}/$1";
+        $outfile =~ m/(.*)/;
+        $outfile = $1;    # Extra bogus untaint anyone?
+        if ( !-f $outfile ) {
+            print "Skipping: $file\n";
+            next;
+        }
+        verbose("Merging: $file\n");
+        ratings_merge( $file, $outfile );
+    }
+}
+
+sub trackinfo_transfer {
+    my ($dir) = @_;
+    my (%dup);
+    my ( %map, %type );
+    foreach my $file ( list_all_trackinfo_files($dir) ) {
+        $file =~ m#(.*)/([^/]+)#;
+        my $key    = lc($2);
+        my $subdir = $1;
+        $subdir =~ s#^$dir/##;
+        $key    =~ s/\.trk$//;
+        $key    =~ s/\.($informat|$outformat)$// || next;
+        my $type = $1;
+        $key =~ s/^0+//;
+        $key =~ s/^(\d+) - /$1-/;
+        $key =~ s/[\(\)\?\!'"]//g;
+        $key =~ s/\s+/_/g;
+        push( @{ $map{$key} }, $subdir );
+        $type{$key}{$type} = 1;
+    }
+    foreach my $key ( sort keys %map ) {
+        if (   @{ $map{$key} } > 1
+            && $type{$key}{$outformat}
+            && $type{$key}{$informat} )
+        {
+            my %uniqdirlist;
+            foreach my $dir ( @{ $map{$key} } ) { $uniqdirlist{$dir} = 1; }
+            ++$dup{ join( ' ', keys %uniqdirlist ) }{count};
+            $dup{ join( ' ', keys %uniqdirlist ) }{dirlist} =
+              [ keys %uniqdirlist ];
+            verbose("Possible duplicate $key\n  @{$map{$key}}\n");
+        }
+    }
+    foreach my $dup ( values %dup ) {
+        if ( $dup->{count} && $dup->{count} > 2 ) {
+            printf( "---- %2d - @{$dup->{dirlist}} ----\n", $dup->{count} );
+            trackinfo_transfer_dir( $informat, $outformat,
+                @{ $dup->{dirlist} } );
+        }
+    }
+}
+
+sub trackinfo_transfer_dir {
+    my ( $informat, $outformat, @dirlist ) = @_;
+    my %map;
+
+    foreach my $dir (@dirlist) {
+        opendir( DIR, $dir ) || die("Unable to opendir($dir): $!");
+        while ( my $file = readdir(DIR) ) {
+            $file =~ /^(\d+).*\.(.+)\.trk$/ || next;
+            my $no = $1 + 0;
+            if    ( $2 eq $informat )  { $map{$no}{in}  = "$dir/$file"; }
+            elsif ( $2 eq $outformat ) { $map{$no}{out} = "$dir/$file"; }
+        }
+        closedir(DIR);
+    }
+
+    my $err;
+    foreach my $no ( sort { $a <=> $b } keys %map ) {
+        if ( !$map{$no}{in} ) {
+            print "**** Missing input $informat for $map{$no}{out}\n";
+            $err = 1;
+            delete $map{$no};
+            next;
+        }
+        if ( !$map{$no}{out} ) {
+            print "**** Missing output $outformat for $map{$no}{in}\n";
+            $err = 1;
+            delete $map{$no};
+            next;
+        }
+    }
+    if ( $err && !$opt{f} ) { exit(1); }
+
+    foreach my $no ( sort { $a <=> $b } keys %map ) {
+        ratings_merge( $map{$no}{in}, $map{$no}{out} );
+        ratings_delete( $map{$no}{in} );
+    }
+}
+
+sub trackinfo_verify_writable {
+    my ($dir) = @_;
+    if ( !-w $dir ) {
+        $opt{n} || die("Unable to write to $dir");
+        print "WARNING: Unable to write to $dir\n";
+    }
+}
+
+sub unlink_and_rmdir {
+    my ($file) = @_;
+    if ( -f $file ) {
+        verbose("Unlink $file\n");
+        if ( !$opt{n} ) {
+            if ( !unlink($file) ) { die("Unable to unlink $file: $!"); }
+            $file =~ s:/[^/]*$::;
+            rmdir($file);
+        }
+    }
+    else { verbose("No $file to unlink\n"); }
+}
+
+sub verbose { $opt{v} && print @_; }

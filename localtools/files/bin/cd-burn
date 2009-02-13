@@ -1,0 +1,424 @@
+#!/usr/pkg/bin/perl -T
+# $Id: cd-burn,v 1.9 2006/12/05 10:18:33 abs Exp $
+
+# Burn a set of files or image to cd or dvd
+
+use strict;
+use warnings;
+use Getopt::Std;
+use File::Find;
+
+$ENV{PATH} =
+'/usr/local/bin:/usr/bin:/bin:/usr/pkg/bin:/usr/games:/usr/sbin:/sbin:/usr/local/sbin:/usr/pkg/sbin';
+
+my ( %config, %opt );
+
+%config = (
+    speed   => 10,
+    max_cd  => 700,
+    max_dvd => 4300,
+);
+
+if (   !getopts( 'M:S:bc:defhimnqsvw:V:', \%opt )
+    || $opt{h}
+    || ( !@ARGV  && !$opt{d} )
+    || ( $opt{i} && @ARGV != 1 )
+    || ( $opt{d} && $opt{i} ) )
+{
+    print "Usage: cd-burn [opts] dirs
+[opts] -M size	Set media size. Defaults to $config{max_cd}M (cd) or $config{max_dvd}M (dvd)
+       -S speed Set speed. Defaults to $config{speed}
+       -b  	Blank disk before writing (RW media)
+       -c num	Create num copies
+       -d	Duplicate CD in other drive
+       -e	Eject and reload between writing and verifying
+       -f	Follow symlinks
+       -h	This help
+       -i	Burn existing iso file directly
+       -m	Do not make a Mac CD
+       -n	Create image but do not burn to CD
+       -q	Quick - do not verify data after writing
+       -s	Put data in subdirectories named after each argument given
+       -v	Verbose
+       -w dev	Write to device dev
+       -V volid	Set volume id
+";
+    exit;
+}
+
+$opt{c} ||= 1;
+
+my $tmp_dir   = '/var/obj';
+my $mount_tmp = "$tmp_dir/cd-burn_mount";
+
+find_cd_drives();
+if ( !-w $tmp_dir ) {
+    fatal("Cannot write $tmp_dir - are you running as root?");
+}
+
+if ( $opt{S} && $opt{S} =~ /^(\d+)$/ ) { $config{speed} = $1; }
+
+timestamp("Start");
+
+if ( $opt{i} ) {
+    my ( $infile, $isofile );
+    if ( $ARGV[0] !~ /^([-\w.\/]+)$/ ) {
+        fatal("Invalid characters (non alphanum or . - /) in $ARGV[0]");
+    }
+    $infile = $isofile = $1;
+    if ( $infile =~ /\.7z$/ ) {
+        $isofile = tmpfile();
+        run_cmd("7z x -so $infile > $isofile");
+    }
+    if ( $infile =~ /\.rz$/ ) {
+        $isofile = tmpfile();
+        run_cmd("runzip -k -o $isofile $infile");
+    }
+    elsif ( $infile =~ /\.(bz2|gz)$/ ) {
+        $isofile = tmpfile();
+        run_cmd("zcat $infile > $isofile");
+    }
+    image_write( $isofile, $opt{V} ? $opt{V} : $infile, $opt{c} );
+}
+elsif ( $opt{d} ) {
+    image_write( "-isosize /dev/r$config{src}{dev} /dev/r$config{src}{dev}",
+        'duplicate', $opt{c} );
+}
+else {
+    my $iso_tmp = tmpfile();
+    my (@paths);
+
+    foreach my $path (@ARGV) {
+        if ( !-e $path ) { fatal("No such file/directory '$path'"); }
+        if ( $path !~ /^([-\w.\/]+)$/ ) {
+            fatal("Invalid characters (non alphanum or . - /) in $path");
+        }
+        push( @paths, $1 );
+    }
+    image_allocate_and_write( $iso_tmp, $config{dest}{size}, @paths );
+}
+timestamp_results();
+exit;
+
+sub image_write {
+    my ( $image, $title, $copies ) = @_;
+
+    for ( my $loop = 1 ; $loop <= $copies ; ++$loop ) {
+        my ($args);
+        my $this_title = $title;
+
+        if ( $loop > 1 ) {
+            $this_title .= " copy $loop of $copies";
+            prompt($this_title);
+        }
+
+        if ( $opt{b} ) {
+            timestamp("blank disc");
+            record("blank=fast");
+        }
+
+        $args = "-overburn -dao -fs=8m -speed=$config{speed}";
+        if ( $opt{d} ) {
+            $image = "/dev/r$config{src}{dev}";
+            $args .= " -isosize $image";
+        }
+        else { $args .= " $image"; }
+        timestamp("cdrecord $this_title");
+        record($args);
+        if ( !$opt{q} ) {
+            my $count = -s $image;
+            my $bs    = 1;
+            while ( $count % 2 == 0 ) {
+                $count /= 2;
+                $bs *= 2;
+            }
+            timestamp("verify $this_title");
+            mkdir($mount_tmp);    # In case not present
+            if ( $opt{e} ) {
+                run_cmd("eject $config{dest}{dev}");
+                run_cmd("eject -l $config{dest}{dev}");
+            }
+            run_root_cmd(
+                "mount /dev/$config{dest}{dev} $mount_tmp && umount $mount_tmp"
+            );
+            if ( !open( SOURCE, $image ) ) { die("Unable to read $image: $!"); }
+            if ( !open( DEST, "/dev/$config{dest}{dev}" ) ) {
+                die("Unable to read $/dev/$config{dest}{dev}: $!");
+            }
+            for ( ; ; ) {
+                my ( $source_data, $dest_data, $len, $checklen );
+                $len = sysread( SOURCE, $source_data, 1024 * 1024 );
+                if ( !$len ) { last; }
+                $checklen = sysread( DEST, $dest_data, $len );
+                if ( !$checklen || $checklen != $len ) {
+                    die("Verify read /dev/$config{dest}{dev} failed: $!");
+                }
+                if ( $source_data ne $dest_data ) {
+                    die("Mismatch $image vs /dev/$config{dest}{dev}");
+                }
+            }
+            close(SOURCE);
+            close(DEST);
+        }
+
+        if ( $opt{d} ) { run_cmd("eject $config{src}{dev}"); }
+        run_cmd("eject $config{dest}{dev}");
+    }
+}
+
+sub prompt {
+    my ($prompt) = @_;
+    timestamp( 'prompt ' . $prompt . ' start' );
+    $| = 1;
+    print ">>>>> Insert $prompt then hit RETURN <<<<<< ";
+    $_ = <STDIN>;
+    timestamp( 'prompt ' . $prompt . ' end' );
+}
+
+sub find_cd_drives {
+    my ( %cddevs, $raw );
+    if ( !open( DMESG, '/var/run/dmesg.boot' ) ) {
+        fatal("Unable to read /var/run/dmesg.boot: $!");
+    }
+    chomp( $raw = `sysctl -n kern.rawpartition` );
+    $raw = ( $raw == '3' ) ? 'd' : 'c';
+    foreach my $dev ( split( /\s+/, `sysctl -n hw.disknames` ) ) {
+        if ( $dev =~ /^(cd\d+)$/ ) {
+            $dev                = $1 . $raw;
+            $cddevs{$dev}{dev}  = $dev;
+            $cddevs{$dev}{size} = $config{max_cd};
+        }
+    }
+    while (<DMESG>) {
+        if (/^(cd\d+) at (scsi|atapi)bus\d+ drive \d+: <(.+)>/) {
+            my $dev = $1 . $raw;
+            $cddevs{$dev} = { dev => $dev, description => $3 };
+            if ( index( $cddevs{$dev}{description}, 'DVD' ) != -1 ) {
+                $cddevs{$dev}{dvd}  = 1;
+                $cddevs{$dev}{size} = $config{max_dvd};
+            }
+            else { $cddevs{$dev}{size} = $config{max_cd}; }
+            if ( $opt{M} ) { $cddevs{$dev}{size} = $opt{M}; }
+
+            # PIONEER DVD-RW  DVR-105
+            # UJDA745 DVD/CDRW
+            # HL-DT-ST DVDRAM GSA-4167B
+            # WPI CDRW-2422
+            # TSSTcorpCD/DVDW SH-W162C,
+            if ( $cddevs{$dev}{description} =~ /^[^,]*(\b|CD|DVD)(RW|W|RAM)\b/ )
+            {
+                $cddevs{$dev}{rw} = 1;
+            }
+        }
+    }
+    close(DMESG);
+    if ( $opt{w} ) {
+        if ( $cddevs{ $opt{w} } ) { $config{dest} = $cddevs{ $opt{w} }; }
+        elsif ( $cddevs{ $opt{w} . $raw } ) {
+            $config{dest} = $cddevs{ $opt{w} . $raw };
+        }
+        else { die("Unknown device $opt{w}"); }
+    }
+    foreach my $cddev ( sort { $a->{dev} cmp $b->{dev} } values %cddevs ) {
+        if ( $cddev->{rw} && !$config{dest} ) { $config{dest} = $cddev; }
+        else { $config{src} ||= $cddev; }
+    }
+    if ( !$config{dest} ) { fatal("Unable to find writable cd/dvd device"); }
+}
+
+sub fatal {
+    print STDERR "@_\n";
+    exit 1;
+}
+
+my @image_files;
+
+sub image_allocate_and_write {
+    my ( $outfile, $size, @infiles ) = @_;
+    my $volid;
+
+    if ( $opt{V} ) {
+        if ( $opt{V} !~ /^([-\w.\/]+)$/ ) {
+            fatal("Invalid characters (non alphanum . - /) in -V ($opt{V})");
+        }
+        $volid = $1;
+    }
+
+    if ( !$volid ) {
+        my @tmp = @infiles;
+        $volid = substr( join( '+', grep( s#.*/## || $_, @tmp ) ), 0, 32 );
+    }
+
+    my $usage;
+    timestamp("check file sizes");
+    find(
+        {
+            wanted          => \&image_du,
+            untaint         => 1,
+            untaint_pattern => qr|^([-+@\w./ &:]+)$|
+        },
+        @infiles
+    );
+    @image_files = sort { $b->{size} <=> $a->{size} } @image_files;
+    foreach my $ent (@image_files) { $usage += $ent->{size}; }
+    $usage = int( ( $usage + 1023 ) / 1024 );
+    if ( $usage > $size ) {
+        my (@images);
+        print
+          "** Total file size (${usage}M) greater than media size (${size}M)\n";
+        while (@image_files) {
+            my $space_left = $size * 1024;
+            my ( @this_iso, @next_iso );
+            foreach my $ent (@image_files) {
+                if ( $ent->{size} <= $space_left ) {
+                    unshift( @this_iso, $ent->{file} );
+                    $space_left -= $ent->{size};
+                }
+                else { push( @next_iso, $ent ); }
+            }
+            if ( @this_iso == 0 ) {
+                fatal("Single file larger than media size");
+            }
+            @image_files = @next_iso;
+            print 'disk ', scalar(@images) + 1, ': ', scalar(@this_iso),
+              " files ", $size - int( ( $space_left + 1023 ) / 1024 ), "M\n";
+            push( @images, \@this_iso );
+        }
+        for ( my $loop = 0 ; $loop < @images ; ++$loop ) {
+            my $this_volid =
+              $volid . '_' . ( $loop + 1 ) . 'of' . scalar(@images);
+            mkisofs( $outfile, $this_volid, @{ $images[$loop] } );
+            if ($loop) { prompt($this_volid); }
+            image_write( $outfile, $this_volid, $opt{c} );
+        }
+    }
+    else {
+        mkisofs( $outfile, $usage, $volid, @infiles );
+        image_write( $outfile, $volid, $opt{c} );
+    }
+    unlink($outfile);
+}
+
+sub mkisofs {
+    my ( $outfile, $filesize, $volid, @infiles ) = @_;
+    my ( $cmd,     @files );
+
+    unlink($outfile);
+    timestamp("mkisofs $volid (${filesize}M)");
+    $cmd = "mkisofs -r -J -l -o $outfile";
+
+    if ( $opt{f} ) { $cmd .= ' -f'; }
+    if ( !$opt{m} ) {
+        $cmd .= " -hfs -hide-joliet :2eDS_Store -hide :2eDS_Store --netatalk";
+    }
+
+    if ( $opt{s} ) {
+        $cmd .= " -graft-points";
+        foreach (@infiles) {
+            s#/$##;
+            m#([^/]+)$#;
+            if ( -d $_ ) { push( @files, "$1/=$_" ); }
+            else { push( @files, $_ ); }
+        }
+    }
+    else { @files = @infiles; }
+    $cmd .= " -V '$volid'";
+    foreach my $file (@files) { $cmd .= qq( "$file"); }
+    verbose("$cmd\n");
+    open( MKISOFS, "$cmd 2>&1|" ) || fatal("Unable to run '$cmd': $!");
+    $| = 1;
+    while (<MKISOFS>) {
+        if (/^(Total|Path table size|Max brk space)/) { next; }
+        if (/^mkisofs: Warning: -follow-links does not always work/) { next; }
+        if (/estimate finish/) { s/\n/\r/; }
+        else { print ' ' x 64, "\r"; }
+        print "mkisofs: $_";
+    }
+    close(MKISOFS);
+    if ( !-f $outfile ) { fatal("mkisofs ($cmd) failed"); }
+}
+
+sub record {
+    my ($args) = @_;
+    my ($cmd);
+    $cmd = "dvdrecord -gui -dev=/dev/$config{dest}{dev}";
+    if ( $opt{n} ) { $cmd .= ' -dummy'; }
+    $cmd .= " $args";
+
+    if ( $< != 0 ) { $cmd = "sudo $cmd"; }
+    verbose("$cmd\n");
+    open( DVDRECORD, "$cmd 2>&1|" ) || fatal("$cmd failed: $!");
+    $| = 1;
+    while (<DVDRECORD>) {
+        if ( !/Warning: using inofficial / && /^(cdrecord|dvdrecord): (.*)/ ) {
+            print $_;
+        }
+    }
+    close(DVDRECORD);
+    if ($?) { fatal("$cmd failed"); }
+}
+
+sub image_du {
+    if ( -f $_ ) {
+        push(
+            @image_files,
+            {
+                file => $File::Find::name,
+                size => int( ( ( -s $_ ) + 2047 ) / 2048 ) * 2
+            }
+        );
+    }
+}
+
+sub run_root_cmd {
+    my ($cmd) = @_;
+    if ( $< != 0 ) { $cmd = "sudo $cmd"; }
+    run_cmd($cmd);
+}
+
+sub run_cmd {
+    my ($cmd) = @_;
+    verbose("$cmd\n");
+    if ( system($cmd) ) {
+
+        # system("scsictl scsibus0 reset");
+        fatal("$cmd failed");
+    }
+}
+
+my ( $time_start, $time_last, $time_record );
+
+sub timestamp {
+    my ($tag) = @_;
+    my ( $t_start, $t_last );
+
+    if ( !$time_start ) { $time_start = $time_last = time; }
+
+    $t_start = ( time - $time_start );
+    $t_last  = ( time - $time_last );
+
+    $time_last = time;
+
+    my $line = timefmt($t_start) . ' ' . timefmt($t_last) . " $tag\n";
+    $time_record .= $line;
+    print "--- ", $line;
+}
+
+sub timefmt {
+    my ($time) = @_;
+
+    if ( $time > 99 * 60 ) {
+        $time /= 60;
+        sprintf( "%02d:%02d", $time / 60, $time % 60 );
+    }
+    else { sprintf( "%02d.%02d", $time / 60, $time % 60 ); }
+}
+
+sub timestamp_results { print $time_record; }
+
+sub tmpfile {
+    if ( $ENV{USER} =~ /(\w+)/ ) { return "$tmp_dir/$1.iso"; }
+    return "$tmp_dir/$<.iso";
+}
+
+sub verbose { $opt{v} && print @_; }

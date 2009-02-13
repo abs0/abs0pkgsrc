@@ -1,0 +1,85 @@
+# $Id: xorg-screens,v 1.2 2006/02/21 09:13:12 abs Exp $
+
+# GB & disable caps
+
+Section "InputDevice"
+        Identifier  "Keyboard0"
+        Driver      "kbd"
+        Option      "XkbLayout" "gb"
+        Option      "XkbOptions" "ctrl:nocaps"
+EndSection
+
+
+# Monitor and Screen config for XIOD LCD (1024x768, 16bit, 60Hz)
+
+Section "Monitor"
+	#DisplaySize	  310   230	# mm
+	Identifier   "Monitor0"
+	VendorName   "IMR"
+	ModelName    "1571"
+	Option	    "DPMS"
+	HorizSync    31.5 - 90.0
+	VertRefresh  59.0 - 60.1
+EndSection
+
+Section "Screen"
+	Identifier "Screen0"
+	Device     "Card0"
+	Monitor    "Monitor0"
+	DefaultDepth     16
+	SubSection "Display"
+		Depth     1
+		Modes    "1024x768"
+	EndSubSection
+	SubSection "Display"
+		Depth     4
+		Modes    "1024x768"
+	EndSubSection
+	SubSection "Display"
+		Depth     8
+		Modes    "1024x768"
+	EndSubSection
+	SubSection "Display"
+		Depth     15
+		Modes    "1024x768"
+	EndSubSection
+	SubSection "Display"
+		Depth     16
+		Modes    "1024x768"
+	EndSubSection
+	SubSection "Display"
+		Depth     24
+		Modes    "1024x768"
+	EndSubSection
+EndSection
+
+# Monitor and Screen config for Samsung75E monitor (1152x864, 16bit, 75Hz)
+
+Section "Monitor"
+	Identifier   "Monitor0"
+	VendorName   "Samsung"
+	ModelName    "75E"
+	HorizSync    31.5 - 75.0
+	VertRefresh  69.0 - 86.0
+	Option	    "DPMS"
+EndSection
+
+Section "Screen"
+	Identifier "Screen0"
+	Device     "Card0"
+	Monitor    "Monitor0"
+	DefaultDepth     16
+	SubSection "Display"
+		Depth     8
+	EndSubSection
+	SubSection "Display"
+		Depth     16
+	EndSubSection
+	SubSection "Display"
+		Depth     24
+	EndSubSection
+	SubSection "Display"
+		Depth     32
+	EndSubSection
+EndSection
+

@@ -1,0 +1,87 @@
+#!/bin/sh -e
+# $Id: update-config,v 1.33 2008/11/18 21:45:32 abs Exp $
+
+# Copy src onto dest if src exists and dest does not or is different
+cmpcp()
+    {
+    src=$1
+    dest=$2
+    if [ -f $src ] ; then
+	if [ ! -f $dest ] || ! cmp -s $src $dest ; then
+	    echo "Copy $src $dest"
+	    cp -p $src $dest
+	fi
+    fi
+    }
+
+# Ceate symlink if specified package installed
+sl()
+    {
+    src=$1
+    dest=$2
+    pkg=$3
+
+    if [ -e $src -o -e $dest ]; then
+	if [ ! -e $src ] ; then
+	    mv $dest $src
+	    echo "update-config: Move $dest $src"
+	fi
+	if [ ! -h $dest ] ; then
+	    mkdir -p $(dirname $dest)
+	    echo "update-config: Symlink $src $dest"
+	    rm -rf $dest
+	    ln -sf $src $dest
+	fi
+	if ! pkg_info -e $pkg > /dev/null; then
+	    echo  "*** WARNING: $src present but $pkg not installed"
+	fi
+    fi
+    }
+
+PATH=/usr/pkg/bin:/usr/pkg/sbin:$PATH
+
+sl /etc/roundcube		/usr/pkg/share/roundcube/config	roundcube
+sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde
+sl /etc/php.ini			/usr/pkg/etc/php.ini		php
+sl /etc/ppp.conf		/usr/pkg/etc/ppp/ppp.conf	speedtouch
+sl /usr/pkg/java/jdk-1.5.0/jre/plugin/i386/ns7/libjavaplugin_oji.so \
+	/usr/pkg/lib/firefox/plugins/libjavaplugin_oji.so jdk15
+sl /etc/ampache/ampache.cfg.php	/usr/pkg/share/ampache/config/ampache.cfg.php \
+	ampache
+
+if [ -f /etc/nut/ups.conf ] ; then
+    for tty in $(sed 's/#.*//' /etc/nut/ups.conf | \
+		awk '/\/dev\/tty/ && $1 == "port"{print $3}') ; do
+	echo "update-config: set permissions on $tty for nut UPS"
+	chgrp nut $tty
+	chmod 660 $tty
+    done
+fi
+
+# Just while we have firefox3 and firefox
+if [ -d /usr/pkg/lib/firefox/plugins -a -d /usr/pkg/lib/firefox3/plugins ]; then
+    ln -sf /usr/pkg/bin/firefox3 /usr/pkg/bin/firefox
+    find /usr/pkg/lib/firefox3/plugins -type l | xargs rm
+    ln -sf /usr/pkg/lib/firefox/plugins/* /usr/pkg/lib/firefox3/plugins
+fi
+
+cmpcp /usr/pkg/share/examples/kdelibs3/applications.menu \
+	/usr/pkg/etc/xdg/menus/applications.menu
+
+if [ ! -x /bin/tcsh ] ; then
+    echo "update-config: Copy /bin/csh /bin/tcsh"
+    cp /bin/csh /bin/tcsh
+fi
+
+if [ -x /usr/sbin/rndc -a ! -h /etc/rndc.key ] ; then
+    echo "update-config: rndc-confgen -a: "
+    rndc-confgen -a -r /dev/urandom
+    mkdir -p /var/chroot/named/etc
+    mv	/etc/rndc.key /var/chroot/named/etc/rndc.key
+    ln -sf /var/chroot/named/etc/rndc.key /etc
+fi
+
+if pkg_info -e munin-node > /dev/null; then
+    echo "update-config: Run munin-setup-plugins"
+    munin-setup-plugins
+fi

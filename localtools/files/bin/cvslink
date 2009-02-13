@@ -1,0 +1,72 @@
+#!/usr/pkg/bin/perl
+# $Id: cvslink,v 1.5 2007/03/18 23:36:38 abs Exp $
+
+# Simple script to link CVS Root and Repository files
+
+use strict;
+use warnings;
+use Cwd;
+use File::Find;
+use Getopt::Std;
+
+my %map;
+my %opt;
+
+getopts( 'v', \%opt );
+
+if ( !@ARGV ) {
+    print "Usage: cvslink <base of trees containing CVS sandboxes>
+
+cvslink will create hardlinks for all Root and Repository files which contain
+the same information. Note, the Repository files are only a win if multiple
+copies of the same or very similar tress are checked out
+";
+    exit(0);
+}
+foreach my $path (@ARGV) {
+    if ( $path !~ m#^/# ) { $path = cwd . '/' . $path; }
+}
+find( \&wanted, @ARGV );
+foreach my $type ( sort keys %map ) {
+    foreach
+      my $ent ( sort { $a->{count} <=> $b->{count} } values %{ $map{$type} } )
+    {
+        if ( $ent->{count} > 1 || $opt{v} ) {
+            printf( "%6d/%6d $type $ent->{data}",
+                $ent->{linked}, $ent->{count} );
+        }
+    }
+}
+exit(0);
+
+sub wanted {
+    return unless ( substr( $File::Find::dir, -4 ) eq '/CVS' );
+    return unless ( $_ eq 'Root' || $_ eq 'Repository' );
+    print "$File::Find::name\n" if $opt{v};
+    my $data;
+    open( FILE, "<$_" ) || die("open($File::Find::name) failed: $!");
+    read( FILE, $data, -s FILE );
+    close(FILE);
+    my $ent = $map{$_}{$data};
+
+    if ( !$ent->{path} ) {
+        $ent->{path}   = $File::Find::name;
+        $ent->{data}   = $data;
+        $ent->{count}  = 1;
+        $ent->{linked} = 0;
+        $ent->{stat}   = join( '.', ( stat($_) )[ 0, 1 ] );
+    }
+    else {
+        ++$ent->{count};
+        if ( $ent->{stat} != join( '.', ( stat($_) )[ 0, 1 ] ) ) {
+            my $cvslinktmp = "$File::Find::name.cvslink_tmp";
+            unlink($cvslinktmp);
+            link( $ent->{path}, $cvslinktmp )
+              || die("link($ent->{path}, $cvslinktmp) failed: $!");
+            rename( $cvslinktmp, $_ )
+              || die("rename($cvslinktmp, $_) failed: $!");
+            ++$ent->{linked};
+        }
+    }
+    $map{$_}{$data} = $ent;
+}

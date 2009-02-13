@@ -1,0 +1,106 @@
+#!/bin/sh
+# $Id: audiox,v 1.3 2008/04/20 23:22:32 abs Exp $
+# Simple audio control script for local/mserv.
+# Written in shell to avoid perl dependancy
+
+determine_ctl()
+    {
+    XMMS_USER=$(ps -ax -o user,comm | grep xmms| awk '{print $1;exit}')
+    if [ -n "$XMMS_USER" ] ; then
+	CTL=xmms
+	return
+    fi
+    AMAROK_USER=$(ps -ax -o user,comm | grep amarokapp| awk '{print $1;exit}')
+    if [ -n "$AMAROK_USER" ] ; then
+	CTL=amarok
+	return
+    fi
+    CTL=local
+    }
+
+ctl_amarok()
+    {
+    if [ $(id -u) = 0 ] ; then
+	su -l "$AMAROK_USER" -c "env DISPLAY=:0.0 /usr/pkg/bin/amarok $@"
+    else
+	/usr/pkg/bin/amarok "$@"
+    fi
+    }
+
+ctl_xmms()
+    {
+    if [ $(id -u) = 0 ] ; then
+	su -l "$XMMS_USER" -c "env DISPLAY=:0.0 /usr/pkg/bin/xmms $@"
+    else
+	/usr/pkg/bin/xmms "$@"
+    fi
+    }
+
+args=$(getopt hlm $*)
+if [ $? != 0 ]; then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-l )	ctl=local ;;
+	-m )	ctl=mserv ;;
+	-- )	shift; break ;;
+    esac
+    shift
+done
+
+if [ -z "$CTL" ]; then
+    determine_ctl
+fi
+
+case "$1" in
+    prev)
+	case $CTL in
+	    mserv) mservc repeat ;;
+	    xmms)  ctl_xmms -r ;;
+	    amarok) ctl_amarok -r ;;
+	esac
+	;;
+    next)
+	case $CTL in
+	    mserv) mservc next ;;
+	    xmms)  ctl_xmms -f ;;
+	    amarok) ctl_amarok -f ;;
+
+	esac
+	;;
+    pause)
+	case $CTL in
+	    mserv) mservc pause | grep '40[61]' && mservc play ;;
+	    xmms)  ctl_xmms -t ;;
+	    amarok) ctl_amarok -t ;;
+	esac
+	;;
+    volume+|vol+|+)
+	case $CTL in
+	    mserv) mservc 'volume +' ;;
+	    *)  volctl + ;;
+	esac
+	;;
+    volume-|vol-|-)
+	case $CTL in
+	    mserv) mservc 'volume -' ;;
+	    *)  volctl - ;;
+	esac
+	;;
+    mute)
+	case $CTL in
+	    mserv) mservc volume 0 ;;
+	    *)  volctl mute ;;
+	esac
+	;;
+    repeat)
+	case $CTL in
+	    mserv) mservc repeat ;;
+	    *)  echo "Need to enter how to repeat on $CTL?"  ;;
+	esac
+	;;
+    *)
+	echo "Unknown option $1" ;;
+esac

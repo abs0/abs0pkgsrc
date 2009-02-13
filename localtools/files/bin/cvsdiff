@@ -1,0 +1,113 @@
+#!/usr/pkg/bin/perl
+# $Id: cvsdiff,v 1.6 2006/11/10 11:40:59 abs Exp $
+# Generate diff between current checked out file and specified CVS version
+#
+
+use strict;
+use warnings;
+use Getopt::Std;
+
+my %opt;
+
+if ( !getopts( 'hmnvR', \%opt ) || $opt{h} || ( @ARGV != 0 && @ARGV != 2 ) ) {
+    usage();
+}
+
+if ( @ARGV == 2 ) { cvsdiff(@ARGV); }
+else { parse_commit_messages(); }
+
+sub parse_commit_messages {
+    my (@lines);
+    print STDERR "Paste commit messages. Hit EOF (^D), or enter '.' to exit\n";
+
+    my $sub;
+    if ( !open( REP, 'CVS/Repository' ) ) {
+        die("Must be in the src tree to run cvsdiff -m");
+    }
+    $sub = <REP>;
+    close(REP);
+    chomp $sub;
+
+    my $fatal;
+    while ( my $line = <STDIN> ) {
+        chomp $line;
+        $line =~ s/^ +//g;
+
+        # Handle continuation lines
+        while ( $line =~ s/\\$// ) {
+            verbose("<Continue $line>\n");
+            $line .= <STDIN>;
+            chomp $line;
+        }
+        if ( $line =~ /^\.$/ ) { last; }
+        while ( $line =~ /^cvs rdiff/ ) {
+            my $rest;
+            if ( $line !~ /(cvs rdiff( -kk) -r\S+ -r\S+\s+\S+)\s*(.*)/ ) {
+                print "** Unable to parse $line **";
+                $fatal = 1;
+                last;
+            }
+
+            $line = $1;
+            $rest = $3;
+            while ( $rest && $rest =~ /(\S+)\s*(.*)/ ) {
+                if ( $1 eq 'cvs' ) { last; }
+                $line .= " $1";
+                $rest = $2;
+            }
+            verbose("<ok:$line>\n");
+            push( @lines, $line );
+            $line = $rest;
+        }
+    }
+    foreach my $line (@lines) {
+        if ( $opt{m} ) {
+            $line =~ s/rdiff( -kk)?/up -kk/;
+            $line =~ s/-r/-j/g;
+            $line =~ s# $sub/# #g;
+        }
+        else { $line =~ s/rdiff/rdiff -u/; }
+    }
+    if ($fatal) { exit 1; }
+    if ( $opt{v} ) { print "----\n", join( ";\n", @lines ), "\n"; }
+    if ( !$opt{n} ) { system( join( ';', @lines ) ); }
+}
+
+sub cvsdiff {
+    print "XXX to be implemented\n";
+}
+
+#PATCHARGS="-s -f -l"
+#cvsdiff()
+#    {
+#    FILE=$1
+#    REV=$2
+#    if [ ! -f $FILE ];then
+#	fatal "cvsdiff: Unable to locate file $FILE";
+#    fi
+#    OLDREV=$(echo $REV|awk -F. '{print $1"."$2-1}')
+#    if [ -n "$opt_p" ] ; then
+#	cvs diff -u -r$OLDREV -r$REV $FILE | patch $PATCHARGS $FILE
+#    else
+#	cvs diff -u -r$OLDREV -r$REV $FILE
+#    fi
+#    }
+#
+
+sub usage {
+    print "Usage: cvsdiff [opts] [file revision]
+opts:	-h  This help
+	-m  Merge in changes
+	-n  No action - just display what would be done
+	-R  Reverse patch (implies -m)
+	-v  Verbose
+
+If given a filename and a revision cvspatch will display the diff between
+that revision and the previous version.
+If no arguments are given cvspatch will expect CVS commit mails on STDIN.
+
+";
+    exit;
+}
+
+sub verbose { $opt{v} && print @_; }

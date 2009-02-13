@@ -1,0 +1,8 @@
+#!/bin/sh
+# $Id: 7z9,v 1.2 2008/05/22 08:18:37 abs Exp $
+CMD="7za a -t7z -m0=lzma -mx=9 -mfb=64 -md=64m -ms=on"
+if [ $# = 1 ] ; then
+    exec $CMD "$1.7z" "$1"
+else
+    exec $CMD "$@"
+fi

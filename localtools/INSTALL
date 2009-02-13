@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# $NetBSD: INSTALL,v 1.4 2002/02/05 05:14:46 jlam Exp $
+
+UPDATE_CONFIG=@PREFIX@/bin/update-config
+
+case ${STAGE} in
+POST-INSTALL)
+
+    if [ -f /etc/rc.local ] && ! grep -q $UPDATE_CONFIG /etc/rc.local ; then
+	echo "Update /etc/rc.local"
+	echo "[ -x $UPDATE_CONFIG ] && $UPDATE_CONFIG" >> /etc/rc.local
+    fi
+
+    LOCAL_CSHRC=@PREFIX@/share/local/csh.cshrc
+    if [ ! -f /etc/csh.cshrc ] || ! grep -q "source.*${LOCAL_CSHRC}" \
+							/etc/csh.cshrc ; then
+	echo "Update /etc/csh.cshrc"
+	echo "if ( -f ${LOCAL_CSHRC} ) source ${LOCAL_CSHRC}" >> /etc/csh.cshrc
+    fi
+
+    for RC in zshenv zshrc ; do
+	LOCAL_ZSHRC=@PREFIX@/share/local/$RC
+	if [ ! -f /etc/$RC ] || ! grep -q "source.*${LOCAL_ZSHRC}" \
+							    /etc/$RC ; then
+	    echo "Update /etc/$RC"
+	    echo "[ -f ${LOCAL_ZSHRC} ] && source ${LOCAL_ZSHRC}" >> /etc/$RC
+	fi
+    done
+
+    for f in /root/.cshrc /root/.login /root/.tcshrc ; do
+	if [ -f $f ] ; then
+	    echo "Removing $f"
+	    rm -f $f
+	fi
+    done
+
+    ;;
+esac

@@ -1,0 +1,101 @@
+#!/usr/pkg/bin/perl
+# [rconfig] $Id: munin-setup-plugins,v 1.1 2007/05/02 15:52:31 abs Exp $
+
+use warnings;
+use strict;
+
+my $active_plugins = '/etc/munin/plugins';
+my $source_plugins = '/usr/pkg/lib/munin/plugins';
+
+my %plugins = (
+    cpu                 => 'cpu',
+    df                  => 'df',
+    forks               => 'forks',
+    interrupts          => 'interrupts',
+    iostat              => 'iostat',
+    iostat_ops          => 'iostat_ops',
+    load                => 'load',
+    memory              => 'memory',
+    netstat             => 'netstat',
+    ntp_kernel_err      => 'ntp_kernel_err',
+    ntp_kernel_pll_freq => 'ntp_kernel_pll_freq',
+    ntp_kernel_pll_off  => 'ntp_kernel_pll_off',
+    ntp_states          => 'ntp_states',
+    open_files          => 'open_files',
+    processes           => 'processes',
+    swap                => 'swap',
+    vmstat              => 'vmstat',
+);
+
+if ( !chkconfig('munin_node') ) {
+    exit;    # Nothing to do
+}
+
+foreach my $if ( split /\s+/, `ifconfig -l` ) {
+    $plugins{"if_$if"} = 'if_';
+}
+
+if ( system('envstat -r > /dev/null 2>&1') == 0 ) {
+    $plugins{sensors_fans} = 'sensors_';
+    $plugins{sensors_temp} = 'sensors_';
+    $plugins{sensors_volt} = 'sensors_';
+}
+
+my @drives = grep { /^wd/ } split ' ', `sysctl -n hw.disknames`;
+foreach my $drive (@drives) {
+    open( ATACTL, 'atactl wd0 smart status|' );
+    my $ok = <ATACTL> =~ /^SMART supported/;
+    close(ATACTL);
+    if ($ok) {
+        $plugins{hddtemp_smartctl} = 'hddtemp_smartctl';
+        last;
+    }
+}
+
+if ( chkconfig('apache') ) {
+    $plugins{apache_accesses}  = 'apache_accesses';
+    $plugins{apache_processes} = 'apache_processes';
+}
+
+if ( chkconfig('exim') ) {
+    $plugins{exim_mailqueue} = 'exim_mailqueue';
+}
+
+if ( chkconfig('nfsd') ) {
+    $plugins{nfsd} = 'nfsd';
+}
+
+if ( chkconfig('nfs_client') ) {
+    $plugins{nfs_client} = 'nfs_client';
+}
+
+if ( chkconfig('smbd') ) {
+    $plugins{samba} = 'samba';
+}
+
+if ( chkconfig('squid') ) {
+    $plugins{squid_cache}    = 'squid_cache';
+    $plugins{squid_requests} = 'squid_requests';
+    $plugins{squid_traffic}  = 'squid_traffic';
+}
+
+foreach my $plugin ( keys %plugins ) {
+    mkdir( $active_plugins, 0755 );
+
+    # XXX Should check for no longer wanted plugins
+    if ( !-f "$active_plugins/$plugin" ) {
+        symlink( "$source_plugins/$plugins{$plugin}",
+            "$active_plugins/$plugin" );
+        print "$active_plugins/$plugin -> $source_plugins/$plugins{$plugin} \n";
+    }
+
+}
+exit 0;
+
+sub chkconfig {
+    my ($key) = @_;
+
+    my $value = `sh -c '. /etc/rc.conf; echo \$$key'`;
+    chomp $value;
+    $value =~ /YES/i;
+}

@@ -1,0 +1,46 @@
+#!/bin/sh
+# $Id: mservc,v 1.5 2008/04/03 13:50:50 abs Exp $
+
+PATH=/usr/bin:/bin:/usr/pkg/bin:/usr/sbin:/sbin:/usr/pkg/sbin
+HOST=mserv
+PORT=4444
+CONF=~mserv/mserv_irman.conf
+
+args=$(getopt h:p:U:P:123456789 $*)
+if [ $? != 0 ]; then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-[123456789] )
+		PORT=$(($PORT + $(echo $1|tr -d -)))
+		;;
+	-h )	HOST="$2" ; shift;;
+	-p )	PORT="$2" ; shift;;
+	-P )	MSERV_PASSWORD="$2" ; shift;;
+	-U )	USER="$2" ; shift;;
+	-- )	shift; break ;;
+    esac
+    shift
+done
+
+TITLE="mserv $USER $PORT"
+
+if [ -z "$MSERV_PASSWORD" ] ; then
+    MSERV_PASSWORD=$(csh -c 'echo $MSERV_PASSWORD')
+    if [ -z "$MSERV_PASSWORD" ]; then
+	MSERV_PASSWORD=$USER
+    fi
+fi
+if [ -z "$MSERV_PASSWORD" ] ; then
+    MSERV_PASSWORD=$USER
+    TITLE="$TITLE (default password)"
+fi
+if [ $# = 0 ] ; then
+    echo $MESSAGE
+    exec mtel -T "$TITLE" -tm mserv $PORT '' "user $USER" "pass $MSERV_PASSWORD"
+else
+    # Using "$*" as getopt above splits any arguments with spaces, so no "$@"
+    exec mservcmd -u $USER -p $MSERV_PASSWORD -h mserv:$PORT "$*"
+fi

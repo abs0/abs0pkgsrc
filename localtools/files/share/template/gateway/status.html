@@ -1,0 +1,59 @@
+${include:common_head.html}
+
+<dl>
+
+${if:$head}
+<hr>
+<dt><h3>${head}</h3>
+<dd>${body}</dd>
+<br>
+<hr>
+${endif:}
+
+
+<dt><h3>Uptime</h3>
+<dd>${uptime}
+
+<dt><h3>Network Status</h3>
+<dd><table border=1 cellspacing=1 cellpadding=4>
+<tr>
+<th>Interface</th><th>Status</th><th>Input</th><th>Output</th><th>Address</th>
+</tr>
+${loop:interfaces}
+<tr align=left valign=top>
+<th align=right>${if}</th>
+<td>${status}</td>
+<td>${input_data} (${input_packets} packets)</td>
+<td>${output_data} (${output_packets} packets)</td>
+<td>${address}</td>
+</tr>
+${endloop:}
+</table>
+
+<dt><h3>Mail Queue</h3>
+<dd>
+${if:$mailq}
+<table border=1 cellpadding=4>
+<tr>
+<th>Time</th><th>Size</th><th>From</th><th>Status</th>
+<th>Recipients</th><th>Actions</th>
+</tr>
+${loop:mailq}
+<tr align=left valign=top>
+<td>${time}</td><td>${size}</td><td>${from}</td><td>${status}</td>
+<td>${addresses}</td>
+<td>
+<a href="${cgi}?exim=log&id=${id}">Log</a> &nbsp;
+<a target="_blank" href="${cgi}?exim=retry&id=${id}">Retry</a> &nbsp;
+<a href="${cgi}?exim=thaw&id=${id}">Thaw</a> &nbsp;
+<a href="${cgi}?exim=freeze&id=${id}">Freeze</a> &nbsp;
+<a href="${cgi}?exim=cancel&id=${id}">Cancel</a></td>
+</tr>
+${endloop:}
+</table>
+${else:}
+The mail queue is empty
+${endif:}
+
+</dl>
+${include:common_tail.html}

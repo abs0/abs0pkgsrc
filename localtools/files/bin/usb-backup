@@ -1,0 +1,115 @@
+#!/bin/sh -e
+# $Id: usb-backup,v 1.4 2007/05/31 15:33:09 abs Exp $
+
+backup_dirs=/files/archive/*backup
+mount=/files/archive/usb
+dev=/dev/sd0
+dev_partition=e
+cgd=cgd2
+cgd_partition=a
+diskid=$mount/.diskid
+
+args=$(getopt bchiru $*)
+if [ $? != 0 ]; then
+    opt_h=1
+fi
+set -- $args
+while [ $# != 0 ]; do
+    case "$1" in
+	-- )	shift ; break ;;
+	-b )	opt_b=1; opt=1 ;;
+	-c )	opt_c=1; opt=1 ;;
+	-h )	opt_h=1; opt=1 ;;
+	-i )	opt_i=1; opt=1 ;;
+	-r )	opt_r=1; opt=1 ;;
+	-u )	opt_u=1; opt=1 ;;
+    esac
+    shift
+done
+if [ -z "$opt" -o "$opt_h" ] ; then
+    cat <<END
+Usage: usb-backup [opts]
+    -b	Run backup. Equivalent to -cru
+    -c	Configure encrypted $cgd on USB disk and mount on $mount
+    -h	This help
+    -i  Initialise new USB disk
+    -r  Rsync data from $backup_dirs to $mount
+    -u  Unmount $mount and unconfigure $cgd on USB disk
+
+If the rsync fails the script will abort leaving the partition mounted. -c/-b
+will check for and handle this case in the event of the user retrying.
+END
+    exit
+fi
+if [ -n "$opt_b"  ] ; then
+    opt_c=1; opt_r=1; opt_u=1
+fi
+
+configure()
+    {
+    if ! sysctl hw.disknames|fmt -1 | grep -q "^$cgd\$" ;  then
+	cgdconfig $cgd $dev$dev_partition
+    fi
+    if ! mount | grep -q $mount ; then
+	echo fsck -Pp /dev/$cgd$cgd_partition
+	fsck -Pp /dev/$cgd$cgd_partition
+	echo mount /dev/$cgd$cgd_partition $mount
+	mount /dev/$cgd$cgd_partition $mount
+    fi
+    report_diskid
+    }
+
+rsync_disk()
+    {
+    for dir in $backup_dirs ; do
+	cd $dir
+	for src in */latest/tree ; do
+	    dest=$(echo $src | sed 's:/.*::')
+	    echo ">>>>$dest"
+	    rsync --delete -ayzv $src/ $mount/$dest/
+	done
+    done
+    df -h $mount
+    du -sh $mount/*
+    }
+
+initialise_disk()
+    {
+    echo "** Make sure partition 0 is NetBSD (169) and spans the entire disk **"
+    fdisk -iua0 $dev
+    export EDITOR=cat
+    echo "** Create a 4096M 4.2BSD 'a' partition, and the rest in 'e' **"
+    disklabel -iI $dev
+    cgdconfig -V re-enter $cgd $dev$dev_partition
+    echo "** Create a single 'a' paritition **"
+    disklabel -iI $cgd
+    newfs -O2 $cgd$cgd_partition
+    }
+
+report_diskid()
+    {
+    if [ -f $diskid ] ; then
+	echo "diskid: $(cat $diskid)"
+    else
+	echo "WARNING: $diskid missing"
+    fi
+    }
+
+unconfigure()
+    {
+    if mount | grep -q "/dev/$cgd" ; then
+	report_diskid
+	umount $mount
+    fi
+    cgdconfig -u $cgd || true
+    }
+
+if [ -n "$opt_i" ] ; then
+    unconfigure # just in case
+    initialise_disk
+    unconfigure
+fi
+
+[ -n "$opt_c" ] && configure
+[ -n "$opt_r" ] && rsync_disk
+[ -n "$opt_u" ] && unconfigure
