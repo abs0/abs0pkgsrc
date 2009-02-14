@@ -11,10 +11,12 @@ COMMENT=	Meta package for 3b tomcat server depends
 META_PACKAGE=	yes
 
 # Used by the main app
+DEPENDS+= jdk15>=0:../../wip/jdk15
+DEPENDS+= ap22-jk>=0:../../www/ap2-jk
 DEPENDS+= apache-ant>=0:../../devel/apache-ant
-DEPENDS+= jdbc-postgresql83>=0:../../databases/jdbc-postgresql83
 DEPENDS+= apache-tomcat55>=0:../../www/apache-tomcat55
-DEPENDS+= ap2-jk>=0:../../www/ap2-jk
+DEPENDS+= jdbc-postgresql83>=0:../../databases/jdbc-postgresql83
+DEPENDS+= postgresql83>=0:../../databases/postgresql83
 
 # By some of the tools
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
