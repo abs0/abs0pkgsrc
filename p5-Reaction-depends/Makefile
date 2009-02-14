@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	p5-Reaction-depends-0.02
+DISTNAME=	p5-Reaction-depends-0.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,7 +14,6 @@ META_PACKAGE=	yes
 
 DEPENDS+= p5-ExtUtils-MakeMaker>=6.11:../../devel/p5-ExtUtils-MakeMaker
 DEPENDS+= p5-Catalyst-Runtime>=5.7002:../../www/p5-Catalyst-Runtime
-DEPENDS+= p5-Catalyst-Component-ACCEPT_CONTEXT>=0:../../www/p5-Catalyst-Component-ACCEPT_CONTEXT
 DEPENDS+= p5-Catalyst-Component-InstancePerContext>=0:../../www/p5-Catalyst-Component-InstancePerContext
 DEPENDS+= p5-Catalyst-Plugin-ConfigLoader>=0.19:../../www/p5-Catalyst-Plugin-ConfigLoader
 DEPENDS+= p5-Catalyst-Plugin-Static-Simple>=0:../../www/p5-Catalyst-Plugin-Static-Simple
@@ -41,8 +40,11 @@ DEPENDS+= p5-Email-MIME-Creator>=1.454:../../mail/p5-Email-MIME-Creator
 DEPENDS+= p5-Text-CSV_XS>=0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-Devel-Declare>=0.003004:../../devel/p5-Devel-Declare
 DEPENDS+= p5-MooseX-Types>=0.04:../../devel/p5-MooseX-Types
+DEPENDS+= p5-MooseX-Types-Common:../../devel/p5-MooseX-Types-Common
+DEPENDS+= p5-MooseX-Types-DateTime:../../time/p5-MooseX-Types-DateTime
 DEPENDS+= p5-Scalar-List-Utils>=0:../../devel/p5-Scalar-List-Utils
 DEPENDS+= p5-File-ShareDir>=1.00:../../devel/p5-File-ShareDir
 DEPENDS+= p5-namespace-clean>=0.08:../../devel/p5-namespace-clean
+DEPENDS+= p5-Catalyst-Component-ACCEPT_CONTEXT>=0:../../www/p5-Catalyst-Component-ACCEPT_CONTEXT
 
 .include "../../mk/bsd.pkg.mk"
