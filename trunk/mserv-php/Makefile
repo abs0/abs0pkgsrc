@@ -7,7 +7,7 @@ CATEGORIES=	audio www
 MASTER_SITES=	http://dougiamas.com/mserv/src/
 EXTRACT_SUFX=	.tgz
 
-MAINTAINER=	abs@netbsd.iog
+MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://dougiamas.com/mserv/
 COMMENT=	Web interface to mserv audio jukebox
 
@@ -19,19 +19,19 @@ WRKSRC=		${WRKDIR}/mserv-php
 MSERVPHPDIR=	${PREFIX}/share/mserv-php
 DOCDIR=		${PREFIX}/share/doc/mserv-php
 
-do-build:
+NO_BUILD=	YES
+
+PKG_DESTDIR_SUPPORT = user-destdir
+INSTALLATION_DIRS += share/mserv-php share/mserv-php/image share/doc/mserv-php
 
 do-install:
-	${INSTALL_DATA_DIR} ${MSERVPHPDIR}
-	${INSTALL_DATA_DIR} ${MSERVPHPDIR}/image
-	${CP} ${WRKSRC}/*.php ${MSERVPHPDIR}
-	${CP} ${WRKSRC}/*.css ${MSERVPHPDIR}
-	${CP} ${WRKSRC}/*.html ${MSERVPHPDIR}
-	${CP} ${WRKSRC}/image/*.gif ${MSERVPHPDIR}/image
-	${CHOWN} -R ${SHAREOWN}:${SHAREGRP} ${MSERVPHPDIR}
-	${CHMOD} -R a-w ${MSERVPHPDIR}
-	${INSTALL_DATA_DIR} ${DOCDIR}
-	${INSTALL_DATA} ${WRKSRC}/COPYRIGHT.GPL ${DOCDIR}
-	${INSTALL_DATA} ${WRKSRC}/README-0.90 ${DOCDIR}
+	${INSTALL_DATA} ${WRKSRC}/*.php ${DESTDIR}${MSERVPHPDIR}
+	${INSTALL_DATA} ${WRKSRC}/*.css ${DESTDIR}${MSERVPHPDIR}
+	${INSTALL_DATA} ${WRKSRC}/*.html ${DESTDIR}${MSERVPHPDIR}
+	${INSTALL_DATA} ${WRKSRC}/image/*.gif ${DESTDIR}${MSERVPHPDIR}/image
+	${CHOWN} -R ${SHAREOWN}:${SHAREGRP} ${DESTDIR}${MSERVPHPDIR}
+	${CHMOD} -R a-w ${DESTDIR}${MSERVPHPDIR}
+	${INSTALL_DATA} ${WRKSRC}/COPYRIGHT.GPL ${DESTDIR}${DOCDIR}
+	${INSTALL_DATA} ${WRKSRC}/README-0.90 ${DESTDIR}${DOCDIR}
 
 .include "../../mk/bsd.pkg.mk"
