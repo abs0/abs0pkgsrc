@@ -163,13 +163,11 @@ pkg_check_install()
 	    fi
 	fi
 	if [ -n "$LOG" ] ; then
+	    echo "build $PKGNAME..."
 	    if [ ! -x $CHECKFILE ] && ! ($MAKE clean && $MAKE update) \
 						>$LOG 2>&1 < /dev/null ; then
 		cat $LOG
 		exit 1
-	    else
-		echo "build $PKGNAME..."
-		($MAKE clean && $MAKE update) || exit 1
 	    fi
 	fi
     fi
@@ -358,7 +356,6 @@ else	# $opt_s
 
     pkg_check_install cpuflags		devel/cpuflags	 /usr/pkg/bin/cpuflags
     pkg_check_install pkg_chk		pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
-    pkg_check_install localtools	local/localtools /usr/pkg/bin/rcsvi
 
     if [ -n "$later_pkg_chk_remove" ] ; then
 	pkg_chk -Br -P $PKGBINDIR
