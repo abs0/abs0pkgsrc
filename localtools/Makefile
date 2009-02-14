@@ -43,8 +43,9 @@ do-build:
 .endfor
 	${ECHO} @dirrm ${SHAREDIR}			>> ${PLIST_SRC}
 
+INSTALLATION_DIRS= bin
+
 do-install:
-	${INSTALL_SCRIPT_DIR} ${DESTDIR}${PREFIX}/bin
 	for d in `awk /@dirrm/'{print $$2}' ${WRKDIR}/PLIST | ${SORT} -r`; do \
 	    ${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/$$d; \
 	done
