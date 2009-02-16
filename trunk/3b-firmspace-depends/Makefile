@@ -39,7 +39,22 @@ DEPENDS+= p5-PerlMagick>0:../../graphics/p5-PerlMagick
 DEPENDS+= p5-YAML>=0:../../textproc/p5-YAML
 
 # Infrastructure, apache, database, etc
-DEPENDS+= postgresql83>=0:../../databases/postgresql83
 DEPENDS+= ap22-fcgid>=0:../../www/ap2-fcgid
+DEPENDS+= ghostscript>=0:../../print/ghostsript
+DEPENDS+= p5-FCGI>=0:../../www/p5-FCGI
+DEPENDS+= postgresql83>=0:../../databases/postgresql83
+
+# Packages that may be needed - need to check
+# DEPENDS+= p5-Error>0:../../devel/p5-Error
+# DEPENDS+= p5-Event>0:../../devel/p5-Event
+# DEPENDS+= p5-IO>0:../../distfiles/p5-IO
+# DEPENDS+= p5-IO-tty>0:../../distfiles/p5-IO-tty
+# DEPENDS+= p5-Curses>0:../../distfiles/p5-Curses
+# DEPENDS+= ImageMagick>=0:../../graphics/ImageMagick
+# DEPENDS+= ncurses>=0:../../devel/ncurses
+# DEPENDS+= p5-POE-Test-Loops>0:../../distfiles/p5-POE-Test-Loops
+# DEPENDS+= p5-POE>0:../../distfiles/p5-POE
+# DEPENDS+= p5-Term-ReadKey>0:../../devel/p5-Term-ReadKey
+# DEPENDS+= p5-Term-Cap>0:../../distfiles/p5-Term-Cap
 
 .include "../../mk/bsd.pkg.mk"

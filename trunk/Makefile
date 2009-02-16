@@ -3,8 +3,8 @@
 
 COMMENT=	Local packages
 
+SUBDIR+=	3b-cgi-depends
 SUBDIR+=	3b-retail-depends
-SUBDIR+=	3b-site-depends
 SUBDIR+=	3b-tomcat-depends
 SUBDIR+=	firmspace-depends
 SUBDIR+=	localtools
