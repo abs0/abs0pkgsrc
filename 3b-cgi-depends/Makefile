@@ -14,6 +14,7 @@ DEPENDS+= p5-CGI-Session>0:../../www/p5-CGI-Session
 DEPENDS+= p5-Cache-Memcached>0:../../devel/p5-Cache-Memcached
 DEPENDS+= p5-Crypt-GeneratePassword>0:../../security/p5-Crypt-GeneratePassword
 DEPENDS+= p5-Crypt-Random>0:../../security/p5-Crypt-Random
+DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
 DEPENDS+= p5-Date-Calc>0:../../time/p5-Date-Calc
 DEPENDS+= p5-Email-Valid>0:../../mail/p5-Email-Valid
 DEPENDS+= p5-HTML-Strip>0:../../www/p5-HTML-Strip
