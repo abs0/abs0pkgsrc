@@ -205,7 +205,8 @@ sub find_cd_drives {
             # HL-DT-ST DVDRAM GSA-4167B
             # WPI CDRW-2422
             # TSSTcorpCD/DVDW SH-W162C,
-            if ( $cddevs{$dev}{description} =~ /^[^,]*(\b|CD|DVD)(RW|W|RAM)\b/ )
+	    # HL-DT-STDVDRRW GCA-4164B
+            if ( $cddevs{$dev}{description} =~ /^[^,]*(\b|CD|DVD)(RRW|RW|W|RAM)\b/ )
             {
                 $cddevs{$dev}{rw} = 1;
             }
