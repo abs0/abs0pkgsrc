@@ -18,24 +18,24 @@ DEPENDS+= p5-Date-Calc>0:../../time/p5-Date-Calc
 DEPENDS+= p5-Email-Valid>0:../../mail/p5-Email-Valid
 DEPENDS+= p5-HTML-Strip>0:../../www/p5-HTML-Strip
 DEPENDS+= p5-HTML-TableExtract>0:../../www/p5-HTML-TableExtract
-DEPENDS+= p5-JSON-Any>=0:../../converters/p5-JSON-Any
+DEPENDS+= p5-JSON-Any>0:../../converters/p5-JSON-Any
 DEPENDS+= p5-MIME-Base64-URLSafe>0:../../converters/p5-MIME-Base64-URLSafe
 DEPENDS+= p5-Module-Pluggable>0:../../devel/p5-Module-Pluggable
 DEPENDS+= p5-Module-Refresh>0:../../devel/p5-Module-Refresh
 DEPENDS+= p5-PerlMagick>0:../../graphics/p5-PerlMagick
 DEPENDS+= p5-Rose-DB-Object>0:../../databases/p5-Rose-DB-Object
-DEPENDS+= p5-Template-Provider-Encoding>0:../../wip/p5-Template-Provider-Encoding
+DEPENDS+= p5-Template-Provider-Encoding>0:../../www/p5-Template-Provider-Encoding
 DEPENDS+= p5-Template-Stash-EscapeHTML>0:../../www/p5-Template-Stash-EscapeHTML
-DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS 
+DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-Text-Substitute>0:../../textproc/p5-Text-Substitute
 DEPENDS+= p5-WWW-Facebook-API>0:../../www/p5-WWW-Facebook-API
 DEPENDS+= p5-XML-LibXML>0:../../textproc/p5-XML-LibXML
 DEPENDS+= p5-libwww>0:../../www/p5-libwww
 
 # Infrastructure, apache, database, etc
-DEPENDS+= ap22-fcgid>=0:../../www/ap2-fcgid
-DEPENDS+= p5-FCGI>=0:../../www/p5-FCGI
-DEPENDS+= postgresql83>=0:../../databases/postgresql83
+DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
+DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
+DEPENDS+= postgresql83>0:../../databases/postgresql83
 
 # Packages that may be needed - need to check
 # DEPENDS+= p5-Clone>0:../../devel/p5-Clone
