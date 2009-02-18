@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	3b-firmspace-depends-0.01
+DISTNAME=	3b-firmspace-depends-0.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -32,29 +32,20 @@ DEPENDS+= p5-DateTime-Format-Epoch>=0:../../time/p5-DateTime-Format-Epoch
 DEPENDS+= p5-DateTime-Format-Pg>0:../../time/p5-DateTime-Format-Pg
 DEPENDS+= p5-DateTime-TimeZone>0:../../time/p5-DateTime-TimeZone
 DEPENDS+= p5-Email-Valid>0:../../mail/p5-Email-Valid
+DEPENDS+= p5-Error>0:../../devel/p5-Error
 DEPENDS+= p5-JSON>=0:../../converters/p5-JSON
 DEPENDS+= p5-MIME-tools>0:../../mail/p5-MIME-tools
 DEPENDS+= p5-Mail-Sender>0:../../mail/p5-Mail-Sender
 DEPENDS+= p5-PerlMagick>0:../../graphics/p5-PerlMagick
 DEPENDS+= p5-YAML>=0:../../textproc/p5-YAML
 
+# Needed by firmspace_jobqueue.pl*
+DEPENDS+= p5-Catalyst-Engine-JobQueue>=0:../../www/p5-Catalyst-Engine-JobQueue
+
 # Infrastructure, apache, database, etc
 DEPENDS+= ap22-fcgid>=0:../../www/ap2-fcgid
 DEPENDS+= ghostscript>=0:../../print/ghostsript
 DEPENDS+= p5-FCGI>=0:../../www/p5-FCGI
 DEPENDS+= postgresql83>=0:../../databases/postgresql83
-
-# Packages that may be needed - need to check
-# DEPENDS+= p5-Error>0:../../devel/p5-Error
-# DEPENDS+= p5-Event>0:../../devel/p5-Event
-# DEPENDS+= p5-IO>0:../../distfiles/p5-IO
-# DEPENDS+= p5-IO-tty>0:../../distfiles/p5-IO-tty
-# DEPENDS+= p5-Curses>0:../../distfiles/p5-Curses
-# DEPENDS+= ImageMagick>=0:../../graphics/ImageMagick
-# DEPENDS+= ncurses>=0:../../devel/ncurses
-# DEPENDS+= p5-POE-Test-Loops>0:../../distfiles/p5-POE-Test-Loops
-# DEPENDS+= p5-POE>0:../../distfiles/p5-POE
-# DEPENDS+= p5-Term-ReadKey>0:../../devel/p5-Term-ReadKey
-# DEPENDS+= p5-Term-Cap>0:../../distfiles/p5-Term-Cap
 
 .include "../../mk/bsd.pkg.mk"
