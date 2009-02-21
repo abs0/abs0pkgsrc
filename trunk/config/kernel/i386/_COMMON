@@ -16,13 +16,5 @@ options 	NPROC=4096
 options 	MAXUPRC=1024
 options 	NOFILE=1024
 options 	NMBCLUSTERS=8192
-options 	NVNODE=131072		#  128K
+options 	NVNODE=65536		#  64K
 options 	DFLDSIZ=536870912	#  512M
-options 	MAXDSIZ=2146435072	# 2047M
-
-options 	NKMEMPAGES_MAX=98304	# Normally 32K, 128K fails to boot 3.0
-
-# Have kernel take upper 1.5GB of VM to avoid potential issues with 4GB
-# 
-# options KERNBASE_LOCORE=0xa0000000
-# makeoptions TEXTADDR=0xa0100000
