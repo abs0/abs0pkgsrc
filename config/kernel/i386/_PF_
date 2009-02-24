@@ -111,10 +111,10 @@ options 	SYSCTL_INCLUDE_DESCR	# Include sysctl descriptions in kernel
 #options 	BEEP_ONHALT_PITCH=1500	# Default frequency (in Hz)
 #options 	BEEP_ONHALT_PERIOD=250	# Default duration (in msecs)
 
-# Enable experimental buffer queue strategy for better responsiveness under
-# high disk I/O load. Likely stable but not yet the default.
+# Alternate buffer queue strategies for better responsiveness under high
+# disk I/O load.
 #options 	BUFQ_READPRIO
-#options 	BUFQ_PRIOCSCAN
+options 	BUFQ_PRIOCSCAN
 
 # Diagnostic/debugging support options
 #options 	DIAGNOSTIC	# expensive kernel consistency checks
@@ -143,6 +143,7 @@ options 	DDB_HISTORY_SIZE=512	# enable history editing in DDB
 #@ options 	COMPAT_16	# NetBSD 1.6
 options 	COMPAT_20	# NetBSD 2.0	#@ For purplei.com onyx
 options 	COMPAT_30	# NetBSD 3.0
+options 	COMPAT_30_PTHREAD # NetBSD 3.0 pthreads compatibility.
 options 	COMPAT_40	# NetBSD 4.0
 #@ options 	COMPAT_43	# 4.3BSD, 386BSD, and BSDI
 #options 	COMPAT_386BSD_MBRPART # recognize old partition ID
@@ -184,12 +185,13 @@ file-system 	PORTAL		# portal filesystem (still experimental)
 file-system 	PROCFS		# /proc
 file-system 	UMAPFS		# NULLFS + uid and gid remapping
 file-system 	UNION		# union file system
-file-system 	CODA		# Coda File System; also needs vcoda (below)
+#@ file-system 	CODA		# Coda File System; also needs vcoda (below)
 file-system 	SMBFS		# experimental - CIFS; also needs nsmb (below)
 file-system 	PTYFS		# /dev/ptm support
 file-system 	TMPFS		# Efficient memory file-system
 #file-system 	UDF		# experimental - OSTA UDF CD/DVD file-system
 #file-system 	HFS		# experimental - Apple HFS+ (read-only)
+file-system	PUFFS		# Userspace file systems (e.g. ntfs-3g & sshfs)
 
 # File system options
 options 	QUOTA		# UFS quotas
@@ -1506,7 +1508,7 @@ pseudo-device	bcsp			# BlueCore Serial Protocol
 pseudo-device	btuart			# Bluetooth HCI UART (H4)
 
 # a pseudo device needed for Coda	# also needs CODA (above)
-pseudo-device	vcoda		4	# coda minicache <-> venus comm.
+#@ pseudo-device	vcoda		4	# coda minicache <-> venus comm.
 
 # a pseudo device needed for SMBFS
 pseudo-device	nsmb			# experimental - SMB requester
@@ -1523,6 +1525,9 @@ pseudo-device	pad
 
 # userland interface to drivers, including autoconf and properties retrieval
 pseudo-device	drvctl
+
+# Pass-to-Userspace TransporTER, required for puffs(4) and pud(4)
+pseudo-device	putter
 
 options 	FILEASSOC		# fileassoc(9) - required for Veriexec
 
