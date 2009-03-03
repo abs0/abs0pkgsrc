@@ -10,9 +10,12 @@ COMMENT=	Meta package for celebratio server depends
 
 META_PACKAGE=	yes
 
+# Optimise build flags
+DEPENDS+= cpuflags>0:../../devel/cpuflags
+
 # Used by the main app
 DEPENDS+= sun-jdk6>0:../../lang/sun-jdk6
-DEPENDS+= apache22>0:../../www/apache22
+DEPENDS+= apache>0:../../www/apache22
 DEPENDS+= ap22-jk>0:../../www/ap2-jk
 DEPENDS+= apache-tomcat6>0:../../www/apache-tomcat6
 DEPENDS+= jdbc-mysql5>0:../../databases/jdbc-mysql5
