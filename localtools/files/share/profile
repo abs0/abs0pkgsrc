@@ -36,7 +36,7 @@ umask 002
 # Exit now if non interactive
 case $- in
     *i*) ;;
-    *) exit ;;
+    *) return ;;
 esac
 
 HISTSIZE=500
@@ -70,8 +70,8 @@ alias rm='rm -i'
 alias z=suspend
 
 # Protect the rest of the file from 'sh'
-if [ -n "$KSH_VERSION$ZSH_VERSION$BASH_VERSION" ] ; then
-    exit
+if [ -z "$KSH_VERSION$ZSH_VERSION$BASH_VERSION" ] ; then
+    return
 fi
 
 if [ -n "$ZSH_VERSION" ] ; then
