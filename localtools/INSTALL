@@ -19,12 +19,16 @@ POST-INSTALL)
 	echo "if ( -f ${LOCAL_CSHRC} ) source ${LOCAL_CSHRC}" >> /etc/csh.cshrc
     fi
 
-    for RC in zshenv zshrc ; do
-	LOCAL_ZSHRC=@PREFIX@/share/local/$RC
-	if [ ! -f /etc/$RC ] || ! grep -q "source.*${LOCAL_ZSHRC}" \
-							    /etc/$RC ; then
-	    echo "Update /etc/$RC"
-	    echo "[ -f ${LOCAL_ZSHRC} ] && source ${LOCAL_ZSHRC}" >> /etc/$RC
+    for profile in /etc/zshenv /etc/profile ; do
+	LOCAL_PROFILE=@PREFIX@/share/local/profile
+	if [ ! -f $profile ] || ! grep -q "${LOCAL_PROFILE}" $profile ; then
+	    echo "Update $profile"
+	    cat >> $profile <<END
+# Added by pkgsrc/localtools
+ENV=/usr/pkg/share/local/profile
+[ -n "$BASH_VERSION" ] && . /usr/pkg/share/local/profile
+
+END
 	fi
     done
 
