@@ -65,9 +65,12 @@ fi
 alias h='history'
 alias j='jobs -l'
 alias ll='ls -la'
-alias ls='ls -w'
 alias rm='rm -i'
 alias z=suspend
+
+if [ "$UNAME" = NetBSD ] ; then
+    alias ls='ls -w'
+fi
 
 # Protect the rest of the file from 'sh'
 if [ -z "$KSH_VERSION$ZSH_VERSION$BASH_VERSION" ] ; then
