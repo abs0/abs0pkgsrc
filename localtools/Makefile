@@ -6,7 +6,7 @@ CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
 
-MAINTAINER=	abs@NetBSD.org
+MAINTAINER=	abs@absd.org
 COMMENT=	Some local tools
 
 USE_PKGINSTALL=		yes
@@ -16,9 +16,8 @@ USE_LANGUAGES=	# empty
 EXTRACT_ONLY=	# empty
 NO_CHECKSUM=	yes
 
-BINSCRIPTS!=(cd files/bin ; find * -type f | egrep -v 'CVS|\.orig$$' )
-SHAREDIRS!=(cd files/share ; find * -type d | egrep -v 'CVS|\.orig$$' | sort -r)
-SHAREFILES!=(cd files/share ; find * -type f | egrep -v 'CVS|\.orig$$' )
+BINSCRIPTS!=(cd files/bin ; find * -type f | egrep -v '.svn|\.orig$$' )
+SHAREFILES!=(cd files/share ; find * -type f | egrep -v '.svn|\.orig$$' )
 
 .if ${MACHINE_ARCH} == "i386"
 BINSCRIPTS+=../i386/mkey ../i386/mtel
@@ -38,9 +37,6 @@ do-build:
 	@${ECHO} ${SHAREDIR}/${f} >> ${PLIST_SRC}
 .endfor
 
-.for d in ${SHAREDIRS}
-	${ECHO} @dirrm ${SHAREDIR}/${d}			>> ${PLIST_SRC}
-.endfor
 	${ECHO} @dirrm ${SHAREDIR}			>> ${PLIST_SRC}
 
 INSTALLATION_DIRS= bin
