@@ -20,7 +20,7 @@ export EXINIT="map \f !}fmt 76 77|$EXINIT"
 
 if [ "$UNAME" = NetBSD ] ; then
     export EXINIT="set filec=	|$EXINIT"
-    # export LC_CTYPE=en_US.UTF-8
+    export LC_CTYPE=en_US.UTF-8
 fi
 
 export PATH=/usr/local/sbin:/usr/pkg/sbin:/usr/sbin:/sbin
