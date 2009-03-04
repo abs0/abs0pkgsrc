@@ -79,7 +79,14 @@ fi
 
 if [ -n "$ZSH_VERSION" ] ; then
     WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'	# Exclude '/'
+    bindkey "\ep" history-search-backward
+    bindkey "\en" history-search-forward
 fi
+if [ -n "$BASH_VERSION" ] ; then
+    bind '"\ep": history-search-backward'
+    bind '"\en": history-search-forward'
+fi
+
 
 vigrep()
     {
