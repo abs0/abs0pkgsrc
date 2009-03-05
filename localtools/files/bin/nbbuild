@@ -139,6 +139,7 @@ build()
 	    root/.cshrc \
 	    root/.login \
 	    var/cron \
+	    boot.cfg \
 	    etc \
 	    "
 	TARDIR=$ARCHHOME/$TAG-$LASTMOD
