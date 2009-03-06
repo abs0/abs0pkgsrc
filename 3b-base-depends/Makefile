@@ -13,6 +13,7 @@ DEPENDS+= alpine>0:../../mail/alpine
 DEPENDS+= exim>0:../../mail/exim
 DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= pico>0:../../editors/pico
+DEPENDS+= rsync>0:../../net/rsync
 DEPENDS+= subversion-base>0:../../devel/subversion-base
 DEPENDS+= zsh>0:../../shells/zsh
 
