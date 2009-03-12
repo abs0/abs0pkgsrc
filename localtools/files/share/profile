@@ -25,7 +25,7 @@ fi
 
 export PATH=/usr/local/sbin:/usr/pkg/sbin:/usr/sbin:/sbin
 export PATH=$PATH:/usr/local/bin:/usr/pkg/bin:/usr/bin:/bin
-export PATH=$PATH:/usr/games
+export PATH=$PATH:/usr/X11R7:/usr/games
 
 export BLOCKSIZE=1k
 export EDITOR=vi
