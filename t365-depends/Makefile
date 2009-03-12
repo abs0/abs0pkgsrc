@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	t365-depends-0.02
+DISTNAME=	t365-depends-0.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -38,4 +38,8 @@ DEPENDS+= p5-signatures>0:../../devel/p5-signatures
 
 # Tests
 DEPENDS+= p5-Test-WWW-Mechanize-Catalyst>0:../../www/p5-Test-WWW-Mechanize-Catalyst
+
+# data loaders
+DEPENDS+= p5-XML-LibXML>=0:../../textproc/p5-XML-LibXML
+
 .include "../../mk/bsd.pkg.mk"
