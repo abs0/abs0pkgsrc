@@ -149,7 +149,7 @@ build()
 	if [ -n "$opt_k" ] ; then
 	    echo "Generated $TARDIR/kernels.tbz"
 	else
-	    pax -w $ETC_LIST | bzip2 -9 > $TARDIR/etc.tbz
+	    pax -w $ETC_LIST dev/MAKEDEV | bzip2 -9 > $TARDIR/etc.tbz
 	    rm -rf $ETC_LIST
 	    pax -w * | bzip2 -9 > $TARDIR/userland.tbz
 	    rm -rf *
