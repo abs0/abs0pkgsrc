@@ -10,7 +10,7 @@ COMMENT=	Meta package for t365 depends
 
 META_PACKAGE=	yes
 
-DEPENDS+= p5-Reaction-depends>0:../../local/p5-Reaction-depends
+DEPENDS+= p5-Reaction>0:../../www/p5-Reaction
 DEPENDS+= p5-Module-Install>0:../../devel/p5-Module-Install
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
 DEPENDS+= postgresql83>0:../../databases/postgresql83

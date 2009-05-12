@@ -369,7 +369,7 @@ echo "pkg_chk $PKG_CHK_FLAGS..."
 nice pkg_chk $PKG_CHK_FLAGS < /dev/null
 if [ ! -n "$opt_b" ] ; then
     echo "Update pkg_summary.gz"
-    ( cd PKGBINDIR && pkg_info -X *.t?? | gzip -9 > pkg_summary.gz )
+    ( cd $PKGBINDIR && ls -t *.t?? | xargs pkg_info -X | gzip -9 > pkg_summary.gz )
 fi
 
 postrun
