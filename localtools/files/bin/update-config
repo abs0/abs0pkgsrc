@@ -40,10 +40,13 @@ sl()
 
 PATH=/usr/pkg/bin:/usr/pkg/sbin:$PATH
 
+sl /etc/bugzilla		/usr/pkg/share/bugzilla		bugzilla3
+sl /etc/mediawiki/LocalSettings.php /usr/pkg/share/mediawiki/LocalSettings.php mediawiki
+sl /etc/mediawiki/extensions 	/usr/pkg/share/mediawiki/extensions mediawiki
+sl /etc/mediawiki/images 	/usr/pkg/share/mediawiki/images mediawiki
 sl /etc/roundcube		/usr/pkg/share/roundcube/config	roundcube
 sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde
 sl /etc/php.ini			/usr/pkg/etc/php.ini		php
-sl /etc/ppp.conf		/usr/pkg/etc/ppp/ppp.conf	speedtouch
 sl /usr/pkg/java/jdk-1.5.0/jre/plugin/i386/ns7/libjavaplugin_oji.so \
 	/usr/pkg/lib/firefox/plugins/libjavaplugin_oji.so jdk15
 sl /etc/ampache/ampache.cfg.php	/usr/pkg/share/ampache/config/ampache.cfg.php \
