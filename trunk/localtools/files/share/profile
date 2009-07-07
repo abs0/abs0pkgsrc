@@ -23,8 +23,8 @@ if [ "$UNAME" = NetBSD ] ; then
     export LC_CTYPE=en_US.UTF-8
 fi
 
-export PATH=/usr/local/sbin:/usr/pkg/sbin:/usr/sbin:/sbin
-export PATH=$PATH:/usr/local/bin:/usr/pkg/bin:/usr/bin:/bin
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin
+export PATH=$PATH:/usr/pkg/sbin:/usr/pkg/bin:
 export PATH=$PATH:/usr/X11R7:/usr/games
 
 export BLOCKSIZE=1k
