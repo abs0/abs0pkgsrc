@@ -40,7 +40,7 @@ sl()
 
 PATH=/usr/pkg/bin:/usr/pkg/sbin:$PATH
 
-sl /etc/bugzilla		/usr/pkg/share/bugzilla		bugzilla3
+sl /etc/bugzilla		/usr/pkg/share/bugzilla		bugzilla
 sl /etc/mediawiki/LocalSettings.php /usr/pkg/share/mediawiki/LocalSettings.php mediawiki
 sl /etc/mediawiki/extensions 	/usr/pkg/share/mediawiki/extensions mediawiki
 sl /etc/mediawiki/images 	/usr/pkg/share/mediawiki/images mediawiki
