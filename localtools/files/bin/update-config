@@ -47,8 +47,15 @@ sl /etc/mediawiki/images 	/usr/pkg/share/mediawiki/images mediawiki
 sl /etc/roundcube		/usr/pkg/share/roundcube/config	roundcube
 sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde
 sl /etc/php.ini			/usr/pkg/etc/php.ini		php
+
 sl /usr/pkg/java/jdk-1.5.0/jre/plugin/i386/ns7/libjavaplugin_oji.so \
-	/usr/pkg/lib/firefox/plugins/libjavaplugin_oji.so jdk15
+	/usr/pkg/lib/firefox35/plugins/libjavaplugin_oji.so jdk15
+ln -sf /usr/pkg/bin/firefox35 /usr/pkg/bin/firefox
+
+if [ -f /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so -a -d /usr/pkg/lib/firefox35/plugins ]; then
+    mv /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so /usr/pkg/lib/firefox35/plugins
+fi
+
 sl /etc/ampache/ampache.cfg.php	/usr/pkg/share/ampache/config/ampache.cfg.php \
 	ampache
 
@@ -59,19 +66,6 @@ if [ -f /etc/nut/ups.conf ] ; then
 	chgrp nut $tty
 	chmod 660 $tty
     done
-fi
-
-# Just while we have firefox3 and firefox
-if [ -d /usr/pkg/lib/firefox/plugins -a -d /usr/pkg/lib/firefox3/plugins ]; then
-    ln -sf /usr/pkg/bin/firefox3 /usr/pkg/bin/firefox
-    find /usr/pkg/lib/firefox3/plugins -type l | xargs rm
-    ln -sf /usr/pkg/lib/firefox/plugins/* /usr/pkg/lib/firefox3/plugins
-fi
-
-if [ -d /usr/pkg/lib/firefox/plugins -a -d /usr/pkg/lib/firefox35/plugins ]; then
-    ln -sf /usr/pkg/bin/firefox35 /usr/pkg/bin/firefox
-    find /usr/pkg/lib/firefox35/plugins -type l | xargs rm
-    ln -sf /usr/pkg/lib/firefox/plugins/* /usr/pkg/lib/firefox35/plugins
 fi
 
 if [ ! -x /bin/tcsh ] ; then
