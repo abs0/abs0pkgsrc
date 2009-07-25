@@ -45,7 +45,7 @@ sl /etc/mediawiki/LocalSettings.php /usr/pkg/share/mediawiki/LocalSettings.php m
 sl /etc/mediawiki/extensions 	/usr/pkg/share/mediawiki/extensions mediawiki
 sl /etc/mediawiki/images 	/usr/pkg/share/mediawiki/images mediawiki
 sl /etc/roundcube		/usr/pkg/share/roundcube/config	roundcube
-sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde
+sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde4
 sl /etc/php.ini			/usr/pkg/etc/php.ini		php
 
 sl /usr/pkg/java/jdk-1.5.0/jre/plugin/i386/ns7/libjavaplugin_oji.so \
