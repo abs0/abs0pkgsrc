@@ -57,10 +57,10 @@ build()
     {
     MACHINE=$1
     ARCHHOME=$NBHOME/arch/$MACHINE
-    OBJDIR=/var/obj/$MACHINE
-    LOG=$OBJDIR/build.log
+    BUILDDIR=/var/obj/$MACHINE
+    LOG=$BUILDDIR/build.log
 
-    mkdir -p $OBJDIR
+    mkdir -p $BUILDDIR
     cd $BSDSRCDIR
 
     # Determine LASTMOD and TAG
@@ -75,10 +75,10 @@ build()
 	TAG=current
     fi
 
-    DESTDIR=$ARCHHOME/destdir/$TAG
-    RELEASEDIR=$ARCHHOME/release/$TAG
+    DESTDIR=$BUILDDIR/destdir
+    RELEASEDIR=$BUILDDIR/release
 
-    ARGS="-m $MACHINE -M $OBJDIR -D $DESTDIR -R $RELEASEDIR -T /var/obj/tools"
+    ARGS="-m $MACHINE -M $BUILDDIR/obj -D $DESTDIR -R $RELEASEDIR -T $BUILDDIR/tools"
     if [ $(id -u) != 0 ] ; then
 	ARGS="$ARGS -U"
     fi
@@ -113,7 +113,7 @@ build()
     mkdir -p $DESTDIR/kernels
     for conf in $KERNLIST ; do
 	cd $BSDSRCDIR
-	KERNEL=$OBJDIR/$NBHOME/$VERSION/sys/arch/$MACHINE/compile/$conf/netbsd
+	KERNEL=$BUILDDIR/$NBHOME/$VERSION/sys/arch/$MACHINE/compile/$conf/netbsd
 	if [ -n "$opt_n" ] ; then
 	    echo ./build.sh $ARGS kernel=$conf
 	    echo $KERNEL $DESTDIR/netbsd$conf
