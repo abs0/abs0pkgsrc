@@ -22,6 +22,7 @@ sl()
     pkg=$3
 
     if [ -e $src -o -e $dest ]; then
+	mkdir -p $(dirname $src)
 	if [ ! -e $src ] ; then
 	    mv $dest $src
 	    echo "update-config: Move $dest $src"
@@ -49,11 +50,10 @@ sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde4
 sl /etc/php.ini			/usr/pkg/etc/php.ini		php
 
 sl /usr/pkg/java/jdk-1.5.0/jre/plugin/i386/ns7/libjavaplugin_oji.so \
-	/usr/pkg/lib/firefox35/plugins/libjavaplugin_oji.so jdk15
-ln -sf /usr/pkg/bin/firefox35 /usr/pkg/bin/firefox
+	/usr/pkg/lib/firefox/plugins/libjavaplugin_oji.so jdk15
 
-if [ -f /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so -a -d /usr/pkg/lib/firefox35/plugins ]; then
-    mv /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so /usr/pkg/lib/firefox35/plugins
+if [ -f /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so -a -d /usr/pkg/lib/firefox/plugins ]; then
+    ln -f /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so /usr/pkg/lib/firefox/plugins
 fi
 
 sl /etc/ampache/ampache.cfg.php	/usr/pkg/share/ampache/config/ampache.cfg.php \
