@@ -56,7 +56,7 @@ fi
 build()
     {
     MACHINE=$1
-    ARCHHOME=$NBHOME/arch/$MACHINE
+    ARCHHOME=$NBHOME/arch
     BUILDDIR=/var/obj/$MACHINE
     LOG=$BUILDDIR/build.log
 
@@ -142,7 +142,7 @@ build()
 	    boot.cfg \
 	    etc \
 	    "
-	TARDIR=$ARCHHOME/$TAG-$LASTMOD
+	TARDIR=$ARCHHOME/$TAG-$LASTMOD-$MACHINE
 	mkdir -p $TARDIR
 	pax -w $KERNELS_LIST | bzip2 -9 > $TARDIR/kernels.tbz
 	rm -rf $KERNELS_LIST
