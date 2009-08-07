@@ -44,7 +44,7 @@ opts	-a arch Push comma separated arch list
 	-o	Push to other OS/Arch
 	-q	Quick (exclude pkgsrc)
 	-r	Receive (pull)
-    	-s arch Push comma separated srcdir list
+    	-s srcdirs Push comma separated srcdir list
 	-t	Use tar, not rsync
 END
     exit
@@ -73,16 +73,16 @@ EXCL="$PARTIALDIR work OLD/"
 
 if [ -n "$opt_q" ] ; then
     ROOT=$ROOT/pkgsrc
-    EXCL="$EXCL distfiles/" # XXX fix to exclude others
+    EXCL="$EXCL /distfiles/" # XXX fix to exclude others
 else
-    EXCL="$EXCL export/ pkgsrc/distfiles/ arch/i386/destdir/ arch/i386/release/"
+    EXCL="$EXCL /export/ /pkgsrc/distfiles/"
 
     if [ -z "$opt_s" ] ; then
 	EXCL="$EXCL $(ls $ROOT|egrep -v '^(arch|pkgsrc)$' || true)"
     fi
 
     if [ -n "$opt_o" ] ; then
-	EXCL="$EXCL pkgsrc/packages/ arch/"
+	EXCL="$EXCL /pkgsrc/packages/ arch/"
     fi
 
 fi

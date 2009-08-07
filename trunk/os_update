@@ -8,7 +8,7 @@ if [ $(sysctl -n kern.ostype) != NetBSD ] ; then
     exit 1
 fi
 
-FILEDIR=/files/netbsd/arch/$(sysctl -n hw.machine)
+FILEDIR=/files/netbsd/arch
 KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/).*//').gz
 OSVER=$(sysctl -n kern.osrelease | sed -e 's/[^0-9].*//')
 HOST=$(sysctl -n kern.hostname | sed 's:\..*::')
@@ -70,9 +70,10 @@ if [ "$1" = -d	]; then
 fi
 
 if [ -z "$TARDIR" ] ; then
-    TARDIR=$(ls $FILEDIR/$OSVER-*/kernels.tbz | sed -n -e 's:/kernels.tbz::' -e '$p')
+    KERNTAR_MATCH='$FILEDIR/$OSVER-*-$(sysctl -n hw.machine)/kernels.tbz'
+    TARDIR=$(ls $KERNTAR_MATCH | sed -n -e 's:/kernels.tbz::' -e '$p')
     if [ -z "$TARDIR" ] ; then
-	echo "Unable to locate $FILEDIR/$OSVER-*/kernels.tbz"
+	echo "Unable to locate $KERNTAR_MATCH"
 	exit 1
     fi
 fi
