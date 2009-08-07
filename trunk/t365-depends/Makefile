@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	t365-depends-0.03
+DISTNAME=	t365-depends-0.04
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,10 +10,11 @@ COMMENT=	Meta package for t365 depends
 
 META_PACKAGE=	yes
 
-DEPENDS+= p5-Reaction>0:../../www/p5-Reaction
+# Ensure installed before any DBD just in case
+DEPENDS+= postgresql84>0:../../databases/postgresql84
+
 DEPENDS+= p5-Module-Install>0:../../devel/p5-Module-Install
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
-DEPENDS+= postgresql83>0:../../databases/postgresql83
 DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
 
 DEPENDS+= p5-Catalyst-Model-Adaptor>0:../../www/p5-Catalyst-Model-Adaptor
@@ -41,5 +42,8 @@ DEPENDS+= p5-Test-WWW-Mechanize-Catalyst>0:../../www/p5-Test-WWW-Mechanize-Catal
 
 # data loaders
 DEPENDS+= p5-XML-LibXML>=0:../../textproc/p5-XML-LibXML
+
+# We usually use the trunk for this anyway...
+DEPENDS+= p5-Reaction>0:../../www/p5-Reaction
 
 .include "../../mk/bsd.pkg.mk"
