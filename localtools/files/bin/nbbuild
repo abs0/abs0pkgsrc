@@ -113,7 +113,7 @@ build()
     mkdir -p $DESTDIR/kernels
     for conf in $KERNLIST ; do
 	cd $BSDSRCDIR
-	KERNEL=$BUILDDIR/$NBHOME/$VERSION/sys/arch/$MACHINE/compile/$conf/netbsd
+	KERNEL=$BUILDDIR/obj$NBHOME/$VERSION/sys/arch/$MACHINE/compile/$conf/netbsd
 	if [ -n "$opt_n" ] ; then
 	    echo ./build.sh $ARGS kernel=$conf
 	    echo $KERNEL $DESTDIR/netbsd$conf
