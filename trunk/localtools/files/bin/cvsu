@@ -72,7 +72,7 @@ fi
 rm -f $log
 for d in $FILES ; do
     cd $base/$d
-    (echo ">> $d" && $cvs_cmd && touch $log.ok ) | tee -a $log
+    (echo ">> $d ($(date))" && $cvs_cmd && touch $log.ok ) | tee -a $log
 done
 egrep '^([^UP] |>>)' $log
 if [ ! -f $log.ok ] ; then
