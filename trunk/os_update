@@ -106,6 +106,7 @@ extract()
     fi
 
     [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
+    [ -f netbsd.dom0 ] &&	run "ln -f netbsd.dom0 onetbsd.dom0"
     [ -d kernels.old ] &&	run "rm -rf kernels.old"
     [ -d kernels ] &&		run "mv kernels kernels.old"
 				run "pax -rz -pe < $TARDIR/kernels.tbz"
@@ -116,6 +117,11 @@ extract()
     fi
 				run "gzcat $KERNEL > netbsd.new"
 				run "mv netbsd.new netbsd"
+    if [ -f netbsd.dom0 ] ; then
+	run "gzcat kernels/_PF_DOM0_.gz > netbsd.dom0.new"
+	run "mv netbsd.dom0.new netbsd.dom0"
+
+    fi
 
     for tarfile in $EXTRACT_TARFILES ; do
 				run "pax -rz -pe < $tarfile"
