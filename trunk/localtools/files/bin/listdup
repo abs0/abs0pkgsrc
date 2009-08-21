@@ -4,24 +4,23 @@
 use strict;
 use warnings;
 use Getopt::Std;
+use Digest::SHA1;
 
-my ( %size, %md5, %sha1, %opt, $minsize, @dups );
+my ( %bysize, %opt, $minsize, @dups );
 
 $minsize = 0;
 
-if ( !getopts( 'hnrs:E:I:vq', \%opt ) || $opt{h} || !@ARGV ) {
+if ( !getopts( 'hnrs:E:I:vl:q', \%opt ) || $opt{h} || !@ARGV ) {
     print "Usage: listdup [opts]
 opts:	-h	 This help
 	-n	 No action - do not make any changes
+	-l log	 Record deletions in log
 	-r	 Remove duplicate files
 	-s size  Set minimum size to check. Can take k or m suffix
 	-I regex Only include files that match regex in remove list
 	-E regex Exclude files that match regex from remove list
 	-q	 Quiet - no output unless errors
 	-v	 Verbose
-
-Listdup uses size, md5, and sha1 to check for a match
-XXX Should perform a final paranoia read and check
 ";
     exit(1);
 }
@@ -29,54 +28,46 @@ XXX Should perform a final paranoia read and check
 if ( $opt{s} ) {
     if    ( $opt{s} =~ /(.*)k/i ) { $minsize = $1 * 1024; }
     elsif ( $opt{s} =~ /(.*)m/i ) { $minsize = $1 * 1024 * 1024; }
-    else { $minsize = $opt{s}; }
+    else                          { $minsize = $opt{s}; }
 }
 
 # List duplicate files (currently just checks size & md5's match)
 
+verbose("Scan @ARGV and calculate file sizes\n");
 foreach my $path (@ARGV) {
     -e $path || die("Unable to access $path: $!");
     add($path);
 }
 
-foreach my $size ( sort { $a <=> $b } keys %size ) {
-    if ( @{ $size{$size} } > 1 ) {
-        verbose( "size $size\n\t",
-            join( "\n\t", sort @{ $size{$size} } ), "\n" );
-        my $cmd = 'md5';
-        foreach my $file ( @{ $size{$size} } ) {
-            $cmd .= ' ' . quotemeta($file);
+foreach my $size ( sort { $a <=> $b } keys %bysize ) {
+    if ( @{ $bysize{$size} } > 1 ) {
+        my %bysha1;
+        verbose( "size $size", join( "\n  ", '', sort @{ $bysize{$size} } ),
+            "\n" );
+        foreach my $filename ( @{ $bysize{$size} } ) {
+            open( FILE, $filename ) || die("Unable to read $filename: $!");
+            my $sha1 = Digest::SHA1->new;
+            $sha1->addfile(*FILE);
+            my $digest = $sha1->b64digest;
+            close(FILE);
+            push( @{ $bysha1{$digest} }, $filename );
         }
-        open( MD5, $cmd . '|' );
-        foreach (<MD5>) {
-            if (/MD5 \((.*)\) = (\S+)/) { push( @{ $md5{"$size.$2"} }, $1 ); }
+        foreach my $sha1 ( keys %bysha1 ) {
+            if ( @{ $bysha1{$sha1} } > 1 ) {
+                verbose( "  sha1 $sha1\n\t",
+                    join( "\n\t", sort @{ $bysha1{$sha1} } ), "\n" );
+                my @files = sort @{ $bysha1{$sha1} };
+                push( @dups, { size => -s $files[0], files => \@files } );
+            }
         }
-        close(MD5);
+        verbose("\n");
     }
 }
 verbose("\n");
 
-foreach my $md5 ( sort keys %md5 ) {
-    if ( @{ $md5{$md5} } > 1 ) {
-        verbose( "md5 $md5\n\t", join( "\n\t", sort @{ $md5{$md5} } ), "\n" );
-        my $cmd = 'sha1';
-        foreach my $file ( @{ $md5{$md5} } ) { $cmd .= ' ' . quotemeta($file); }
-        open( SHA1, $cmd . '|' );
-        foreach (<SHA1>) {
-            if (/SHA1 \((.*)\) = (\S+)/) { push( @{ $sha1{"$md5.$2"} }, $1 ); }
-        }
-        close(SHA1);
-    }
+if ( $opt{l} ) {
+    open( LOG, ">$opt{l}" ) || die("Unable to write $opt{l}: $!");
 }
-verbose("\n");
-
-foreach my $sha1 ( keys %sha1 ) {
-    if ( @{ $sha1{$sha1} } > 1 ) {
-        my @files = sort @{ $sha1{$sha1} };
-        push( @dups, { size => -s ${ $sha1{$sha1} }[0], files => \@files } );
-    }
-}
-
 foreach my $ent ( sort { $a->{size} <=> $b->{size} } @dups ) {
     if ( $ent->{size} > 1024 ) {
         progress( sprintf( "%dK\n", $ent->{size} / 1024 ) );
@@ -99,11 +90,13 @@ foreach my $ent ( sort { $a->{size} <=> $b->{size} } @dups ) {
             progress("\tremove  $file\n");
             if ( !$opt{n} ) {
                 unlink($file) || die("Unlink($file) failed: $!");
+                print LOG $file if $opt{l};
             }
         }
     }
     else { progress( join( "\n", @remove ), "\n\n" ); }
 }
+close(LOG) if $opt{l};
 
 exit;
 
@@ -119,9 +112,10 @@ sub add {
         closedir(DIR);
         foreach (@list) { add("$path/$_"); }
     }
-    elsif ( -s $path > $minsize ) { push( @{ $size{ -s $path } }, $path ); }
+    elsif ( -s $path > $minsize ) { push( @{ $bysize{ -s $path } }, $path ); }
 }
 
 sub progress { print @_ unless $opt{q}; }
 
 sub verbose { print @_ if $opt{v}; }
+
