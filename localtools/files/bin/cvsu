@@ -34,7 +34,7 @@ while [ $# != 0 ]; do
     shift
 done
 
-cvs_cmd="cvs -q up -d -P -I ! -I CVS"
+cvs_cmd="cvs -z6 -q up -d -P -I ! -I CVS"
 log=$base/update.log
 
 if [ -n "$opt_h" ] ; then
