@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	t365-depends-0.04
+DISTNAME=	t365-depends-0.05
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,6 +17,7 @@ DEPENDS+= p5-Module-Install>0:../../devel/p5-Module-Install
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
 DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
 
+DEPENDS+= p5-Catalyst-Action-REST>0:../../www/p5-Catalyst-Action-REST
 DEPENDS+= p5-Catalyst-Model-Adaptor>0:../../www/p5-Catalyst-Model-Adaptor
 DEPENDS+= p5-Catalyst-Plugin-Session-State-Cookie>0:../../www/p5-Catalyst-Plugin-Session-State-Cookie
 DEPENDS+= p5-Catalyst-Plugin-Session-Store-DBIC>0:../../www/p5-Catalyst-Plugin-Session-Store-DBIC
@@ -32,6 +33,7 @@ DEPENDS+= p5-File-MMagic-XS>0:../../misc/p5-File-MMagic-XS
 DEPENDS+= p5-Image-Size>0:../../graphics/p5-Image-Size
 DEPENDS+= p5-JSON>0:../../converters/p5-JSON
 DEPENDS+= p5-MooseX-AttributeHelpers>0:../../devel/p5-MooseX-AttributeHelpers
+DEPENDS+= p5-MooseX-Getopt>0:../../devel/p5-MooseX-Getopt
 DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
 DEPENDS+= p5-DateTime-Format-Pg>0:../../time/p5-DateTime-Format-Pg
 DEPENDS+= p5-Method-Signatures-Simple>0:../../devel/p5-Method-Signatures-Simple
@@ -45,5 +47,9 @@ DEPENDS+= p5-XML-LibXML>=0:../../textproc/p5-XML-LibXML
 
 # We usually use the trunk for this anyway...
 DEPENDS+= p5-Reaction>0:../../www/p5-Reaction
+# Additional Reaction trunk depends
+DEPENDS+= p5-Test-Class>=0.31:../../devel/p5-Test-Class
+DEPENDS+= p5-Test-Memory-Cycle>=0.51:../../devel/p5-Test-Memory-Cycle
+DEPENDS+= p5-MooseX-Types-URI>=0.02:../../devel/p5-MooseX-Types-URI
 
 .include "../../mk/bsd.pkg.mk"
