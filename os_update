@@ -55,7 +55,10 @@ opts:   -D dir Read source tarfiles and script from dir, and delete after
     fi
 
     if [ -n "$opt_s" ] ; then
-	nbbuild $opt_u -t $OSVER
+	if ! nbbuild $opt_u -t $OSVER ; then
+	    echo nbbuild failed
+	    exit 1
+	fi
     fi
 fi
 
