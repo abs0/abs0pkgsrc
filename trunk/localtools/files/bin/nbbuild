@@ -96,7 +96,7 @@ build()
 	fi
 	if [ -z "$opt_n" ] ; then
 	    if ! ./build.sh $ARGS $TARGET > $LOG 2>&1 ; then
-		tail -50 $LOGMACHINE
+		tail -50 $LOG
 		exit 1
 	    fi
 	fi
