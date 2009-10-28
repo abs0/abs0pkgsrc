@@ -1,0 +1,25 @@
+# $Id: _COMMON,v 1.12 2008/11/17 22:09:50 abs Exp $
+
+options 	PCKBD_LAYOUT=KB_UK
+
+# options 	HZ=1024			#@ ogle
+#@ options 	SHMMAXPGS=65536		#@ Postgres
+#@ options         SEMMNI=256		#@ Postgres
+#@ options         SEMMNS=1024		#@ Postgres
+#@ options         SEMMNU=256		#@ Postgres
+#@ options         SEMMAP=256		#@ Postgres
+
+options 	IPFORWSRCRT=0
+
+# options 	NMBCLUSTERS=8192
+# options 	NVNODE=65536		#  64K
+
+options 	NPROC=4096
+options 	MAXUPRC=1024
+options 	NOFILE=1024
+options 	DFLDSIZ=536870912	#  512M
+
+# datasize        256MB
+# stacksize       2MB
+# maxproc         160
+# descriptors     128
