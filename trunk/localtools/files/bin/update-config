@@ -52,8 +52,8 @@ sl /etc/php.ini			/usr/pkg/etc/php.ini		php
 sl /usr/pkg/java/jdk-1.5.0/jre/plugin/i386/ns7/libjavaplugin_oji.so \
 	/usr/pkg/lib/firefox/plugins/libjavaplugin_oji.so jdk15
 
-if [ -f /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so -a -d /usr/pkg/lib/firefox/plugins ]; then
-    ln -f /usr/pkg/lib/firefox3/plugins/npwrapper.libflashplayer.so /usr/pkg/lib/firefox/plugins
+if [ -x /usr/pkg/bin/nspluginwrapper ] ; then
+    nspluginwrapper -a -i
 fi
 
 sl /etc/ampache/ampache.cfg.php	/usr/pkg/share/ampache/config/ampache.cfg.php \
