@@ -16,6 +16,3 @@ share/mserv-php/queue.php
 share/mserv-php/setup.php
 share/mserv-php/styles.css
 share/mserv-php/tracks.php
-@dirrm share/mserv-php/image
-@dirrm share/mserv-php
-@dirrm share/doc/mserv-php
