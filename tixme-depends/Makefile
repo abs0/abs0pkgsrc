@@ -1,12 +1,12 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	celebratio-depends-0.01
+DISTNAME=	tixme-depends-0.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.absd.org/
-COMMENT=	Meta package for celebratio server depends
+COMMENT=	Meta package for tixme server depends
 
 META_PACKAGE=	yes
 
@@ -14,7 +14,7 @@ META_PACKAGE=	yes
 DEPENDS+= cpuflags>0:../../devel/cpuflags
 
 # Used by the main app
-DEPENDS+= sun-jdk6>0:../../lang/sun-jdk6
+DEPENDS+= openjdk7>0:../../lang/openjdk7
 DEPENDS+= apache>0:../../www/apache22
 DEPENDS+= ap22-jk>0:../../www/ap2-jk
 DEPENDS+= apache-tomcat6>0:../../www/apache-tomcat6
