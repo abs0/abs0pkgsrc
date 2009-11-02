@@ -14,6 +14,7 @@ META_PACKAGE=	yes
 DEPENDS+= postgresql84>0:../../databases/postgresql84
 
 DEPENDS+= p5-Catalyst-Controller-FormBuilder>0:../../www/p5-Catalyst-Controller-FormBuilder
+DEPENDS+= p5-Catalyst-Devel>0:../../www/p5-Catalyst-Devel
 DEPENDS+= p5-Catalyst-Plugin-Authorization-Roles>0:../../www/p5-Catalyst-Plugin-Authorization-Roles
 DEPENDS+= p5-Catalyst-Plugin-ConfigLoader>0:../../www/p5-Catalyst-Plugin-ConfigLoader
 DEPENDS+= p5-Catalyst-Plugin-Session-State-Cookie>0:../../www/p5-Catalyst-Plugin-Session-State-Cookie
@@ -25,6 +26,9 @@ DEPENDS+= p5-Catalyst-View-TT>0:../../www/p5-Catalyst-View-TT
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
 DEPENDS+= p5-Template-Plugin-Number-Format>0:../../textproc/p5-Template-Plugin-Number-Format
 DEPENDS+= p5-YAML>0:../../textproc/p5-YAML
+
+# XXX - SQL Translate pulls in GD & huge quantities of graphics libs
+DEPENDS+= p5-Catalyst-Authentication-Store-DBIx-Class>0:../../www/p5-Catalyst-Authentication-Store-DBIx-Class
 
 DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
 
