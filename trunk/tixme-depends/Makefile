@@ -10,15 +10,18 @@ COMMENT=	Meta package for tixme server depends
 
 META_PACKAGE=	yes
 
-# Optimise build flags
-DEPENDS+= cpuflags>0:../../devel/cpuflags
-
 # Used by the main app
 DEPENDS+= openjdk7>0:../../lang/openjdk7
-DEPENDS+= apache>0:../../www/apache22
-DEPENDS+= ap22-jk>0:../../www/ap2-jk
-DEPENDS+= apache-tomcat6>0:../../www/apache-tomcat6
-DEPENDS+= jdbc-mysql5>0:../../databases/jdbc-mysql5
-DEPENDS+= mysql5-server>0:../../databases/mysql5-server
+
+DEPENDS+= apache-ant>0:../../devel/apache-ant
+DEPENDS+= mysql-server>0:../../databases/mysql5-server
+
+# Not needed as packaged with app
+# DEPENDS+= apache-tomcat6>0:../../www/apache-tomcat6
+# DEPENDS+= jdbc-mysql5>0:../../databases/jdbc-mysql5
+
+# Used by scripts/test-sellout
+DEPENDS+= p5-Moose>0:../../devel/p5-Moose
+DEPENDS+= p5-WWW-Mechanize>0:../../www/p5-WWW-Mechanize
 
 .include "../../mk/bsd.pkg.mk"
