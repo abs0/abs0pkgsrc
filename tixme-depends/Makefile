@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-0.01
+DISTNAME=	tixme-depends-0.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -23,5 +23,6 @@ DEPENDS+= mysql-server>0:../../databases/mysql5-server
 # Used by scripts/test-sellout
 DEPENDS+= p5-Moose>0:../../devel/p5-Moose
 DEPENDS+= p5-WWW-Mechanize>0:../../www/p5-WWW-Mechanize
+DEPENDS+= p5-Parallel-ForkManager>0:../../devel/p5-Parallel-ForkManager
 
 .include "../../mk/bsd.pkg.mk"
