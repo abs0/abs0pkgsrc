@@ -85,3 +85,5 @@ if pkg_info -e munin-node > /dev/null; then
     echo "update-config: Run munin-setup-plugins"
     munin-setup-plugins
 fi
+
+cp -p /usr/pkg/share/examples/rc.d/* /etc/rc.d
