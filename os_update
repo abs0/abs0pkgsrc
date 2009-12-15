@@ -62,11 +62,6 @@ opts:   -D dir Read source tarfiles and script from dir, and delete after
     fi
 fi
 
-# Must be after nbbuild -u
-if [ -x /usr/bin/id -a $(id -u) != 0 ] ; then
-    exec sudo -H $0 "$@"
-fi
-
 if [ "$1" = -d	]; then
     DESTDIR=$2
     shift ; shift;
@@ -148,7 +143,11 @@ run()
     {
     echo "$HOST:$DESTDIR $@"
     if [ -z "$opt_n" ] ; then
-	sh -c "$*"
+	if [ -x /usr/bin/id -a $(id -u) != 0 ] ; then
+	    exec sudo -H sh -c "$*"
+	else
+	    sh -c "$*"
+	fi
     fi
     }
 
