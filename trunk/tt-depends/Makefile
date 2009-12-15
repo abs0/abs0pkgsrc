@@ -30,6 +30,7 @@ DEPENDS+= p5-YAML>0:../../textproc/p5-YAML
 # XXX - SQL Translate pulls in GD & huge quantities of graphics libs
 DEPENDS+= p5-Catalyst-Authentication-Store-DBIx-Class>0:../../www/p5-Catalyst-Authentication-Store-DBIx-Class
 
+DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
 
 .include "../../mk/bsd.pkg.mk"
