@@ -49,7 +49,7 @@ opts:   -D dir Read source tarfiles and script from dir, and delete after
 	-n     No write (do not actually make any changes)
 	-o ver Set OS version to build
 	-s     Rebuild from source
-	-u	Run cvsu before building
+	-u     Run cvsu before building
 ";
 	exit
     fi
