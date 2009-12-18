@@ -8,7 +8,7 @@ TARGET=distribution # sets
 VERSION=$(ls -l /usr/src | sed 's:.*/::')
 
 SAVED_ARGS="$@"
-if ! args=$(getopt CURhknt:uv $*); then
+if ! args=$(getopt NCURhknt:uv $*); then
     opt_h=1
 fi
 set -- $args
@@ -23,6 +23,7 @@ while [ $# != 0 ]; do
 	-u )	opt_u=1			;;
 	-v )	opt_v=1			;;
 	-U )	opt_U=1			;;
+	-N )	opt_N=1			;;
 	-- )	shift; break		;;
     esac
     shift
@@ -45,12 +46,12 @@ fi
 
 NBHOME=$(cd /files/netbsd ; pwd)
 export BSDSRCDIR=$NBHOME/$VERSION
-if [ -n "$opt_u" ] ; then
+if [ -n "$opt_u" -a -z "$opt_N" ] ; then
     cvsu $VERSION
 fi
 
 if [ $(id -u) != 0 ] ; then
-    exec sudo -H $0 "$SAVED_ARGS"
+    exec sudo -H $0 -N "$SAVED_ARGS"
 fi
 
 build()
