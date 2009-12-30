@@ -60,7 +60,7 @@ build()
     {
     MACHINE=$1
     ARCHHOME=$NBHOME/arch
-    BUILDDIR=/var/obj/nbbuild-$MACHINE
+    BUILDDIR=${TMPDIR:-/var/obj}/nbbuild-$MACHINE
     LOG=$BUILDDIR/build.log
 
     mkdir -p $BUILDDIR
