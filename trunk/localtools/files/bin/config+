@@ -1,16 +1,15 @@
 #!/bin/sh -e
 # $Id: config+,v 1.5 2008/01/03 10:26:59 abs Exp $
 
-# configure and build kernel (in /tmp), then install
+# configure and build kernel, then install
 
 config_build()
     {
     CONF=$1
     [ -f $CONF ] || fatal "Unable to locate $CONF in $CONFDIR"
-    rm -rf /tmp/$CONF
-    echo "Config /tmp/$CONF"
-    config -s /sys -b /tmp/$CONF $CONF
-    cd /tmp/$CONF
+    echo "Config $CONF in $TEMPDIR"
+    config -s /sys -b $TEMPDIR $CONF
+    cd $TEMPDIR
     echo "Building $CONF"
     if ! make > LOG 2>&1 ; then
 	cat LOG
@@ -25,7 +24,7 @@ config_build()
 	make install
     fi
     cd /
-    rm -rf /tmp/$CONF
+    rm -rf $TEMPDIR
     }
 
 fatal()
@@ -58,6 +57,9 @@ fi
 
 CONFDIR=/sys/arch/$(uname -m)/conf
 cd $CONFDIR
+
+TEMPDIR=`mktemp -d -t ${0##*/}` || exit 1
+trap 'rm -rf "$TEMPDIR"; exit 1' 1 2 3 13 15
 
 if [ $# = 0 ] ; then
     CONF=$(uname -a | sed -e 's/.*(//' -e 's/).*//')
