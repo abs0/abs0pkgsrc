@@ -1,10 +1,11 @@
 #!/bin/sh -e
 # $Id: raid1-setup,v 1.4 2006/03/11 14:56:18 abs Exp $
-TMPFILE=$(mktemp /tmp/${0##*/}.XXXXXX) || exit 1
+
+TEMPFILE=`mktemp -t ${0##*/}` || exit 1
+trap 'rm -rf "$TEMPDILR"; exit 1' 1 2 3 13 15
 
 fatal()
     {
-    rm -f $TMPFILE
     echo $@ >&2
     exit 1
     }
@@ -32,7 +33,7 @@ DEV2=$3
 # Generate a random serial number
 SERIAL=$(dd if=/dev/urandom bs=4 count=1 2>/dev/null | od -I | awk '{print $2}')
 
-cat >$TMPFILE << END
+cat >$TEMPFILE << END
 # Sample raid config for setting up a raid mirror
 
 START array
@@ -51,12 +52,12 @@ START queue
 fifo 100
 END
 
-raidctl -C $TMPFILE $RAID || fatal "Unable to configure raid $RAID"
+raidctl -C $TEMPFILE $RAID || fatal "Unable to configure raid $RAID"
 raidctl -I $SERIAL $RAID || fatal "Unable to set raid serial ($SERIAL)"
 raidctl -i $RAID || fatal "Unable to initialise raid $RAID"
 raidctl -A yes $RAID || fatal "Unable to set raid to automconfigure"
 
-rm -f $TMPFILE
+rm -f $TEMPFILE
 
 # Inelegant method to write default disklabel
 export EDITOR=cat
