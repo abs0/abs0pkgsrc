@@ -48,7 +48,7 @@ if (   !getopts( 'M:S:bc:defhimnqsvw:V:', \%opt )
 
 $opt{c} ||= 1;
 
-my $tmp_dir   = '/var/obj';
+my $tmp_dir   = '/var/tmp';
 my $mount_tmp = "$tmp_dir/cd-burn_mount";
 
 find_cd_drives();
