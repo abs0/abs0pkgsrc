@@ -211,7 +211,7 @@ stream_to_remote_hosts()
     done
     }
 
-if mount | grep -q ' /tmp .*noexec' ; then
+if mount | grep -q '[ 	]/tmp[ 	].*noexec' ; then
     export PKG_TMPDIR=/var/run
 fi
 
@@ -329,7 +329,7 @@ else	# $opt_s
     #
     WRKOBJDIR=$(show_var WRKOBJDIR)
     if [ ! -n "$WRKOBJDIR" ] ; then
-	WRKOBJDIR=/var/obj/pkg
+	WRKOBJDIR=${TMPDIR:-/var/obj}/nbbuild-$MACHINE
     fi
     if [ -d $WRKOBJDIR ] ; then
 	echo "rm -rf $WRKOBJDIR ..."
