@@ -8,7 +8,7 @@ TARGET=distribution # sets
 VERSION=$(ls -l /usr/src | sed 's:.*/::')
 
 SAVED_ARGS="$@"
-if ! args=$(getopt NCURhknt:uv $*); then
+if ! args=$(getopt NCURhknrt:uv $*); then
     opt_h=1
 fi
 set -- $args
@@ -20,6 +20,7 @@ while [ $# != 0 ]; do
 	-h )	opt_h=1			;;
 	-k )	opt_k=1			;;
 	-n )	opt_n=1			;;
+	-r )	opt_r=1			;;
 	-u )	opt_u=1			;;
 	-v )	opt_v=1			;;
 	-U )	opt_U=1			;;
@@ -37,6 +38,7 @@ Usage: nbbuild [opts] [arch]
 	-h     This help
 	-k     Build kernels
 	-n     Do not actually do anything
+	-r     Remove build directories after successful build
 	-t tag Build 'tag' directory
 	-u     CVS update
 	-U     Set UPDATE
@@ -58,7 +60,7 @@ build()
     {
     MACHINE=$1
     ARCHHOME=$NBHOME/arch
-    BUILDDIR=/var/obj/$MACHINE
+    BUILDDIR=/var/obj/nbbuild-$MACHINE
     LOG=$BUILDDIR/build.log
 
     mkdir -p $BUILDDIR
@@ -155,6 +157,9 @@ build()
 	    pax -w * | bzip2 -9 > $TARDIR/userland.tbz
 	    rm -rf *
 	    echo "Generated $TARDIR/{kernels,userland,etc}.tbz"
+	fi
+	if [ -n "$opt_r" ] ; then
+	    rm -rf $BUILDDIR
 	fi
     fi
     }

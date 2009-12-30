@@ -30,6 +30,7 @@ export PATH=$PATH:/usr/X11R7:/usr/games
 export BLOCKSIZE=1k
 export EDITOR=vi
 export PAGER=/usr/bin/less
+export TMPDIR=/tmp
 
 umask 002
 
