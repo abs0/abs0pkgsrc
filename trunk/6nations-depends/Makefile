@@ -13,7 +13,7 @@ META_PACKAGE=	yes
 # Just additional depends on top of standard
 
 DEPENDS+= p5-Business-CreditCard>0:../../misc/p5-Business-CreditCard
-DEPENDS+= p5->Text-CSV-Hash0:../../misc/p5-Text-CSV-Hash
-DEPENDS+= p5-Text-Substitute>0:../../misc/p5-Substitute
+DEPENDS+= p5-Text-CSV-Hash>0:../../textproc/p5-Text-CSV-Hash
+DEPENDS+= p5-Text-Substitute>0:../../textproc/p5-Text-Substitute
 
 .include "../../mk/bsd.pkg.mk"
