@@ -1,0 +1,3 @@
+#!/bin/sh
+# $Id$
+exec /files/netbsd/pkgsrc/local/os-update "$@"
