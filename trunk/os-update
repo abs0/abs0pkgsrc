@@ -1,5 +1,5 @@
 #!/bin/sh -e
-# $Id: os_update,v 1.58 2008/11/18 15:01:54 abs Exp $
+# $Id: os-update,v 1.58 2008/11/18 15:01:54 abs Exp $
 
 PATH=/usr/bin:/bin:/usr/sbin:/sbin:$PATH
 
@@ -39,7 +39,7 @@ if [ -x /usr/bin/getopt ]; then
 
 
     if [ -n "$opt_h" ] ; then
-	echo "Usage: os_update [opts] [hosts]
+	echo "Usage: os-update [opts] [hosts]
 opts:   -D dir Read source tarfiles and script from dir, and delete after 
 	-b     Install from binaries (default)
 	-d dir Full distribution (including etc set)
@@ -154,13 +154,13 @@ run()
 if [ -n "$1" ] ; then
     for host ; do
 	echo
-	run scp /pkgsrc/local/os_update $TARDIR/* $host:/var/run
-	run ssh $host /var/run/os_update $opt_f -D /var/run
+	run scp /pkgsrc/local/os-update $TARDIR/* $host:/var/run
+	run ssh $host /var/run/os-update $opt_f -D /var/run
     done
     exit 0
 fi
 
-[ -n "$opt_D" ] &&	run "rm -f $opt_D/os_update"
+[ -n "$opt_D" ] &&	run "rm -f $opt_D/os-update"
 extract $DESTDIR
 
 if [ -f $DESTDIR/altroot/netbsd ] || mount | grep -q ' on /altroot ' ; then
