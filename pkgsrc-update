@@ -1,8 +1,8 @@
 #!/bin/sh -e
-# $Id: pkg_update,v 1.92 2008/07/14 14:43:37 abs Exp $
+# $Id: pkgsrc-update,v 1.92 2008/07/14 14:43:37 abs Exp $
 PATH=/usr/pkg/sbin:/usr/pkg/bin:/usr/sbin:/sbin:$PATH
 PKGSRC=/pkgsrc
-PKG_UPDATE_SPOOL=/var/run/pkg_update
+PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
 
 umask 022
 
@@ -39,7 +39,7 @@ while [ $# != 0 ]; do
 done
 if [ -n "$opt_h" ]; then
     cat << END
-Usage: pkg_update [opts] [hosts]
+Usage: pkgsrc-update [opts] [hosts]
 opts	
 	-D def	Set extra defines for pkg_chk
 	-P dir	Set packages dir
@@ -204,9 +204,9 @@ stream_to_remote_hosts()
 	else
 	    echo -n " (transfer)"
 	    ssh $h "rm -rf $PKG_UPDATE_SPOOL ; mkdir -p $PKG_UPDATE_SPOOL"
-	    scp /pkgsrc/local/pkg_update $h:$PKG_UPDATE_SPOOL/pkg_update
+	    scp /pkgsrc/local/pkgsrc-update $h:$PKG_UPDATE_SPOOL/pkgsrc-update
 	    scp $PKGCHK_CONF $h:$PKG_UPDATE_SPOOL/pkgchk.conf
-	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkg_update -I $opt_r $opt_v
+	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkgsrc-update -I $opt_r $opt_v
 	fi
     done
     }
@@ -223,9 +223,9 @@ fi
 if [ ! -d $PKGSRC ];then
     case $0 in
 	/*)
-	    ln -sf $(echo $0 | sed 's:/local/pkg_update::') $PKGSRC
+	    ln -sf $(echo $0 | sed 's:/local/pkgsrc-update::') $PKGSRC
 	    ;;
-	*)  fatal "Initial call to pkg_update must use full path"
+	*)  fatal "Initial call to pkgsrc-update must use full path"
 	    ;;
     esac
 fi
