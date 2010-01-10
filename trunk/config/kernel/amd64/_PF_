@@ -363,7 +363,7 @@ wsdisplay*	at vga? console ?
 wskbd*		at pckbd? console ?
 wsmouse*	at pms? mux 0
 
-i915drm*        at vga?         # Intel i915, i945 DRM driver #@ Added
+# i915drm*        at vga?         # Intel i915, i945 DRM driver #@ Added - fail
 
 attimer0	at isa?
 pcppi0		at isa?
@@ -912,10 +912,11 @@ sbp*	at ieee1394if? euihi ? euilo ?
 # SD/MMC/SDIO Controller and Device support
 
 # SD/MMC controller
-sdhc*  at pci?				# SD Host Controller
-sdmmc* at sdhc?				# SD/MMC bus
+# sdhc stops suspend
+#@ sdhc*  at pci?				# SD Host Controller
+#@ sdmmc* at sdhc?				# SD/MMC bus
 
-ld*    at sdmmc?
+#@ ld*    at sdmmc?
 
 # Audio Devices
 
