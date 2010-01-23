@@ -7,9 +7,11 @@ config_build()
     {
     CONF=$1
     [ -f $CONF ] || fatal "Unable to locate $CONF in $CONFDIR"
-    echo "Config $CONF in $TEMPDIR"
-    config -s /sys -b $TEMPDIR $CONF
-    cd $TEMPDIR
+    CONFIGDIR=$TEMPDIR/$CONF
+    mkdir -p $CONFIGDIR
+    echo "Config $CONF in $CONFIGDIR"
+    config -s /sys -b $CONFIGDIR $CONF
+    cd $CONFIGDIR
     echo "Building $CONF"
     if ! make > LOG 2>&1 ; then
 	cat LOG
