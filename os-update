@@ -144,7 +144,7 @@ run()
     echo "$HOST:$DESTDIR $@"
     if [ -z "$opt_n" ] ; then
 	if [ -x /usr/bin/id -a $(id -u) != 0 ] ; then
-	    exec sudo -H sh -c "$*"
+	    sudo -H sh -c "$*"
 	else
 	    sh -c "$*"
 	fi
