@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	dev-depends-0.01
+DISTNAME=	dev-depends-0.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -16,6 +16,10 @@ DEPENDS+= ap22-py26-python>0:../../www/ap2-python
 DEPENDS+= ap22-php5>0:../../www/ap-php
 DEPENDS+= trac>0:../../www/trac
 DEPENDS+= mediawiki>0:../../www/mediawiki
+
 DEPENDS+= bugzilla>0:../../devel/bugzilla3
+DEPENDS+= p5-BSD-Resource>0:../../devel/p5-BSD-Resource
+DEPENDS+= ap22-perl>0:../../www/ap2-perl 
+
 
 .include "../../mk/bsd.pkg.mk"
