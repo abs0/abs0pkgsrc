@@ -2,8 +2,6 @@
 # $Id: ssh-init,v 1.6 2006/11/10 11:40:59 abs Exp $
 #
 # Setup ssh environment/agent to use consistent ssh socket.
-# SSH_AGENT_HOSTS specifies a colon delimited set of hosts on which to create
-# an agent if not already present.
 #
 # Add to startup scripts
 # t?csh: 	setenv SSH_AUTH_SOCK `ssh-init -p`
@@ -21,7 +19,7 @@ auth_sock_canonify()
 	    chmod 700 $dir
 	else
 	    verbose "mktemp -q -d $dir"
-	    mktemp -d $dir > /dev/null
+	    mktemp -q -d $dir
 	fi
 	verbose "rename($SSH_AUTH_SOCK,$REAL_SOCK)"
 	mv -f $SSH_AUTH_SOCK $REAL_SOCK
@@ -88,13 +86,14 @@ verbose()
     [ -n "$opt_v" ] && echo $@ >&2
     }
 
-args=$(getopt fhpv $*)
+args=$(getopt cfhpv $*)
 if [ $? != 0 ]; then
     opt_error=1
 fi
 set -- $args
 while [ $# != 0 ]; do
     case "$1" in
+	-c )    opt_c=1 ;;
 	-f )    opt_f=1 ;;
 	-h )    opt_h=1 ;;
 	-p )    opt_p=1 ;;
@@ -108,6 +107,7 @@ if [ -n "$opt_h" -o -n "$opt_error" ] ; then
     cat << END
 Usage: ssh-init [-hv]
 opts:	-f Force key input
+        -c Run as client
 	-h This help
 	-p Print out the value of SSH_AUTH_SOCK
 	-v Verbose
@@ -117,23 +117,17 @@ END
 fi
 
 REAL_SOCK=/tmp/.ssh-$USER/sock
-thishost=$(hostname -s)
-HOST_TYPE=client
-for h in $(echo $SSH_AGENT_HOSTS | tr ':' ' ') ; do
-    if [ $h = $thishost ] ; then
-	HOST_TYPE=server
-    fi
-done
 
 if [ -n "$opt_p" ];then
-    if [ $HOST_TYPE = client ] ; then
+    if [ -n "$opt_c" ] ; then
 	ssh_agent_client
     fi
     echo $REAL_SOCK
     exit
 fi
 
-case $HOST_TYPE in
-    client)	ssh_agent_client ;;
-    server)	ssh_agent_server ;;
-esac
+if [ -n "$opt_c" ] ; then
+    ssh_agent_client
+else
+    ssh_agent_server
+fi
