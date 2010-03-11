@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-0.03
+DISTNAME=	tixme-depends-0.04
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,7 +14,7 @@ META_PACKAGE=	yes
 DEPENDS+= openjdk7>0:../../lang/openjdk7
 
 DEPENDS+= apache-ant>0:../../devel/apache-ant
-DEPENDS+= mysql-server>0:../../databases/mysql5-server
+DEPENDS+= mysql-server>0:../../databases/mysql51-server
 
 # Not needed as packaged with app
 # DEPENDS+= apache-tomcat6>0:../../www/apache-tomcat6
