@@ -58,7 +58,7 @@ ssh_agent_server()
     else
 	verbose "SSH_AUTH_SOCK defined..."
 	# Ignore any non 'REAL_SOCK' SSH_AUTH_SOCK, and create new if needed
-	if [ -n "$opt_f" -o "$TERM" != screen -o "$WINDOW" -eq 1 ] ;then
+	if [ -n "$opt_f" -o "$TERM" != screen -o "$WINDOW" = 1 ] ;then
 	    verbose "Not in screen WINDOW !=1... (or -f given)"
 	    SSH_ADD=$(ssh-add -l 2>&1)
 	    verbose "SSH_ADD=$SSH_ADD"
