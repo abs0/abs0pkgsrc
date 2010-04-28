@@ -11,12 +11,15 @@ fatal()
 
 umask 002
 
-if [ -d /files/netbsd ];then
-    base=/files/netbsd
-elif [ -d /home/netbsd ];then
-    base=/home/netbsd
-else
-    fatal "No /files/netbsd, nor /home/netbsd - aborting"
+dlist="/files/netbsd /home/netbsd /Library/netbsd"
+for d in $dlist ; do
+    if [ -d $d ] ; then
+        base=$d
+        break
+    fi
+done
+if [ ! -n "$base" ];then
+    fatal "No ($dilist) - aborting"
 fi
 
 args=$(getopt d:hl $*)
