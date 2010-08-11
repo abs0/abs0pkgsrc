@@ -374,6 +374,8 @@ pckbc*  	at acpi?		# PC keyboard controller
 pcppi*		at acpi?                # AT-style speaker sound
 thinkpad*	at acpi?		# IBM/Lenovo Thinkpad hotkeys
 ug* 		at acpi?		# Abit uGuru Hardware monitor
+wb*		at acpi?		# Winbond W83L518D SD/MMC reader
+sdmmc*		at wb?			# SD/MMC bus
 wss* 		at acpi?		# NeoMagic 256AV in wss mode
 ym* 		at acpi?		# Yamaha OPL3-SA[23] audio
 
@@ -529,6 +531,7 @@ pckbd*		at pckbc?		# PC keyboard
 pms*		at pckbc?		# PS/2 mouse for wsmouse
 #options 	PMS_DISABLE_POWERHOOK	# Disable PS/2 reset on resume
 options 	PMS_SYNAPTICS_TOUCHPAD	# Enable support for Synaptics Touchpads
+options 	PMS_ELANTECH_TOUCHPAD	# Enable support for Elantech Touchpads
 vga0		at isa?
 vga*		at pci? dev ? function ?
 pcdisplay0	at isa?			# CGA, MDA, EGA, HGA
@@ -621,6 +624,9 @@ amdpm*	at pci? dev ? function ?	# RNG and SMBus 1.0 interface
 
 # Intel Core's on-die Thermal sensor
 options 	INTEL_CORETEMP
+
+# VIA C7 Temperature sensor
+options 	VIA_C7TEMP
 
 # Intel ICH SMBus controller
 ichsmb*	at pci? dev ? function ?
@@ -1248,6 +1254,13 @@ ieee1394if* at fwohci?
 fwip*	at ieee1394if?			# IP over IEEE1394
 sbp*	at ieee1394if? euihi ? euilo ?	# SCSI over IEEE1394
 
+# SD/MMC/SDIO Controller and Device support
+
+# SD/MMC controller
+sdhc*  at pci?				# SD Host Controller
+sdmmc* at sdhc?				# SD/MMC bus
+
+ld*    at sdmmc?
 
 # Audio Devices
 
@@ -1300,6 +1313,10 @@ opl*	at sv?
 opl*	at wss?
 opl*	at yds?
 opl*	at ym?
+
+# High Definition Audio
+hdaudio*	at pci? dev ? function ?	# High Definition Audio #@ Un
+hdafg*		at hdaudiobus? #@ Un
 
 # Audio support
 audio*	at audiobus?
