@@ -145,7 +145,7 @@ build()
 	    boot.cfg \
 	    etc \
 	    "
-	TARDIR=$ARCHHOME/$TAG-$LASTMOD-$MACHINE
+	TARDIR=$ARCHHOME/$TAG-$MACHINE-$LASTMOD
 	mkdir -p $TARDIR
 	pax -w $KERNELS_LIST | bzip2 -9 > $TARDIR/kernels.tbz
 	rm -rf $KERNELS_LIST
