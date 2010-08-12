@@ -32,7 +32,7 @@ done
 
 if [ -n "$opt_h" ] ; then
     cat <<END
-Usage: nbbuild [opts] [arch]
+Usage: nbbuild [opts] [arch ...] 
 [opts]	-C     Build 'current' directory
 	-R     Build a release
 	-h     This help
