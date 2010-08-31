@@ -4,8 +4,8 @@
 # Setup ssh environment/agent to use consistent ssh socket.
 #
 # Add to startup scripts
-# t?csh: 	setenv SSH_AUTH_SOCK `ssh-init -p`
-# {ba,k,}sh: 	export SSH_AUTH_SOCK=$(ssh-init -p)
+# t?csh:     if ( -f /usr/pkg/bin/ssh-init ) setenv SSH_AUTH_SOCK `ssh-init -p`
+# {ba,k,}sh: [ -f /usr/pkg/bin/ssh-init ] && export SSH_AUTH_SOCK=$(ssh-init -p)
 
 auth_sock_canonify()
     {
@@ -19,7 +19,7 @@ auth_sock_canonify()
 	    chmod 700 $dir
 	else
 	    verbose "mktemp -q -d $dir"
-	    mktemp -q -d $dir
+	    mktemp -q -d $dir >/dev/null
 	fi
 	verbose "rename($SSH_AUTH_SOCK,$REAL_SOCK)"
 	mv -f $SSH_AUTH_SOCK $REAL_SOCK
@@ -58,8 +58,8 @@ ssh_agent_server()
     else
 	verbose "SSH_AUTH_SOCK defined..."
 	# Ignore any non 'REAL_SOCK' SSH_AUTH_SOCK, and create new if needed
-	if [ -n "$opt_f" -o "$TERM" != screen -o "$WINDOW" = 1 ] ;then
-	    verbose "Not in screen WINDOW !=1... (or -f given)"
+	if [ -n "$opt_f" -o "$TERM" != screen -o "$WINDOW" = 0 ] ;then
+	    verbose "Not (screen & WINDOW=0)... or -f given"
 	    SSH_ADD=$(ssh-add -l 2>&1)
 	    verbose "SSH_ADD=$SSH_ADD"
 	    case "$SSH_ADD" in
@@ -118,16 +118,12 @@ fi
 
 REAL_SOCK=/tmp/.ssh-$USER/sock
 
-if [ -n "$opt_p" ];then
-    if [ -n "$opt_c" ] ; then
-	ssh_agent_client
-    fi
-    echo $REAL_SOCK
-    exit
-fi
-
 if [ -n "$opt_c" ] ; then
     ssh_agent_client
 else
     ssh_agent_server
+fi
+
+if [ -n "$opt_p" ];then
+    echo $SSH_AUTH_SOCK
 fi
