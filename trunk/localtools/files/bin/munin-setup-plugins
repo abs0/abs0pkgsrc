@@ -95,6 +95,7 @@ exit 0;
 sub chkconfig {
     my ($key) = @_;
 
+    return if ! -f '/etc/rc.conf';
     my $value = `sh -c '. /etc/rc.conf; echo \$$key'`;
     chomp $value;
     $value =~ /YES/i;
