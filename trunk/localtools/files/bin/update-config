@@ -82,8 +82,10 @@ if [ -x /usr/sbin/rndc -a ! -h /etc/rndc.key ] ; then
 fi
 
 if pkg_info -e munin-node > /dev/null; then
-    echo "update-config: Run munin-setup-plugins"
-    munin-setup-plugins
+    if [ -z "$(ls /etc/munin/plugins)" ] ; then
+	echo "update-config: Run munin-node-configure"
+	munin-node-configure --shell | sh
+    fi
 fi
 
 cp -p /usr/pkg/share/examples/rc.d/* /etc/rc.d
