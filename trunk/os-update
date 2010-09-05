@@ -68,7 +68,7 @@ if [ "$1" = -d	]; then
 fi
 
 if [ -z "$TARDIR" ] ; then
-    KERNTAR_MATCH="$FILEDIR/$OSVER-$(sysctl -n hw.machine)-*/kernels.tbz"
+    KERNTAR_MATCH="$FILEDIR/$OSVER-*-$(sysctl -n hw.machine)/kernels.tbz"
     TARDIR=$(ls $KERNTAR_MATCH | sed -n -e 's:/kernels.tbz::' -e '$p')
     if [ -z "$TARDIR" ] ; then
 	echo "Unable to locate $KERNTAR_MATCH"
