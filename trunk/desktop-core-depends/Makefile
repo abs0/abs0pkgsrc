@@ -26,7 +26,7 @@ DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
 
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= pidgin>0:../../chat/pidgin
-DEPENDS+= xpdf>0:../../print/xpdf
+DEPENDS+= epdfview>0:../../print/epdfview
 DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 
 # very long build time
