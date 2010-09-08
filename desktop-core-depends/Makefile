@@ -29,9 +29,6 @@ DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= epdfview>0:../../print/epdfview
 DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 
-# very long build time
-DEPENDS+= openoffice3>0:../../misc/openoffice3
-
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= gthumb>0:../../graphics/gthumb
 DEPENDS+= meld>0:../../devel/meld
