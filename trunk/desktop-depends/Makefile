@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-0.01
+DISTNAME=	desktop-depends-0.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -56,10 +56,6 @@ DEPENDS+= gst-plugins0.10-farsight>0:../../wip/gst-plugins0.10-farsight
 DEPENDS+= x11vnc>0:../../x11/x11vnc
 DEPENDS+= x2x>0:../../x11/x2x
 DEPENDS+= xosd>0:../../x11/xosd
-
-# KDE
-DEPENDS+= kdebase4>0:../../x11/kdebase4
-DEPENDS+= kde4>0:../../meta-pkgs/kde4
 
 DEPENDS+= openjdk7-icedtea-plugin>0:../../www/openjdk7-icedtea-plugin
 # Misc low priority
