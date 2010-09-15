@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-0.01
+DISTNAME=	desktop-core-depends-1.00
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -37,5 +37,6 @@ DEPENDS+= rdesktop>0:../../net/rdesktop
 DEPENDS+= vlc>0:../../multimedia/vlc
 DEPENDS+= vncviewer>0:../../net/vncviewer
 DEPENDS+= wireshark>0:../../net/wireshark
+DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
 .include "../../mk/bsd.pkg.mk"
