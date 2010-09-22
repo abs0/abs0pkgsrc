@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-0.02
+DISTNAME=	desktop-depends-1.00
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -63,7 +63,6 @@ DEPENDS+= audacity>0:../../audio/audacity
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 DEPENDS+= ckmame>0:../../emulators/ckmame
 DEPENDS+= sdlmame>0:../../emulators/sdlmame
-DEPENDS+= wine>0:../../emulators/wine
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= teamspeak-client>0:../../net/teamspeak-client
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
