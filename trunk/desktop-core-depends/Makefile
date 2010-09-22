@@ -20,23 +20,26 @@ DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 
+# High priorities - build first
 DEPENDS+= jwm>0:../../wm/jwm
-DEPENDS+= firefox>0:../../www/firefox
 DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
+DEPENDS+= firefox>0:../../www/firefox
 
+# Medium priority
+DEPENDS+= meld>0:../../devel/meld
+DEPENDS+= rdesktop>0:../../net/rdesktop
+DEPENDS+= vncviewer>0:../../net/vncviewer
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= epdfview>0:../../print/epdfview
 DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
+DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
+# Lower priority
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= gthumb>0:../../graphics/gthumb
-DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= qemu>0:../../emulators/qemu
-DEPENDS+= rdesktop>0:../../net/rdesktop
 DEPENDS+= vlc>0:../../multimedia/vlc
-DEPENDS+= vncviewer>0:../../net/vncviewer
 DEPENDS+= wireshark>0:../../net/wireshark
-DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
 .include "../../mk/bsd.pkg.mk"
