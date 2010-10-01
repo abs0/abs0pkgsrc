@@ -46,7 +46,7 @@ END
     exit
 fi
 
-NBHOME=$(cd /files/netbsd ; pwd)
+NBHOME=$(cd /home/netbsd ; pwd)
 export BSDSRCDIR=$NBHOME/$VERSION
 if [ -n "$opt_u" -a -z "$opt_N" ] ; then
     cvsu $VERSION

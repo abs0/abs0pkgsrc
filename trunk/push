@@ -8,7 +8,7 @@ if [ $? != 0 ]; then
 fi
 set -- $args
 
-ROOT=/files/netbsd
+ROOT=/home/netbsd
 HOSTS=
 
 while [ $# != 0 ]; do

@@ -230,8 +230,8 @@ if [ ! -d $PKGSRC ];then
     esac
 fi
 
-if [ ! -d $PKGSRC -a -d /files/netbsd/pkgsrc ] ; then
-   ln -sf /files/netbsd/pkgsrc $PKGSRC
+if [ ! -d $PKGSRC -a -d /home/netbsd/pkgsrc ] ; then
+   ln -sf /home/netbsd/pkgsrc $PKGSRC
 fi
 
 if [ ! -f /etc/mk.conf ]; then
