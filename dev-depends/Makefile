@@ -9,7 +9,7 @@ HOMEPAGE=	http://www.absd.org/
 COMMENT=	Meta package for tools installed on the dev server
 META_PACKAGE=	yes
 
-DEPENDS+= postgresql90>0:../../databases/postgresql90
+DEPENDS+= postgresql84>0:../../databases/postgresql84
 DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
 DEPENDS+= ap22-subversion>0:../../www/ap2-subversion
 DEPENDS+= ap22-py26-python>0:../../www/ap2-python

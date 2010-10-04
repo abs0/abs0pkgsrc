@@ -26,8 +26,7 @@ mail/roundcube			webmail		# Webmail
 mail/squirrelmail		*
 
 #	Server fun
-databases/postgresql90		*
-databases/postgresql83-client	*
+databases/postgresql84		*
 net/mrstat			*
 mail/majordomo			*
 security/sudo			*
@@ -35,7 +34,7 @@ mail/dovecot			*
 net/openvpn			*
 
 www/ap-php			*
-databases/php-pgsql		*		# must be after postgresql83
+databases/php-pgsql		*		# must be after postgresql
 mail/fetchmail			*
 
 # Apache
