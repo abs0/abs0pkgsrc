@@ -46,15 +46,16 @@ ulimit -c 0 	# Limit coredumpsize
 
 # Prompt - to work in bash, ksh, sh and zsh
 PS1=
+[ -n "$WINDOW" ] && PS1="$WINDOW:"
 [ $UID != 0 ] && PS1="${USER}@${PS1}"
 if [ -n "$ZSH_VERSION" ] ; then
     PS1="(${PS1}%m %B%~%b)%h%# "
 elif [ -n "$BASH_VERSION" ] ; then
     PS1="(${PS1}\h \w)\!\\$ "
-else # ksh/sh/bash
+else # ksh/sh
     PS1="(${PS1}$(hostname -s))"
     if [ -n "$KSH_VERSION" ]; then
-	PS1="${PS1}\!"
+	PS1="${PS1}!"
     fi
     if [ $UID = 0 ] ; then
 	PS1="${PS1}# "
