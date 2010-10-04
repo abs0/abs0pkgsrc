@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	natbsync-depends-0.01
+DISTNAME=	natbsync-depends-1.00
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,5 +15,6 @@ DEPENDS+= py26-django-registration>0:../../www/py-django-registration
 DEPENDS+= py26-django>0:../../www/py-django
 DEPENDS+= py26-psycopg2>0:../../databases/py-psycopg2
 DEPENDS+= py26-xml>0:../../textproc/py-xml
+DEPENDS+= bash>0:../../shells/bash
 
 .include "../../mk/bsd.pkg.mk"
