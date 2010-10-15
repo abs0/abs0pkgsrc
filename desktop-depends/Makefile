@@ -38,7 +38,6 @@ DEPENDS+= mplayer>0:../../multimedia/mplayer
 
 # Misc desktop packages
 DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
-DEPENDS+= chromium-devel>0:../../wip/chromium-devel
 DEPENDS+= rapidsvn>0:../../devel/rapidsvn
 DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= thunderbird>0:../../mail/thunderbird
