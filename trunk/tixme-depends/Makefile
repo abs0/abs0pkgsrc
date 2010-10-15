@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.01
+DISTNAME=	tixme-depends-1.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,10 +10,12 @@ COMMENT=	Meta package for tixme server depends
 
 META_PACKAGE=	yes
 
-DEPENDS+= munin-node>0:../../sysutils/munin-node
+DEPENDS+= fping>0:../../net/fping			# Quick monitoring
+DEPENDS+= munin-node>0:../../sysutils/munin-node	# Monitoring
+DEPENDS+= unison>0:../../net/unison			# File sync
 
-DEPENDS+= unison>0:../../net/unison
-DEPENDS+= fping>0:../../net/fping
+# Used by updateEventRedirects & whitelist dump
+DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
 
 # monitor Catalyst app
 DEPENDS+= p5-Catalyst-Runtime>0:../../www/p5-Catalyst-Runtime

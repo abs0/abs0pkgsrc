@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.00
+DISTNAME=	desktop-depends-1.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -29,6 +29,7 @@ DEPENDS+= nspluginwrapper>0:../../www/nspluginwrapper
 DEPENDS+= adobe-flash-plugin>0:../../multimedia/adobe-flash-plugin
 
 # Audio
+DEPENDS+= amarok>0:../../audio/amarok
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= xine-pulse>0:../../audio/xine-pulse
@@ -37,6 +38,7 @@ DEPENDS+= mplayer>0:../../multimedia/mplayer
 
 # Misc desktop packages
 DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
+DEPENDS+= chromium-devel>0:../../wip/chromium-devel
 DEPENDS+= rapidsvn>0:../../devel/rapidsvn
 DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= thunderbird>0:../../mail/thunderbird
