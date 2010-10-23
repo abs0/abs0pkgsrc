@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.04
+DISTNAME=	desktop-depends-1.05
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -44,7 +44,6 @@ DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= thunderbird>0:../../mail/thunderbird
 DEPENDS+= dvdrip>0:../../multimedia/dvdrip
 DEPENDS+= ffplay>0:../../multimedia/ffplay
-DEPENDS+= gtranscode>0:../../multimedia/gtranscode
 DEPENDS+= gxine>0:../../multimedia/gxine
 DEPENDS+= handbrake>0:../../multimedia/handbrake
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
