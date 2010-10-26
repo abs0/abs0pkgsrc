@@ -7,6 +7,7 @@ MASTER_SITES=	# empty
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.absd.org/
 COMMENT=	Meta package for NATBsync server dependencies
+
 META_PACKAGE=	yes
 
 DEPENDS+= ap22-py26-wsgi>0:../../www/ap2-wsgi

@@ -39,11 +39,11 @@ DEPENDS+= p5-PerlMagick>0:../../graphics/p5-PerlMagick
 DEPENDS+= p5-YAML>0:../../textproc/p5-YAML
 
 # Needed by firmspace_jobqueue.pl
-DEPENDS+= p5-Catalyst-Engine-JobQueue>0:../../www/p5-Catalyst-Engine-JobQueue
+DEPENDS+= p5-Catalyst-Engine-JobQueue-POE>0:../../www/p5-Catalyst-Engine-JobQueue-POE
 
 # Infrastructure, apache, database, etc
 DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
-DEPENDS+= ghostscript>0:../../print/ghostsript
+DEPENDS+= ghostscript>0:../../print/ghostscript
 DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 DEPENDS+= postgresql83>0:../../databases/postgresql83
 

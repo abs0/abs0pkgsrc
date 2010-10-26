@@ -7,6 +7,7 @@ MASTER_SITES=	# empty
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.absd.org/
 COMMENT=	Meta package for tools installed on the dev server
+
 META_PACKAGE=	yes
 
 DEPENDS+= postgresql90>0:../../databases/postgresql90
@@ -19,7 +20,6 @@ DEPENDS+= mediawiki>0:../../www/mediawiki
 
 DEPENDS+= bugzilla>0:../../devel/bugzilla3
 DEPENDS+= p5-BSD-Resource>0:../../devel/p5-BSD-Resource
-DEPENDS+= ap22-perl>0:../../www/ap2-perl 
-
+DEPENDS+= ap22-perl>0:../../www/ap2-perl
 
 .include "../../mk/bsd.pkg.mk"

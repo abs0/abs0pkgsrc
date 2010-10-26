@@ -7,6 +7,7 @@ MASTER_SITES=	# empty
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.absd.org/
 COMMENT=	Meta package for tools installed on every host
+
 META_PACKAGE=	yes
 
 DEPENDS+= screen>0:../../misc/screen
