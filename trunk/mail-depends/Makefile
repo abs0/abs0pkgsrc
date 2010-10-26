@@ -7,6 +7,7 @@ MASTER_SITES=	# empty
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.absd.org/
 COMMENT=	Meta package for mail server tools
+
 META_PACKAGE=	yes
 
 DEPENDS+= exim>0:../../mail/exim

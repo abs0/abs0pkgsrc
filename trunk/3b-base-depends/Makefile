@@ -7,6 +7,7 @@ MASTER_SITES=	# empty
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.3b.net/
 COMMENT=	Meta package for tools installed on every 3B host
+
 META_PACKAGE=	yes
 
 DEPENDS+= alpine>0:../../mail/alpine
