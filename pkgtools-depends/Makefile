@@ -17,7 +17,7 @@ DEPENDS+= pkg_tarup>0:../../pkgtools/pkg_tarup
 DEPENDS+= pkgdiff>0:../../pkgtools/pkgdiff
 DEPENDS+= pkgin>0:../../pkgtools/pkgin
 DEPENDS+= pkglint>0:../../pkgtools/pkglint
-DEPENDS+= pkgsurvey>0:../../pkgtools/pkgsurvey
+DEPENDS+= pkgsurvey>=0:../../pkgtools/pkgsurvey
 DEPENDS+= url2pkg>0:../../pkgtools/url2pkg
 
 .include "../../mk/bsd.pkg.mk"
