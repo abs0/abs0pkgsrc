@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.05
+DISTNAME=	desktop-depends-1.06
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -24,9 +24,7 @@ DEPENDS+= dvd+rw-tools>0:../../sysutils/dvd+rw-tools
 
 # Core desktop tools
 DEPENDS+= pidgin-icb>0:../../chat/pidgin-icb
-DEPENDS+= libflashsupport-pulse>0:../../multimedia/libflashsupport-pulse
-DEPENDS+= nspluginwrapper>0:../../www/nspluginwrapper
-DEPENDS+= adobe-flash-plugin>0:../../multimedia/adobe-flash-plugin
+DEPENDS+= gnash>0:../../multimedia/gnash
 
 # Audio/Video
 DEPENDS+= amarok>0:../../audio/amarok
