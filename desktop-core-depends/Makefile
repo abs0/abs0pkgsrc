@@ -38,7 +38,7 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 # Lower priority
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= gthumb>0:../../graphics/gthumb
-DEPENDS+= qemu>0:../../emulators/qemu
+# DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>0:../../multimedia/vlc
 DEPENDS+= wireshark>0:../../net/wireshark
 
