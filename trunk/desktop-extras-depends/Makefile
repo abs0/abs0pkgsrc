@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.06
+DISTNAME=	desktop-extras-depends-1.07
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -9,8 +9,6 @@ HOMEPAGE=	http://www.absd.org/
 COMMENT=	Meta package for desktop install
 
 META_PACKAGE=	yes
-
-DEPENDS+= desktop-core-depends>0:../../local/desktop-core-depends
 
 DEPENDS+= encodings>0:../../fonts/encodings
 DEPENDS+= dhcpcd-dbus>0:../../net/dhcpcd-dbus
