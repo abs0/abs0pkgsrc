@@ -30,7 +30,7 @@ databases/postgresql90		*
 net/mrstat			*
 mail/majordomo			*
 security/sudo			*
-mail/dovecot			*
+mail/dovecot2			*
 net/openvpn			*
 
 www/ap-php			*
