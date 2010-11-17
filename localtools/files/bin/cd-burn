@@ -8,6 +8,7 @@ use warnings;
 use Getopt::Std;
 use File::Find;
 
+%ENV = ();
 $ENV{PATH} =
 '/usr/local/bin:/usr/bin:/bin:/usr/pkg/bin:/usr/games:/usr/sbin:/sbin:/usr/local/sbin:/usr/pkg/sbin';
 
@@ -180,7 +181,7 @@ sub find_cd_drives {
     if ( !open( DMESG, '/var/run/dmesg.boot' ) ) {
         fatal("Unable to read /var/run/dmesg.boot: $!");
     }
-    chomp( $raw = `sysctl -n kern.rawpartition` );
+    chomp( $raw = `/sbin/sysctl -n kern.rawpartition` );
     $raw = ( $raw == '3' ) ? 'd' : 'c';
     foreach my $dev ( split( /\s+/, `sysctl -n hw.disknames` ) ) {
         if ( $dev =~ /^(cd\d+)$/ ) {
