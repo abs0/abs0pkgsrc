@@ -28,7 +28,7 @@ DEPENDS+= p5-Config-General>0:../../devel/p5-Config-General
 DEPENDS+= p5-Catalyst-Action-RenderView>0:../../www/p5-Catalyst-Action-RenderView
 DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 
-DEPENDS+= mysql-server->0:../../databases/mysql51-server
+DEPENDS+= mysql-server>0:../../databases/mysql51-server
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
 
 .include "../../mk/bsd.pkg.mk"
