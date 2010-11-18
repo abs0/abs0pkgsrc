@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.07
+DISTNAME=	desktop-extras-depends-1.08
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -28,7 +28,6 @@ DEPENDS+= gnash>0:../../multimedia/gnash
 DEPENDS+= amarok>0:../../audio/amarok
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
-DEPENDS+= xine-pulse>0:../../audio/xine-pulse
 DEPENDS+= abcde>0:../../audio/abcde
 DEPENDS+= mplayer>0:../../multimedia/mplayer
 DEPENDS+= kdenlive>0:../../multimedia/kdenlive
@@ -40,12 +39,10 @@ DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= thunderbird>0:../../mail/thunderbird
 DEPENDS+= dvdrip>0:../../multimedia/dvdrip
 DEPENDS+= ffplay>0:../../multimedia/ffplay
-DEPENDS+= gxine>0:../../multimedia/gxine
 DEPENDS+= handbrake>0:../../multimedia/handbrake
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= transcode>0:../../multimedia/transcode
-DEPENDS+= xine-ui>0:../../multimedia/xine-ui
 DEPENDS+= filezilla>0:../../net/filezilla
 DEPENDS+= skype>0:../../net/skype
 DEPENDS+= x2vnc>0:../../net/x2vnc
