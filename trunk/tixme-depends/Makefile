@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.05
+DISTNAME=	tixme-depends-1.06
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,15 +18,6 @@ DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# While editing
 
 # Used by updateEventRedirects & whitelist dump
 DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
-
-# monitor Catalyst app
-DEPENDS+= p5-Catalyst-Runtime>0:../../www/p5-Catalyst-Runtime
-DEPENDS+= p5-Catalyst-Plugin-Static-Simple>0:../../www/p5-Catalyst-Plugin-Static-Simple
-DEPENDS+= p5-Catalyst-Plugin-ConfigLoader>0:../../www/p5-Catalyst-Plugin-ConfigLoader
-DEPENDS+= p5-Catalyst-View-TT>0:../../www/p5-Catalyst-View-TT
-DEPENDS+= p5-Config-General>0:../../devel/p5-Config-General
-DEPENDS+= p5-Catalyst-Action-RenderView>0:../../www/p5-Catalyst-Action-RenderView
-DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 
 DEPENDS+= mysql-server>0:../../databases/mysql51-server
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
