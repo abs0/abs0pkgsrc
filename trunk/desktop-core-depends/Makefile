@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.00
+DISTNAME=	desktop-core-depends-1.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -32,7 +32,7 @@ DEPENDS+= vncviewer>0:../../net/vncviewer
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= epdfview>0:../../print/epdfview 			# For !kde
-DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo	# For !kde
+DEPENDS+= xscreensaver>0:../../x11/xscreensaver			# For !kde
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
 # Lower priority
