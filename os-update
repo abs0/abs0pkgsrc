@@ -10,7 +10,11 @@ fi
 
 FILEDIR=/home/netbsd/arch
 KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/).*//').gz
-OSVER=$(sysctl -n kern.osrelease | sed -e 's/[^0-9].*//')
+if sysctl kern.version|grep -q /current/ ; then
+    OSVER=current
+else
+    OSVER=$(sysctl -n kern.osrelease | sed -e 's/[^0-9].*//')
+fi
 HOST=$(sysctl -n kern.hostname | sed 's:\..*::')
 DESTDIR=/
 
