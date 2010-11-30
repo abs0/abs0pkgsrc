@@ -106,13 +106,15 @@ build()
     fi
 
     cd $BSDSRCDIR/sys/arch/$MACHINE/conf
-    KERNLIST="$(echo _*_)"
-    if [ "$KERNLIST" = '_*_' ] ; then
-	KERNLIST="GENERIC"
-    else
-	KERNLIST="$KERNLIST GENERIC"
+    KERNLIST="GENERIC"
+    if [ "$(echo XEN*)" != 'XEN*' ] ; then
+	KERNLIST="$(echo XEN*) $KERNLIST"
+    fi
+    if [ "$(echo _*_)" != '_*_' ] ; then
+	KERNLIST="$(echo _*_) $KERNLIST"
     fi
     echo "Kernel list: $KERNLIST"
+
     mkdir -p $DESTDIR/kernels
     for conf in $KERNLIST ; do
 	cd $BSDSRCDIR
