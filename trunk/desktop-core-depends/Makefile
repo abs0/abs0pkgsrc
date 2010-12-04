@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.02
+DISTNAME=	desktop-core-depends-1.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -37,7 +37,6 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
 # Lower priority
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
-DEPENDS+= gthumb>0:../../graphics/gthumb			# For !kde
 DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>0:../../multimedia/vlc
 DEPENDS+= wireshark>0:../../net/wireshark
