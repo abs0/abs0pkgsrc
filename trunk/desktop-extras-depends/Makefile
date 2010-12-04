@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.08
+DISTNAME=	desktop-extras-depends-1.09
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -21,8 +21,7 @@ DEPENDS+= dvdbackup>0:../../multimedia/dvdbackup
 DEPENDS+= dvd+rw-tools>0:../../sysutils/dvd+rw-tools
 
 # Core desktop tools
-DEPENDS+= pidgin-icb>0:../../chat/pidgin-icb
-DEPENDS+= gnash>0:../../multimedia/gnash
+DEPENDS+= pidgin>0:../../chat/pidgin
 
 # Audio/Video
 DEPENDS+= amarok>0:../../audio/amarok
@@ -55,6 +54,7 @@ DEPENDS+= openjdk7-icedtea-plugin>0:../../www/openjdk7-icedtea-plugin
 # Misc low priority
 DEPENDS+= audacity>0:../../audio/audacity
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
+DEPENDS+= gnash>0:../../multimedia/gnash
 DEPENDS+= ckmame>0:../../emulators/ckmame
 DEPENDS+= sdlmame>0:../../emulators/sdlmame
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
