@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-monitor-depends-1.00
+DISTNAME=	tixme-monitor-depends-1.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,7 +10,7 @@ COMMENT=	Meta package for tixme server depends
 
 META_PACKAGE=	yes
 
-DEPENDS+= munin-server>0:../../sysutils/munin-server	# Monitoring
+DEPENDS+= munin-server>=1.3.2nb3:../../sysutils/munin-server	# Monitoring
 
 # monitor Catalyst app
 DEPENDS+= p5-Catalyst-Runtime>0:../../www/p5-Catalyst-Runtime
