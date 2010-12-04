@@ -63,6 +63,27 @@ if [ $(id -u) != 0 ] ; then
     fi
 fi
 
+
+confirm_symlink()
+{   
+    from=$1
+    to=$2
+    link=$(readlink $to || echo '') 
+    case "$link" in
+        $from | $from/ )
+            ;;  # All ok
+        * )
+            echo "Symlink $from $to"
+            rm -f $to
+            ln -sf $from $to || true
+            link=$(readlink $to || echo '')
+            if [ "$link" != $from ] ; then
+		echo "Symlink failed" >&1
+            fi
+        ;;
+    esac
+}   
+
 handle_opt_r()
     {
     echo rm -rf /usr/OLDpkg
@@ -79,7 +100,7 @@ handle_opt_r()
     if [ "$LINUX_PROC_MOUNT" = 1 ] ; then
 	mkdir -p /usr/pkg/emul/linux/proc
 	mkdir -p /emul
-	ln -sf /usr/pkg/emul/linux /emul/linux
+ 	confirm_symlink /usr/pkg/emul/linux /emul/linux
 	mount /emul/linux/proc
     fi
     }
@@ -223,19 +244,18 @@ fi
 if [ ! -d $PKGSRC ];then
     case $0 in
 	/*)
-	    ln -sf $(echo $0 | sed 's:/local/pkgsrc-update::') $PKGSRC
 	    ;;
 	*)  fatal "Initial call to pkgsrc-update must use full path"
 	    ;;
     esac
+    confirm_symlink $(echo $0 | sed 's:/local/pkgsrc-update::') $PKGSRC
 fi
 
-if [ ! -d $PKGSRC -a -d /home/netbsd/pkgsrc ] ; then
-   ln -sf /home/netbsd/pkgsrc $PKGSRC
-fi
-
-if [ ! -f /etc/mk.conf ]; then
-    ln -sf $PKGSRC/local/config/mk.conf /etc/mk.conf
+confirm_symlink /home/netbsd/pkgsrc $PKGSRC
+if [ $(uname) = NetBSD ] ; then
+    confirm_symlink $PKGSRC/local/config/mk.conf /etc/mk.conf
+else
+    confirm_symlink $PKGSRC/local/config/mk.conf /usr/pkg/etc/mk.conf
 fi
 
 if [ $# != 0 ] ; then
@@ -287,8 +307,8 @@ if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
 	./mkbinarykit
 	mv bootstrap-pkgsrc-*.tar /pkgsrc/packages
     fi
-    rm -f /usr/pkg/etc/mk.conf
-    ln -sf $PKGSRC/local/config/mk.conf /etc/mk.conf
+    confirm_symlink $PKGSRC/local/config/mk.conf /usr/pkg/etc/mk.conf
+    confirm_symlink $PKGSRC/local/config/mk.conf /etc/mk.conf
 fi
 
 # Must be after -r and bootstrap
