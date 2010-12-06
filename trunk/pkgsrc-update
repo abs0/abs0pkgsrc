@@ -75,11 +75,7 @@ confirm_symlink()
         * )
             echo "Symlink $from $to"
             rm -f $to
-            ln -sf $from $to || true
-            link=$(readlink $to || echo '')
-            if [ "$link" != $from ] ; then
-		echo "Symlink failed" >&1
-            fi
+            ln -sf $from $to
         ;;
     esac
 }   
@@ -251,10 +247,13 @@ if [ ! -d $PKGSRC ];then
     confirm_symlink $(echo $0 | sed 's:/local/pkgsrc-update::') $PKGSRC
 fi
 
-confirm_symlink /home/netbsd/pkgsrc $PKGSRC
+if [ -d /home/netbsd/pkgsrc ] ; then
+    confirm_symlink /home/netbsd/pkgsrc $PKGSRC
+fi
 if [ $(uname) = NetBSD ] ; then
     confirm_symlink $PKGSRC/local/config/mk.conf /etc/mk.conf
 else
+    mkdir -p /usr/pkg/etc
     confirm_symlink $PKGSRC/local/config/mk.conf /usr/pkg/etc/mk.conf
 fi
 
@@ -289,26 +288,25 @@ fi
 # Install via bootstrap if necessary
 #
 if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
-    opsys=`uname -s`
-    osrev=`uname -r`
-    ospro=`uname -p`
-    bootstrap=/pkgsrc/packages/bootstrap-pkgsrc-$opsys-$osrev-$ospro-*.tar
+    opsys=$(uname -s)
+    osrev=$(uname -r | sed 's/-.*//')  # Handle Linux 2.6.18-194.26.1.el5
+    ospro=$(uname -p)
+    bootstrap=/pkgsrc/packages/bootstrap-pkgsrc-$opsys-$osrev-$ospro.tgz
     # XXX Check for multiple matches
     if [ -n "$opt_b" -a -f $bootstrap ] ; then
 	echo "Installing binary bootstrap"
-	cd / ; tar xpf $bootstrap
+	cd / ; tar xpzf $bootstrap
 	if [ ! -d /usr/pkg ] ; then
 	    fatal "/usr/pkg not found in $bootstrap"
 	fi
     else
 	echo "Building bootstrap from source"
 	cd /pkgsrc/bootstrap
-	rm -f /etc/mk.conf # Is overwritten
-	./mkbinarykit
-	mv bootstrap-pkgsrc-*.tar /pkgsrc/packages
+	rm -rf work
+	rm -f /usr/pkg/etc/mk.conf # Is overwritten
+	./bootstrap --gzip-binary-kit $bootstrap
     fi
     confirm_symlink $PKGSRC/local/config/mk.conf /usr/pkg/etc/mk.conf
-    confirm_symlink $PKGSRC/local/config/mk.conf /etc/mk.conf
 fi
 
 # Must be after -r and bootstrap
