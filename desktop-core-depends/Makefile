@@ -10,13 +10,17 @@ COMMENT=	Meta package for core desktop install
 
 META_PACKAGE=	yes
 
+.include "../../mk/bsd.prefs.mk"
+
+.if ${OPSYS} == "NetBSD" || ${OPSYS} == "Linux"
 DEPENDS+= modular-xorg-apps>0:../../meta-pkgs/modular-xorg-apps
 DEPENDS+= modular-xorg-drivers>0:../../meta-pkgs/modular-xorg-drivers
 DEPENDS+= modular-xorg-fonts>0:../../meta-pkgs/modular-xorg-fonts
 DEPENDS+= modular-xorg-server>0:../../x11/modular-xorg-server
+DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
+.endif
 
 # additional fonts
-DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 
