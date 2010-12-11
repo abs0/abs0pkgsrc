@@ -1,11 +1,11 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.07
+DISTNAME=	tixme-depends-1.08
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
 MAINTAINER=	abs@tix-me.com
-HOMEPAGE=	http://www.absd.org/
+HOMEPAGE=	http://www.tix-me.com/
 COMMENT=	Meta package for tixme server depends
 
 META_PACKAGE=	yes
@@ -13,6 +13,7 @@ META_PACKAGE=	yes
 DEPENDS+= fping>0:../../net/fping			# Quick monitoring
 DEPENDS+= munin-node>0:../../sysutils/munin-node	# Monitoring
 DEPENDS+= unison>0:../../net/unison			# File sync
+DEPENDS+= exim>=4.70:../../mail/exim			# Non ancient exim
 
 DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# While editing
 
