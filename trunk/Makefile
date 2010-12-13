@@ -8,9 +8,19 @@ SUBDIR+=	3b-cgi-depends
 SUBDIR+=	3b-firmspace-depends
 SUBDIR+=	3b-retail-depends
 SUBDIR+=	3b-tomcat-depends
+SUBDIR+=	6nations-depends
+SUBDIR+=	base-depends
+SUBDIR+=	desktop-core-depends
+SUBDIR+=	desktop-extras-depends
+SUBDIR+=	dev-depends
 SUBDIR+=	localtools
-SUBDIR+=	mserv-php
-SUBDIR+=	p5-Reaction-depends
+SUBDIR+=	mail-depends
+SUBDIR+=	natbsync-depends
+SUBDIR+=	pkgtools-depends
 SUBDIR+=	t365-depends
+SUBDIR+=	tixme-depends
+SUBDIR+=	tixme-monitor-depends
+SUBDIR+=	tixme-munin-plugins
+SUBDIR+=	tt-depends
 
 .include "../mk/bsd.pkg.subdir.mk"
