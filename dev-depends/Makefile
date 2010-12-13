@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	dev-depends-1.00
+DISTNAME=	dev-depends-1.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,7 +14,7 @@ DEPENDS+= postgresql90>0:../../databases/postgresql90
 DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
 DEPENDS+= ap22-subversion>0:../../www/ap2-subversion
 DEPENDS+= ap22-py26-python>0:../../www/ap2-python
-DEPENDS+= ap22-php5>0:../../www/ap-php
+DEPENDS+= ap22-php53>0:../../www/ap-php
 DEPENDS+= trac>0:../../www/trac
 DEPENDS+= mediawiki>0:../../www/mediawiki
 
