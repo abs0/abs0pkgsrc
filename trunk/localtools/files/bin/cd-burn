@@ -125,7 +125,8 @@ sub image_write {
         }
         else { $args .= " $image"; }
         timestamp("cdrecord $this_title");
-        record($args);
+
+        # record($args);
         if ( !$opt{q} ) {
             my $count = -s $image;
             my $bs    = 1;
@@ -140,7 +141,7 @@ sub image_write {
                 run_cmd("eject -l $config{dest}{dev}");
             }
             run_root_cmd(
-                "mount /dev/$config{dest}{dev} $mount_tmp && umount $mount_tmp"
+"mount /dev/$config{dest}{mount} $mount_tmp && umount $mount_tmp"
             );
             if ( !open( SOURCE, $image ) ) { die("Unable to read $image: $!"); }
             if ( !open( DEST, "/dev/$config{dest}{dev}" ) ) {
@@ -185,15 +186,17 @@ sub find_cd_drives {
     $raw = ( $raw == '3' ) ? 'd' : 'c';
     foreach my $dev ( split( /\s+/, `sysctl -n hw.disknames` ) ) {
         if ( $dev =~ /^(cd\d+)$/ ) {
-            $dev                = $1 . $raw;
-            $cddevs{$dev}{dev}  = $dev;
-            $cddevs{$dev}{size} = $config{max_cd};
+            $dev                 = $1 . $raw;
+            $cddevs{$dev}{dev}   = $dev;
+            $cddevs{$dev}{mount} = $1 . 'a';
+            $cddevs{$dev}{size}  = $config{max_cd};
         }
     }
     while (<DMESG>) {
         if (/^(cd\d+) at (scsi|atapi)bus\d+ drive \d+: <(.+)>/) {
             my $dev = $1 . $raw;
-            $cddevs{$dev} = { dev => $dev, description => $3 };
+            $cddevs{$dev} =
+              { dev => $dev, mount => $1 . 'a', description => $3 };
             if ( index( $cddevs{$dev}{description}, 'DVD' ) != -1 ) {
                 $cddevs{$dev}{dvd}  = 1;
                 $cddevs{$dev}{size} = $config{max_dvd};
@@ -206,8 +209,9 @@ sub find_cd_drives {
             # HL-DT-ST DVDRAM GSA-4167B
             # WPI CDRW-2422
             # TSSTcorpCD/DVDW SH-W162C,
-	    # HL-DT-STDVDRRW GCA-4164B
-            if ( $cddevs{$dev}{description} =~ /^[^,]*(\b|CD|DVD)(RRW|RW|W|RAM)\b/ )
+            # HL-DT-STDVDRRW GCA-4164B
+            if ( $cddevs{$dev}{description} =~
+                /^[^,]*(\b|CD|DVD)(RRW|RW|W|RAM)\b/ )
             {
                 $cddevs{$dev}{rw} = 1;
             }
@@ -223,7 +227,7 @@ sub find_cd_drives {
     }
     foreach my $cddev ( sort { $a->{dev} cmp $b->{dev} } values %cddevs ) {
         if ( $cddev->{rw} && !$config{dest} ) { $config{dest} = $cddev; }
-        else { $config{src} ||= $cddev; }
+        else                                  { $config{src} ||= $cddev; }
     }
     if ( !$config{dest} ) { fatal("Unable to find writable cd/dvd device"); }
 }
@@ -303,7 +307,7 @@ sub image_allocate_and_write {
 
 sub mkisofs {
     my ( $outfile, $filesize, $volid, @infiles ) = @_;
-    my ( $cmd,     @files );
+    my ( $cmd, @files );
 
     unlink($outfile);
     timestamp("mkisofs $volid (${filesize}M)");
@@ -319,8 +323,8 @@ sub mkisofs {
         foreach (@infiles) {
             s#/$##;
             m#([^/]+)$#;
-            if ( -d $_ ) { push( @files, "$1/=$_" ); }
-            else { push( @files, $_ ); }
+            if   ( -d $_ ) { push( @files, "$1/=$_" ); }
+            else           { push( @files, $_ ); }
         }
     }
     else { @files = @infiles; }
@@ -332,8 +336,8 @@ sub mkisofs {
     while (<MKISOFS>) {
         if (/^(Total|Path table size|Max brk space)/) { next; }
         if (/^mkisofs: Warning: -follow-links does not always work/) { next; }
-        if (/estimate finish/) { s/\n/\r/; }
-        else { print ' ' x 64, "\r"; }
+        if   (/estimate finish/) { s/\n/\r/; }
+        else                     { print ' ' x 64, "\r"; }
         print "mkisofs: $_";
     }
     close(MKISOFS);
@@ -419,7 +423,7 @@ sub timefmt {
 sub timestamp_results { print $time_record; }
 
 sub tmpfile {
-    if ( $ENV{USER} =~ /(\w+)/ ) { return "$tmp_dir/$1.iso"; }
+    return "$tmp_dir/$1.iso" if defined $ENV{USER} && $ENV{USER} =~ /(\w+)/;
     return "$tmp_dir/$<.iso";
 }
 
