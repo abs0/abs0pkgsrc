@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
 
-DISTNAME=	desktop-extras-depends-1.11
+DISTNAME=	desktop-extras-depends-1.13
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -23,7 +23,7 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= pidgin>0:../../chat/pidgin
 
 # Audio/Video
-DEPENDS+= amarok>0:../../wip/amarok
+DEPENDS+= amarok>0:../../audio/amarok
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= abcde>0:../../audio/abcde
@@ -55,7 +55,7 @@ DEPENDS+= openjdk7-icedtea-plugin>0:../../www/openjdk7-icedtea-plugin
 # Misc low priority
 DEPENDS+= audacity>0:../../audio/audacity
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
-DEPENDS+= gnash>0:../../multimedia/gnash
+DEPENDS+= adobe-flash-plugin>0:../../multimedia/adobe-flash-plugin
 DEPENDS+= ckmame>0:../../emulators/ckmame
 DEPENDS+= sdlmame>0:../../emulators/sdlmame
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
