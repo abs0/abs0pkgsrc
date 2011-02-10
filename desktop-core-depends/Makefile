@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.03
+DISTNAME=	desktop-core-depends-1.04
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,7 +25,7 @@ DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 
 # High priorities - build first
-DEPENDS+= jwm>0:../../wm/jwm 					# For !kde
+# DEPENDS+= jwm>0:../../wm/jwm 					# For !kde
 DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
 DEPENDS+= firefox>0:../../www/firefox
 
@@ -35,8 +35,8 @@ DEPENDS+= rdesktop>0:../../net/rdesktop
 DEPENDS+= vncviewer>0:../../net/vncviewer
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= pidgin>0:../../chat/pidgin
-DEPENDS+= epdfview>0:../../print/epdfview 			# For !kde
-DEPENDS+= xscreensaver>0:../../x11/xscreensaver			# For !kde
+# DEPENDS+= epdfview>0:../../print/epdfview 			# For !kde
+# DEPENDS+= xscreensaver>0:../../x11/xscreensaver		# For !kde
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
 # Lower priority
