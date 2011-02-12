@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.05
+DISTNAME=	base-depends-1.06
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,6 +10,7 @@ COMMENT=	Meta package for tools installed on every host
 
 META_PACKAGE=	yes
 
+DEPENDS+= tmux>0:../../misc/tmux
 DEPENDS+= screen>0:../../misc/screen
 DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= rsync>0:../../net/rsync
