@@ -63,16 +63,10 @@ else
     cd $base
     FILES="$(echo */CVS | sed 's:/CVS::g' | sed 's/pkgsrc[^ ]*//g')"
     # Ensure pkgsrc is at the front
-    if [ -d pkgsrc/wip ] ; then
-	FILES="pkgsrc/wip $FILES"
-    fi
     if [ -d pkgsrc ] ; then
 	FILES="pkgsrc $FILES"
     fi
     echo $FILES
-    if [ -d 5/xsrc ] ; then
-	FILES="$FILES 5/xsrc"
-    fi
 fi
 
 rm -f $log
