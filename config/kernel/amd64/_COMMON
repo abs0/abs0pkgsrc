@@ -11,7 +11,7 @@ options 	PCKBD_LAYOUT=KB_UK
 
 options 	IPFORWSRCRT=0
 
-options 	NMBCLUSTERS=4096	# default 2048
+options 	NMBCLUSTERS=16384	# default 2048
 # options 	NVNODE=65536		# 64K
 
 options 	NPROC=4096
