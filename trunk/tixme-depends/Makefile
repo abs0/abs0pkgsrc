@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.10
+DISTNAME=	tixme-depends-1.11
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -21,8 +21,13 @@ DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# While editing
 DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
 DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-Email-Stuff>0:../../mail/p5-Email-Stuff
+DEPENDS+= p5-Moose>0:../../devel/p5-Moose
 
 DEPENDS+= mysql-server>0:../../databases/mysql51-server
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
+
+# Barcode generation
+DEPENDS+= p5-CGI>0:../../www/p5-CGI
+DEPENDS+= p5-Barcode-Code128>0:../../graphics/p5-Barcode-Code128
 
 .include "../../mk/bsd.pkg.mk"
