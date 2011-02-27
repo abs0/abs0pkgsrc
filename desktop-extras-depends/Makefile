@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
 
-DISTNAME=	desktop-extras-depends-1.14
+DISTNAME=	desktop-extras-depends-1.15
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -56,8 +56,8 @@ DEPENDS+= openjdk7-icedtea-plugin>0:../../www/openjdk7-icedtea-plugin
 DEPENDS+= audacity>0:../../audio/audacity
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 DEPENDS+= adobe-flash-plugin>0:../../multimedia/adobe-flash-plugin
-DEPENDS+= ckmame>0:../../emulators/ckmame
-DEPENDS+= mame>0:../../emulators/mame
+# DEPENDS+= ckmame>0:../../emulators/ckmame
+# DEPENDS+= mame>0:../../emulators/mame
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= aircrack-ng>0:../../wip/aircrack-ng
