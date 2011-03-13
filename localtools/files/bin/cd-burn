@@ -126,7 +126,7 @@ sub image_write {
         else { $args .= " $image"; }
         timestamp("cdrecord $this_title");
 
-        # record($args);
+        record($args);
         if ( !$opt{q} ) {
             my $count = -s $image;
             my $bs    = 1;
