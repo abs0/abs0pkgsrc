@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.13
+DISTNAME=	tixme-depends-1.14
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -26,6 +26,7 @@ DEPENDS+= p5-Moose>0:../../devel/p5-Moose
 DEPENDS+= mysql-server>0:../../databases/mysql51-server
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
 DEPENDS+= p5-DBIx-Class>0:../../databases/p5-DBIx-Class
+DEPENDS+= p5-DBIx-Class-Schema-Loader>0:../../databases/p5-DBIx-Class-Schema-Loader
 
 DEPENDS+= p5-Date-Manip>0:../../devel/p5-Date-Manip
 
