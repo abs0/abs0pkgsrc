@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.15
+DISTNAME=	tixme-depends-1.16
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -9,6 +9,8 @@ HOMEPAGE=	http://www.tix-me.com/
 COMMENT=	Meta package for tixme server depends
 
 META_PACKAGE=	yes
+
+DEPENDS+= localtools>0:../../local/localtools		# Common scripts/config
 
 DEPENDS+= fping>0:../../net/fping			# Quick monitoring
 DEPENDS+= munin-node>0:../../sysutils/munin-node	# Monitoring
