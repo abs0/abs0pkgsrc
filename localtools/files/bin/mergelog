@@ -48,7 +48,7 @@ sub mergedir {
             else { $cmd = "zcat @{$target{$targetfile}} | gzip -9 > $tmpfile"; }
 
             die("creation of $tmpfile failed: $!") if system($cmd);
-            die("$tmpfile too small")              if -s $tmpfile < 100;
+            die("$tmpfile too small") if -s $tmpfile < 100;
             safe_rename( $tmpfile, $targetfile );
             foreach my $file ( @{ $target{$targetfile} } ) {
                 ( $file ne $targetfile ) && safe_unlink($file);
@@ -61,8 +61,8 @@ sub mergedir {
 
 my @files;
 foreach my $arg (@ARGV) {
-    if ( -d $arg ) { mergedir($arg); }
-    else { push( @files, $arg ); }
+    if   ( -d $arg ) { mergedir($arg); }
+    else             { push( @files, $arg ); }
 }
 @files && mergedir( '.', @files );
 
