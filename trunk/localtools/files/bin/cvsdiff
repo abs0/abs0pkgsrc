@@ -1,7 +1,6 @@
 #!/usr/pkg/bin/perl
 # $Id: cvsdiff,v 1.6 2006/11/10 11:40:59 abs Exp $
 # Generate diff between current checked out file and specified CVS version
-#
 
 use strict;
 use warnings;
@@ -13,8 +12,8 @@ if ( !getopts( 'hmnvR', \%opt ) || $opt{h} || ( @ARGV != 0 && @ARGV != 2 ) ) {
     usage();
 }
 
-if ( @ARGV == 2 ) { cvsdiff(@ARGV); }
-else { parse_commit_messages(); }
+if   ( @ARGV == 2 ) { cvsdiff(@ARGV); }
+else                { parse_commit_messages(); }
 
 sub parse_commit_messages {
     my (@lines);
@@ -76,23 +75,6 @@ sub parse_commit_messages {
 sub cvsdiff {
     print "XXX to be implemented\n";
 }
-
-#PATCHARGS="-s -f -l"
-#cvsdiff()
-#    {
-#    FILE=$1
-#    REV=$2
-#    if [ ! -f $FILE ];then
-#	fatal "cvsdiff: Unable to locate file $FILE";
-#    fi
-#    OLDREV=$(echo $REV|awk -F. '{print $1"."$2-1}')
-#    if [ -n "$opt_p" ] ; then
-#	cvs diff -u -r$OLDREV -r$REV $FILE | patch $PATCHARGS $FILE
-#    else
-#	cvs diff -u -r$OLDREV -r$REV $FILE
-#    fi
-#    }
-#
 
 sub usage {
     print "Usage: cvsdiff [opts] [file revision]

@@ -1,5 +1,5 @@
 #!/usr/pkg/bin/perl
-# [rconfig] $Id: munin-setup-plugins,v 1.1 2007/05/02 15:52:31 abs Exp $
+# $Id: munin-setup-plugins,v 1.1 2007/05/02 15:52:31 abs Exp $
 
 use warnings;
 use strict;
@@ -95,7 +95,7 @@ exit 0;
 sub chkconfig {
     my ($key) = @_;
 
-    return if ! -f '/etc/rc.conf';
+    return if !-f '/etc/rc.conf';
     my $value = `sh -c '. /etc/rc.conf; echo \$$key'`;
     chomp $value;
     $value =~ /YES/i;

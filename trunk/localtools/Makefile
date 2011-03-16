@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.58 2003/07/20 14:21:52 abs Exp $
 #
 
-DISTNAME=	localtools-2.89
+DISTNAME=	localtools-2.90
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -16,7 +16,13 @@ USE_LANGUAGES=	# empty
 EXTRACT_ONLY=	# empty
 NO_CHECKSUM=	yes
 
-BINSCRIPTS!=(cd files/bin ; find * -type f | egrep -v '.svn|\.orig$$' )
+.if exists(files/${OPSYS}-bin)
+BINSRC=bin ${OPSYS}-bin
+.else
+BINSRC=bin
+.endif
+
+BINSCRIPTS!=(cd files ; find ${BINSRC} -type f | egrep -v '.svn|\.orig$$' )
 SHAREFILES!=(cd files/share ; find * -type f | egrep -v '.svn|\.orig$$' )
 
 SHAREDIR=share/local
@@ -38,7 +44,7 @@ do-build:
 
 do-install:
 .for f in ${BINSCRIPTS}
-	${INSTALL_SCRIPT} ${FILESDIR}/bin/${f} ${DESTDIR}${PREFIX}/bin/`basename ${f}`
+	${INSTALL_SCRIPT} ${FILESDIR}/${f} ${DESTDIR}${PREFIX}/bin/`basename ${f}`
 .endfor
 .for f in ${SHAREFILES}
 	${INSTALL_DATA} ${FILESDIR}/share/${f} ${DESTDIR}${PREFIX}/${SHAREDIR}/${f}
