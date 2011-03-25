@@ -111,7 +111,10 @@ determine_PKGBINDIR()
 	# find any directory which matches
 	if [ ! -d $PKGBINDIR ] ; then
 	    echo "* Unable to locate $PKGBINDIR"
-	    PKGBINDIR=$(echo $PKGBINDIR* | sed 's/ .*//')
+	    PKGBINDIR=$(echo $PKGBINDIR | sed 's/5\.99\.[0-9]*/5.1/')
+	    if [ ! -d $PKGBINDIR ] ; then
+		PKGBINDIR=$(echo $PKGBINDIR* | sed 's/ .*//')
+	    fi
 	    echo "* Using $PKGBINDIR"
 	fi
 	PKGBINDIR=$PKGBINDIR/All
