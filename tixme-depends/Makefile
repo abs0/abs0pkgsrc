@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.16
+DISTNAME=	tixme-depends-1.17
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -34,5 +34,7 @@ DEPENDS+= p5-Date-Manip>0:../../devel/p5-Date-Manip
 # Barcode generation
 DEPENDS+= p5-CGI>0:../../www/p5-CGI
 DEPENDS+= p5-Barcode-Code128>0:../../graphics/p5-Barcode-Code128
+
+DEPENDS+= apache-ivy>0:../../devel/apache-ivy
 
 .include "../../mk/bsd.pkg.mk"
