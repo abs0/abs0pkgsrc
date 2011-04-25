@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.06
+DISTNAME=	base-depends-1.07
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -27,6 +27,8 @@ DEPENDS+= cdrtools>0:../../sysutils/cdrtools
 DEPENDS+= dvdrecord>0:../../sysutils/dvdrecord
 DEPENDS+= dvdbackup>0:../../multimedia/dvdbackup
 DEPENDS+= dvd+rw-tools>0:../../sysutils/dvd+rw-tools
+
+DEPENDS+= gnupg2>0:../../security/gnupg2
 
 DEPENDS+= scmgit>0:../../devel/scmgit
 
