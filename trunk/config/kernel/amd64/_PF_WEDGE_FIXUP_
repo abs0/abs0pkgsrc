@@ -1,4 +1,0 @@
-include "arch/amd64/conf/_PF_FIXUP_"
-
-options 	DKWEDGE_METHOD_BSDLABEL	# Support disklabel entries as wedges
-options 	DKWEDGE_METHOD_MBR	# Support MBR partitions as wedges
