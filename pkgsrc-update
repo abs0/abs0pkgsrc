@@ -85,9 +85,9 @@ handle_opt_r()
     echo rm -rf /usr/OLDpkg
     rm -rf /usr/OLDpkg
     sync	# Delay as long as possible before removing live packages
-    mkdir -p /usr/OLDpkg/db
     echo mv /usr/pkg /usr/OLDpkg
     [ -d /usr/pkg ]             && mv /usr/pkg             /usr/OLDpkg
+    mkdir -p /usr/OLDpkg/db
     [ -d /var/db/pkg ]	        && mv /var/db/pkg          /usr/OLDpkg/db
     [ -d /var/db/pkg.refcount ] && mv /var/db/pkg.refcount /usr/OLDpkg/db
     mkdir -p /usr/pkg /var/db/pkg /var/db/pkg.refcount
