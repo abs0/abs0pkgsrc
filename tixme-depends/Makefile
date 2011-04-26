@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.17
+DISTNAME=	tixme-depends-1.18
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,7 +25,7 @@ DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-Email-Stuff>0:../../mail/p5-Email-Stuff
 DEPENDS+= p5-Moose>0:../../devel/p5-Moose
 
-DEPENDS+= mysql-server>0:../../databases/mysql51-server
+DEPENDS+= mysql-server>0:../../databases/mysql55-server
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
 DEPENDS+= p5-Rose-DB-Object>0:../../databases/p5-Rose-DB-Object
 

@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.06
+DISTNAME=	desktop-core-depends-1.07
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -27,7 +27,7 @@ DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 # High priorities - build first
 DEPENDS+= jwm>0:../../wm/jwm 					# For !kde
 DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
-DEPENDS+= firefox>0:../../wip/firefox
+DEPENDS+= firefox>0:../../www/firefox
 
 # Medium priority
 DEPENDS+= meld>0:../../devel/meld
