@@ -7,3 +7,11 @@ options 	MAXUPRC=1024
 options 	NOFILE=1024
 
 include "arch/amd64/conf/GENERIC"
+
+no pseudo-device	ipfilter
+no options 	IPFILTER_LOG
+no options 	IPFILTER_LOOKUP
+no options 	IPFILTER_COMPAT
+
+pseudo-device	pf
+pseudo-device	pflog
