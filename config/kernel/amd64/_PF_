@@ -1,0 +1,9 @@
+# $Id$
+
+options 	PCKBD_LAYOUT=KB_UK
+
+options 	NPROC=4096
+options 	MAXUPRC=1024
+options 	NOFILE=1024
+
+include "arch/amd64/conf/GENERIC"
