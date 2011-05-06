@@ -59,10 +59,18 @@ fi
 if [ $(id -u) != 0 ] ; then
     if [ -n "$opt_u" ] ; then
 	cvsu pkgsrc pkgsrc/wip
-	sudo -H env FETCH_PROTO=http download-vulnerability-list  >/dev/null
+	env FETCH_PROTO=http download-vulnerability-list  >/dev/null
     fi
 fi
 
+as_root()
+{
+    if [ $(id -u) != 0 ] ; then
+	sudo -H "$@"
+    else
+	"$@"
+    fi
+}
 
 confirm_symlink()
 {   
@@ -74,8 +82,8 @@ confirm_symlink()
             ;;  # All ok
         * )
             echo "Symlink $from $to"
-            rm -f $to
-            ln -sf $from $to
+            as_root rm -f $to
+            as_root ln -sf $from $to
         ;;
     esac
 }   
@@ -180,11 +188,7 @@ pkg_check_install()
 postrun()
     {
     if [ -x /usr/pkg/bin/update-config ] ; then
-	if [ $(id -u) != 0 ] ; then
-	    sudo -H /usr/pkg/bin/update-config
-	else
-	    /usr/pkg/bin/update-config
-	fi
+	as_root /usr/pkg/bin/update-config
     fi
     }
 
