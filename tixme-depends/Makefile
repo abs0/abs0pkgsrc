@@ -13,9 +13,10 @@ META_PACKAGE=	yes
 DEPENDS+= localtools>0:../../local/localtools		# Common scripts/config
 
 DEPENDS+= fping>0:../../net/fping			# Quick monitoring
-DEPENDS+= munin-node>0:../../sysutils/munin-node	# Monitoring
 DEPENDS+= unison>0:../../net/unison			# File sync
 DEPENDS+= p7zip>0:../../archivers/p7zip			# Archiver
+
+DEPENDS+= munin-node>0:../../sysutils/munin-node	# Monitoring
 
 DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# While editing
 
