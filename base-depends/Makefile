@@ -10,12 +10,12 @@ COMMENT=	Meta package for tools installed on every host
 
 META_PACKAGE=	yes
 
+DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= tmux>0:../../misc/tmux
 DEPENDS+= screen>0:../../misc/screen
 DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= rsync>0:../../net/rsync
 DEPENDS+= subversion-base>0:../../devel/subversion-base
-DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
 DEPENDS+= p5-ack>0:../../textproc/p5-ack
 
