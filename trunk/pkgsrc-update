@@ -6,12 +6,6 @@ PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
 
 umask 022
 
-if [ $(uname) != NetBSD ] ; then
-    MAKE=bmake
-else
-    MAKE=make
-fi
-
 args=$(getopt bhklrsuvD:IU:P: $*)
 if [ $? != 0 ]; then
     opt_h=1
@@ -40,7 +34,7 @@ done
 if [ -n "$opt_h" ]; then
     cat << END
 Usage: pkgsrc-update [opts] [hosts]
-opts	
+opts
 	-D def	Set extra defines for pkg_chk
 	-P dir	Set packages dir
 	-U def	Unset extra defines for pkg_chk
@@ -56,13 +50,6 @@ END
     exit
 fi
 
-if [ $(id -u) != 0 ] ; then
-    if [ -n "$opt_u" ] ; then
-	cvsu pkgsrc pkgsrc/wip
-	env FETCH_PROTO=http download-vulnerability-list  >/dev/null
-    fi
-fi
-
 as_root()
 {
     if [ $(id -u) != 0 ] ; then
@@ -73,33 +60,20 @@ as_root()
 }
 
 confirm_symlink()
-{   
+{
     from=$1
     to=$2
-    link=$(readlink $to || echo '') 
+    link=$(readlink $to || echo '')
     case "$link" in
-        $from | $from/ )
-            ;;  # All ok
-        * )
-            echo "Symlink $from $to"
-            as_root rm -f $to
-            as_root ln -sf $from $to
-        ;;
+	$from | $from/ )
+	    ;;  # All ok
+	* )
+	    echo "Symlink $from $to"
+	    as_root rm -f $to
+	    as_root ln -sf $from $to
+	;;
     esac
-}   
-
-handle_opt_r()
-    {
-    echo rm -rf /usr/OLDpkg
-    rm -rf /usr/OLDpkg
-    sync	# Delay as long as possible before removing live packages
-    echo mv /usr/pkg /usr/OLDpkg
-    [ -d /usr/pkg ]             && mv /usr/pkg             /usr/OLDpkg
-    mkdir -p /usr/OLDpkg/db
-    [ -d /var/db/pkg ]	        && mv /var/db/pkg          /usr/OLDpkg/db
-    [ -d /var/db/pkg.refcount ] && mv /var/db/pkg.refcount /usr/OLDpkg/db
-    mkdir -p /usr/pkg /var/db/pkg /var/db/pkg.refcount
-    }
+}
 
 determine_PKGBINDIR()
     {
@@ -132,12 +106,12 @@ fatal()
 install_from_stream()
     {
     cd $PKG_UPDATE_SPOOL
-    echo -n " (read)" 
+    echo -n " (read)"
     pax -r $opt_v
-    echo -n " (install)" 
+    echo -n " (install)"
 
     if [ -n "$opt_r" ] ; then
-	handle_opt_r
+	rotate_away_usr_pkg
     else
 	pkg_add -uf pkg_chk
 	pkg_chk -Brb -C pkgchk.conf -P $(pwd)
@@ -192,9 +166,22 @@ postrun()
     fi
     }
 
+rotate_away_usr_pkg()
+    {
+    echo rm -rf /usr/OLDpkg
+    rm -rf /usr/OLDpkg
+    sync
+    echo mv /usr/pkg /usr/OLDpkg
+    [ -d /usr/pkg ]             && mv /usr/pkg             /usr/OLDpkg
+    mkdir -p /usr/OLDpkg/db
+    [ -d /var/db/pkg ]	        && mv /var/db/pkg          /usr/OLDpkg/db
+    [ -d /var/db/pkg.refcount ] && mv /var/db/pkg.refcount /usr/OLDpkg/db
+    mkdir -p /usr/pkg /var/db/pkg /var/db/pkg.refcount
+    }
+
 show_var()
     {
-    cd /pkgsrc/pkgtools/pkg_chk
+    cd $PKGSRC/pkgtools/pkg_chk
     ${MAKE} show-var VARNAME=$1
     }
 
@@ -220,22 +207,43 @@ stream_to_remote_hosts()
 	else
 	    echo -n " (transfer)"
 	    ssh $h "rm -rf $PKG_UPDATE_SPOOL ; mkdir -p $PKG_UPDATE_SPOOL"
-	    scp /pkgsrc/local/pkgsrc-update $h:$PKG_UPDATE_SPOOL/pkgsrc-update
+	    scp $PKGSRC/local/pkgsrc-update $h:$PKG_UPDATE_SPOOL/pkgsrc-update
 	    scp $PKGCHK_CONF $h:$PKG_UPDATE_SPOOL/pkgchk.conf
 	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkgsrc-update -I $opt_r $opt_v
 	fi
     done
     }
 
-if mount | grep -q '[ 	]/tmp[ 	].*noexec' ; then
-    export PKG_TMPDIR=/var/run
+if [ $(uname) != NetBSD ] ; then
+    MAKE=bmake
+else
+    MAKE=make
 fi
 
+# If /tmp is mounted noexec then use /var/tmp
+#
+if mount | grep -q '[ 	]/tmp[ 	].*noexec' ; then
+    export PKG_TMPDIR=/var/tmp
+fi
+
+# The client side of a remote host update
+#
 if [ -n "$opt_I" ]; then
     install_from_stream
     exit
 fi
 
+# Update source tree & rebuild vulnerability-list as needed
+#
+if [ $(id -u) != 0 ] ; then
+    if [ -n "$opt_u" ] ; then
+	cvsu pkgsrc
+	as_root download-vulnerability-list
+    fi
+fi
+
+# Ensure the ($PKGSRC) symlink is present to wherever pkgsrc lives
+#
 if [ ! -d $PKGSRC ];then
     case $0 in
 	/*)
@@ -246,9 +254,6 @@ if [ ! -d $PKGSRC ];then
     confirm_symlink $(echo $0 | sed 's:/local/pkgsrc-update::') $PKGSRC
 fi
 
-if [ -d /home/netbsd/pkgsrc ] ; then
-    confirm_symlink /home/netbsd/pkgsrc $PKGSRC
-fi
 if [ $(uname) = NetBSD ] ; then
     confirm_symlink $PKGSRC/local/config/mk.conf /etc/mk.conf
 else
@@ -284,22 +289,21 @@ if [ -n "$opt_r" ] ; then
 	    fatal "No packages found?"
 	fi
     fi
-    handle_opt_r
+    rotate_away_usr_pkg
 fi
 
 # Install via bootstrap if necessary
 #
 if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
     opsys=$(uname -s)
-    osrev=$(uname -r | sed 's/-.*//')  # Handle Linux 2.6.18-194.26.1.el5
+    osrev=$(uname -r | sed 's/-.*//')  # eg: Linux 2.6.18-194.26.1.el5
     ospro=$(uname -p)
     bootstrap=/pkgsrc/packages/bootstrap-pkgsrc-$opsys-$osrev-$ospro.tgz
-    # XXX Check for multiple matches
     if [ -n "$opt_b" -a -f $bootstrap ] ; then
 	echo "Installing binary bootstrap"
 	cd / ; tar xpzf $bootstrap
 	if [ ! -d /usr/pkg ] ; then
-	    fatal "/usr/pkg not found in $bootstrap"
+	    fatal "/usr/pkg not extracted from $bootstrap"
 	fi
     else
 	echo "Building bootstrap from source"
