@@ -4,6 +4,9 @@ PATH=/usr/pkg/sbin:/usr/pkg/bin:/usr/sbin:/sbin:$PATH
 PKGSRC=/pkgsrc
 PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
 
+# unset ENV to ensure it does not disrupt PATH or other settings
+ENV=
+
 umask 022
 
 args=$(getopt bhklrsuvD:IU:P: $*)
