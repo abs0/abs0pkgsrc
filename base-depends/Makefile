@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.07
+DISTNAME=	base-depends-1.08
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,6 +15,7 @@ DEPENDS+= tmux>0:../../misc/tmux
 DEPENDS+= screen>0:../../misc/screen
 DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= rsync>0:../../net/rsync
+DEPENDS+= unison>0:../../net/unison			# File sync
 DEPENDS+= subversion-base>0:../../devel/subversion-base
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
 DEPENDS+= p5-ack>0:../../textproc/p5-ack
