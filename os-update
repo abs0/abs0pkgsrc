@@ -10,39 +10,29 @@ fi
 
 FILEDIR=/home/netbsd/arch
 KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/).*//').gz
-if sysctl kern.version|grep -q /current/ ; then
-    OSVER=current
-else
-    OSVER=$(sysctl -n kern.osrelease | sed -e 's/[^0-9].*//')
-fi
+VERSION=$(uname -r)
+MACHINE=$(uname -m)
+case "$VERSION" in *.99.*) VERSION=current;; esac
 HOST=$(sysctl -n kern.hostname | sed 's:\..*::')
 DESTDIR=/
 
-if [ -x /usr/bin/getopt ]; then
-    args=$(getopt D:bd:fhk:no:su $*)
-    if [ $? != 0 ]; then
-	opt_h=1
-    fi
-    set -- $args
-    while [ $# != 0 ]; do
-	case "$1" in
-	    -D )	opt_D="$2"; TARDIR="$2" shift ;;
-	    -d )	opt_d="$2"; DESTDIR="$2"; shift ;;
-	    -f )	opt_f=-f ;;
-	    -h )	opt_h=1 ;;
-	    -k )	KERNEL="kernels/$2.gz"; shift ;;
-	    -n )	opt_n=1 ;;
-	    -o )	OSVER="$2"; shift ;;
-	    -b )	opt_b=1 ;;
-	    -s )	opt_s=1 ;;
-	    -u )	opt_u=-u ;;
-	    -- )	shift; break ;;
-	esac
-	shift
-    done
+while getopts D:bd:fhk:nst:u f; do
+    case $f in
+	D) opt_D="$OPTARG"; TARDIR="$OPTARG"	;;
+	b) opt_b=1				;;
+	d) opt_d="$OPTARG"; DESTDIR="$OPTARG"	;;
+	f) opt_f=-f				;;
+	h) opt_h=1				;;
+	k) KERNEL="kernels/$OPTARG.gz"		;;
+	n) opt_n=1				;;
+	t) VERSION="$OPTARG"			;;
+	s) opt_s=1				;;
+	u) opt_u=-u				;;
+    esac
+done
+shift `expr $OPTIND - 1`
 
-
-    if [ -n "$opt_h" ] ; then
+if [ -n "$opt_h" ] ; then
 	echo "Usage: os-update [opts] [hosts]
 opts:   -D dir Read source tarfiles and script from dir, and delete after 
 	-b     Install from binaries (default)
@@ -51,96 +41,107 @@ opts:   -D dir Read source tarfiles and script from dir, and delete after
 	-h     This help
 	-k nam Override name of kernel to install
 	-n     No write (do not actually make any changes)
-	-o ver Set OS version to build
+	-t tag Set OS tag to build
 	-s     Rebuild from source
 	-u     Run cvsu before building
 ";
-	exit
-    fi
-
-    if [ -n "$opt_s" ] ; then
-	if ! nbbuild $opt_u -r -t $OSVER ; then
-	    echo nbbuild failed
-	    exit 1
-	fi
-    fi
+    exit
 fi
 
-if [ "$1" = -d	]; then
-    DESTDIR=$2
-    shift ; shift;
-fi
-
-if [ -z "$TARDIR" ] ; then
-    KERNTAR_MATCH="$FILEDIR/$OSVER-$(sysctl -n hw.machine)-*/kernels.tbz"
-    TARDIR=$(ls $KERNTAR_MATCH | sed -n -e 's:/kernels.tbz::' -e '$p')
-    if [ -z "$TARDIR" ] ; then
-	echo "Unable to locate $KERNTAR_MATCH"
+if [ -n "$opt_s" ] ; then
+    if ! nbbuild $opt_u -t $VERSION ; then
+	echo nbbuild failed
 	exit 1
     fi
 fi
 
-TARFILES="$(echo $TARDIR/*.tbz | fmt 1 | grep -v kernels.tbz)"
+if [ -z "$TARDIR" ] ; then
+    ETCTAR_MATCH="$FILEDIR/$VERSION-$MACHINE-*/etc.t?z"
+    TARDIR=$(ls $ETCTAR_MATCH | sed -n -e 's:/etc\.t.z::' -e '$p')
+    if [ -z "$TARDIR" ] ; then
+	echo "Unable to locate $ETCTAR_MATCH"
+	exit 1
+    fi
+fi
+
+TARFILES="$(echo $TARDIR/*.t?z)"
+
+cleanup()
+    {
+    if [ -n "$opt_D" ]; then
+	for tarfile in $TARFILES ; do
+	    run "rm -f $tarfile"
+	done
+    fi
+    }
 
 extract()
     {
     DESTDIR=$1
     cd "$DESTDIR"
-    if [ ! -d $DESTDIR/etc ] ; then
-	extract_etc=1
-    fi
+
     if [ -z "$opt_f" -a -f etc/release ] && \
-		tar xzfO $TARDIR/etc.tbz etc/release 2>/dev/null | \
+		tar xzfO $TARDIR/base.t?z ./etc/release 2>/dev/null | \
 		cmp -s etc/release - ; then
 	echo "$HOST:$DESTDIR etc/release matches existing version ($TARDIR)"
-	if [ -n "$opt_D" ] ; then
-	    for tarfile in $TARDIR/kernels.tbz $TARFILES ; do
-		run "rm -f $tarfile"
-	    done
-	fi
+	cleanup
 	return
     fi
 
-    if [ -z "$opt_d" -a -z "$extract_etc" ] ; then
-	EXTRACT_TARFILES="$(echo $TARFILES | fmt 1 | grep -v etc.tbz)"
+    if [ -n "$opt_d" -o ! -d $DESTDIR/etc ] ; then
+	extract_etc=1
+    fi
+
+    if [ -n "$extract_etc" ] ; then
+	EXTRACT_TARFILES="$TARFILES"
     else
-	EXTRACT_TARFILES=$TARFILES
+	EXTRACT_TARFILES="$(echo $TARFILES | fmt 1 | grep -v 'etc\.t.z$')"
     fi
 
     [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
     [ -f netbsd.dom0 ] &&	run "ln -f netbsd.dom0 onetbsd.dom0"
     [ -d kernels.old ] &&	run "rm -rf kernels.old"
     [ -d kernels ] &&		run "mv kernels kernels.old"
-				run "pax -rz -pe < $TARDIR/kernels.tbz"
-    [ -n "$opt_D" ] &&		run "rm -f $TARDIR/kernels.tbz"
+    				run "mkdir -p kernels"
+
+    for tarfile in $EXTRACT_TARFILES ; do
+	case "$tarfile" in
+	    */kern-*)
+		kern=$(echo $tarfile | sed -e 's:.*/kern-::' -e 's:\.t.z$::')
+				run "cd kernels && tar xzpf $tarfile"
+				run "mv kernels/netbsd kernels/$kern"
+				run "gzip -9 kernels/$kern"
+		;;
+	    *)
+				run "tar xzpf $tarfile"
+		;;
+	esac
+    done
+
     if [ -z "$opt_n" -a ! -f $KERNEL ] ; then
 	echo "**** Unable to locate $KERNEL"
 	KERNEL=kernels/GENERIC.gz
     fi
-				run "gzcat $KERNEL > netbsd.new"
+				run "cp $KERNEL netbsd.new"
 				run "mv netbsd.new netbsd"
     if [ -f netbsd.dom0 ] ; then
 	run "gzcat kernels/_PF_DOM0_.gz > netbsd.dom0.new"
 	run "mv netbsd.dom0.new netbsd.dom0"
-
     fi
-
-    for tarfile in $EXTRACT_TARFILES ; do
-				run "pax -rz -pe < $tarfile"
-    [ -n "$opt_D" ] &&		run "rm -f $tarfile"
-    done
-				run "usr/sbin/postinstall -s $TARDIR/etc.tbz -d $DESTDIR fix || true"
+				run "usr/sbin/postinstall -s $TARDIR/etc.t?z -d $DESTDIR fix || true"
 				run "(cd dev && ./MAKEDEV all)"
 				run "rm -rf kernels.old"
 
     if [ -n "$extract_etc" ] ; then
 				run "cd / ; pax -rvw bin/tcsh etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db bin/tcsh $DESTDIR"
     fi
+
     if [ ! -f boot ] ; then
 				run "cp -p usr/mdec/boot boot"
 				echo "*** Run installboot, check ssh keys, rc.conf, fstab ***"
     fi
-				run "tar xzf $TARDIR/etc.tbz etc/release"
+
+    cleanup
     }
 
 run()
