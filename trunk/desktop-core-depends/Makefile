@@ -12,6 +12,11 @@ META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
+# High priorities - build first
+DEPENDS+= jwm>0:../../wm/jwm 					# For !kde
+DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
+DEPENDS+= firefox>0:../../www/firefox
+
 .if ${OPSYS} == "NetBSD" || ${OPSYS} == "Linux"
 DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
 DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
@@ -20,11 +25,6 @@ DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 # additional fonts
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
-
-# High priorities - build first
-DEPENDS+= jwm>0:../../wm/jwm 					# For !kde
-DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
-DEPENDS+= firefox>0:../../www/firefox
 
 # Medium priority
 DEPENDS+= meld>0:../../devel/meld
