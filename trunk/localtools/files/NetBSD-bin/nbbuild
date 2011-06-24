@@ -63,7 +63,7 @@ build()
 	($BUILD 2>&1 && touch $COMPLETE) | tee $OBJBASE/nbbuild.log
 	[ ! -f $COMPLETE ] && exit
     elif ! $BUILD > $OBJBASE/nbbuild.log 2>&1 ; then
-	tail -50 $LOG
+	tail -60 $LOG
 	exit 1
     fi
 
