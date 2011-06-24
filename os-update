@@ -16,6 +16,8 @@ case "$VERSION" in *.99.*) VERSION=current;; esac
 HOST=$(sysctl -n kern.hostname | sed 's:\..*::')
 DESTDIR=/
 
+start=$(date +%s)
+
 while getopts D:bd:fhk:nst:u f; do
     case $f in
 	D) opt_D="$OPTARG"; TARDIR="$OPTARG"	;;
@@ -162,14 +164,17 @@ if [ -n "$1" ] ; then
 	run scp /pkgsrc/local/os-update $TARDIR/* $host:/var/run
 	run ssh $host /var/run/os-update $opt_f -D /var/run
     done
-    exit 0
-fi
-
-[ -n "$opt_D" ] &&	run "rm -f $opt_D/os-update"
-extract $DESTDIR
-
-if [ -f $DESTDIR/altroot/netbsd ] || mount | grep -q ' on /altroot ' ; then
-    DESTDIR=$DESTDIR/altroot
+else
+    [ -n "$opt_D" ] &&	run "rm -f $opt_D/os-update"
     extract $DESTDIR
+
+    if [ -f $DESTDIR/altroot/netbsd ] || mount | grep -q ' on /altroot ' ; then
+	DESTDIR=$DESTDIR/altroot
+	extract $DESTDIR
+    fi
 fi
+
+elapsed=$(($(date +%s) - $start))
+printf "Elapsed: %d:%02d\n" $(($elapsed / 60)) $(($elapsed % 60))
+
 exit 0
