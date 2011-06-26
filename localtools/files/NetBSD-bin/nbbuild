@@ -6,7 +6,11 @@
 
 TARGET=distribution # sets
 VERSION=$(uname -r)
-case "$VERSION" in *.99.*) VERSION=current;; esac
+
+VERSION=$(case "$VERSION" in
+    *.99.*) echo current ;;
+    *) echo $VERSION | sed 's/\..*//' ;;
+esac)
 
 while getopts Cht:uv f; do
   case $f in
