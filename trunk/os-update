@@ -12,9 +12,13 @@ FILEDIR=/home/netbsd/arch
 KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/).*//').gz
 VERSION=$(uname -r)
 MACHINE=$(uname -m)
-case "$VERSION" in *.99.*) VERSION=current;; esac
 HOST=$(sysctl -n kern.hostname | sed 's:\..*::')
 DESTDIR=/
+
+VERSION=$(case "$VERSION" in
+    *.99.*) echo current ;;
+    *) echo $VERSION | sed 's/\..*//' ;;
+esac)
 
 start=$(date +%s)
 
