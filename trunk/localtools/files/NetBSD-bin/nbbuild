@@ -80,6 +80,10 @@ build()
 	    zcat $f | bzip2 -9 > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.tbz/')
 	fi
     done
+
+    if [ -z "$opt_u" ]; then
+	rm -rf $OBJBASE
+    fi
     }
 
 if [ -z "$1" ] ; then
