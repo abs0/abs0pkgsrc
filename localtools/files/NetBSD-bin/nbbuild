@@ -25,7 +25,7 @@ shift `expr $OPTIND - 1`
 
 if [ -n "$opt_h" ] ; then
     cat <<END
-Usage: nbbuild [opts] [arch ...] 
+Usage: nbbuild [opts] [arch ...]
 [opts]	-C     Build 'current' directory
 	-h     This help
 	-t tag Build 'tag' directory
@@ -74,11 +74,11 @@ build()
     cd $OBJBASE/releasedir/$MACHINE/binary/sets
     mkdir -p $ARCHDIR
     for f in *.tgz ; do
-	if [ $VERSION = current -o $VERSION -gt 5 ] ; then
+	if [ $VERSION = current ] || [ $VERSION -gt 5 ] ; then
 	    zcat $f | xz -9    > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.txz/')
 	else
 	    zcat $f | bzip2 -9 > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.tbz/')
-	fi 
+	fi
     done
     }
 
