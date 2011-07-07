@@ -1,5 +1,6 @@
 #!/bin/sh -e
 # $Id: pkgsrc-update,v 1.92 2008/07/14 14:43:37 abs Exp $
+
 PATH=/usr/pkg/sbin:/usr/pkg/bin:/usr/sbin:/sbin:$PATH
 PKGSRC=/pkgsrc
 PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
@@ -7,6 +8,7 @@ PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
 # unset ENV to ensure it does not disrupt PATH or other settings
 ENV=
 
+start=$(date +%s)
 umask 022
 
 args=$(getopt bhklrsuvD:IU:P: $*)
@@ -393,3 +395,6 @@ if [ ! -n "$opt_b" ] ; then
 fi
 
 postrun
+
+elapsed=$(($(date +%s) - $start))
+printf "Elapsed: %d:%02d\n" $(($elapsed / 60)) $(($elapsed % 60))
