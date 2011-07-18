@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.08
+DISTNAME=	desktop-core-depends-1.09
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -42,5 +42,6 @@ DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>0:../../multimedia/vlc
 DEPENDS+= wireshark>0:../../net/wireshark
+DEPENDS+= opera>0:../../www/opera
 
 .include "../../mk/bsd.pkg.mk"
