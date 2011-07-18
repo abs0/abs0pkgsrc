@@ -174,14 +174,14 @@ postrun()
 rotate_away_usr_pkg()
     {
     echo rm -rf /usr/OLDpkg
-    rm -rf /usr/OLDpkg
+    as_root rm -rf /usr/OLDpkg
     sync
     echo mv /usr/pkg /usr/OLDpkg
-    [ -d /usr/pkg ]             && mv /usr/pkg             /usr/OLDpkg
-    mkdir -p /usr/OLDpkg/db
-    [ -d /var/db/pkg ]	        && mv /var/db/pkg          /usr/OLDpkg/db
-    [ -d /var/db/pkg.refcount ] && mv /var/db/pkg.refcount /usr/OLDpkg/db
-    mkdir -p /usr/pkg /var/db/pkg /var/db/pkg.refcount
+    [ -d /usr/pkg ]             && as_root mv /usr/pkg           /usr/OLDpkg
+    as_root mkdir -p /usr/OLDpkg/db
+    [ -d /var/db/pkg ]	        && as_root mv /var/db/pkg        /usr/OLDpkg/db
+    [ -d /var/db/pkg.refcount ] && as_root mv /var/db/pkg.refcount /usr/OLDpkg/db
+    as_root mkdir -p /usr/pkg /var/db/pkg /var/db/pkg.refcount
     }
 
 show_var()
