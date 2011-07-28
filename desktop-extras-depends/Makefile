@@ -23,7 +23,6 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= pidgin>0:../../chat/pidgin
 
 # Audio/Video
-DEPENDS+= amarok>0:../../audio/amarok
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= abcde>0:../../audio/abcde
