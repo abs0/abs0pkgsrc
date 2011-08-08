@@ -8,6 +8,8 @@ PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
 # unset ENV to ensure it does not disrupt PATH or other settings
 ENV=
 
+export TMPDIR=/tmp
+
 start=$(date +%s)
 umask 022
 
