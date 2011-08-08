@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.09
+DISTNAME=	desktop-core-depends-1.10
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,11 +14,11 @@ META_PACKAGE=	yes
 
 # High priorities - build first
 DEPENDS+= jwm>0:../../wm/jwm 					# For !kde
-DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
 DEPENDS+= firefox>0:../../www/firefox
 
 .if ${OPSYS} == "NetBSD" || ${OPSYS} == "Linux"
-DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
+# DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
+# DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
 DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 .endif
 
@@ -29,13 +29,15 @@ DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 # Medium priority
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= rdesktop>0:../../net/rdesktop
-DEPENDS+= vncviewer>0:../../net/vncviewer
+DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= pidgin>0:../../chat/pidgin
-# DEPENDS+= epdfview>0:../../print/epdfview 			# For !kde
-# DEPENDS+= xscreensaver>0:../../x11/xscreensaver		# For !kde
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= gnash>0:../../multimedia/gnash
+
+# for !kde
+# DEPENDS+= epdfview>0:../../print/epdfview
+# DEPENDS+= xscreensaver>0:../../x11/xscreensaver
 
 # Lower priority
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
