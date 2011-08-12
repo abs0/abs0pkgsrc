@@ -4,8 +4,8 @@
 # Setup ssh environment/agent to use consistent ssh socket.
 #
 # Add to startup scripts
-# t?csh:     if ( -f /usr/pkg/bin/ssh-init ) setenv SSH_AUTH_SOCK `ssh-init -p`
-# {ba,k,}sh: [ -f /usr/pkg/bin/ssh-init ] && export SSH_AUTH_SOCK=$(ssh-init -p)
+# t?csh:     if ( -f /usr/pkg/bin/ssh-init ) eval `ssh-init -c`
+# {ba,k,}sh: [ -f /usr/pkg/bin/ssh-init ] && eval $(ssh-init -s)
 
 auth_sock_canonify()
     {
@@ -32,7 +32,7 @@ auth_sock_canonify()
 fatal()
     { echo $*; exit 1; }
 
-ssh_agent_client()
+ssh_agent_remote()
     {
     verbose Client...
     # Just rename any current SSH_AUTH_SOCK to REAL_SOCK
@@ -106,9 +106,11 @@ done
 if [ -n "$opt_h" -o -n "$opt_error" ] ; then
     cat << END
 Usage: ssh-init [-hv]
-opts:	-f Force key input
-        -c Run as client
+opts:	-c Output suitable for a csh shell to eval
+	-f Force key input
+        -r Run as remote
 	-h This help
+	-s Output suitable for a Bourne shell to eval (default)
 	-p Print out the value of SSH_AUTH_SOCK
 	-v Verbose
 END
@@ -118,12 +120,23 @@ fi
 
 REAL_SOCK=/tmp/.ssh-$USER/sock
 
-if [ -n "$opt_c" ] ; then
-    ssh_agent_client
+if [ -n "$opt_r" ] ; then
+    ssh_agent_remote
 else
     ssh_agent_server
 fi
 
-if [ -n "$opt_p" ];then
+if [ -z "$opt_p" -a -z "$opt_s" -a -z "$opt_c" ]; then
+    case "$SHELL" in
+	*csh) opt_c=1 ;;
+	*)    opt_s=1 ;;
+    esac
+fi
+
+if [ -n "$opt_s" ];then
+    echo "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+elif [ -n "$opt_c" ];then
+    echo "setenv SSH_AUTH_SOCK $SSH_AUTH_SOCK"
+elif [ -n "$opt_p" ];then
     echo $SSH_AUTH_SOCK
 fi
