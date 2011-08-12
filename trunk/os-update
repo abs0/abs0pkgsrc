@@ -131,7 +131,7 @@ extract()
 				run "cp $KERNEL netbsd.new"
 				run "mv netbsd.new netbsd"
     if [ -f netbsd.dom0 ] ; then
-	run "gzcat kernels/_PF_DOM0_.gz > netbsd.dom0.new"
+	run "gzcat kernels/XEN3_DOM0.gz > netbsd.dom0.new"
 	run "mv netbsd.dom0.new netbsd.dom0"
     fi
 				run "usr/sbin/postinstall -s $TARDIR/etc.t?z -d $DESTDIR fix || true"
