@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.23
+DISTNAME=	tixme-depends-1.24
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -21,7 +21,6 @@ DEPENDS+= munin-node>0:../../sysutils/munin-node	# Monitoring
 DEPENDS+= ocsinventory-agent>0:../../net/ocsinventory-agent
 
 # Used by tools
-DEPENDS+= mysql-client>0:../../databases/mysql55-client
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
 DEPENDS+= p5-Email-Stuff>0:../../mail/p5-Email-Stuff
 DEPENDS+= p5-Moose>0:../../devel/p5-Moose
