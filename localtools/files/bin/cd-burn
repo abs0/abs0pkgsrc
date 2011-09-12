@@ -63,8 +63,8 @@ timestamp("Start");
 
 if ( $opt{i} ) {
     my ( $infile, $isofile );
-    if ( $ARGV[0] !~ /^([-\w.\/]+)$/ ) {
-        fatal("Invalid characters (non alphanum or . - /) in $ARGV[0]");
+    if ( $ARGV[0] !~ /^([-\+\w.\/]+)$/ ) {
+        fatal("Invalid characters (non alphanum or . + - /) in $ARGV[0]");
     }
     $infile = $isofile = $1;
     if ( $infile =~ /\.7z$/ ) {
@@ -91,8 +91,8 @@ else {
 
     foreach my $path (@ARGV) {
         if ( !-e $path ) { fatal("No such file/directory '$path'"); }
-        if ( $path !~ /^([-\w.\/]+)$/ ) {
-            fatal("Invalid characters (non alphanum or . - /) in $path");
+        if ( $path !~ /^([-\+\w.\/]+)$/ ) {
+            fatal("Invalid characters (non alphanum or . + - /) in $path");
         }
         push( @paths, $1 );
     }
@@ -244,8 +244,8 @@ sub image_allocate_and_write {
     my $volid;
 
     if ( $opt{V} ) {
-        if ( $opt{V} !~ /^([-\w.\/]+)$/ ) {
-            fatal("Invalid characters (non alphanum . - /) in -V ($opt{V})");
+        if ( $opt{V} !~ /^([-\+\w.\/]+)$/ ) {
+            fatal("Invalid characters (non alphanum . + - /) in -V ($opt{V})");
         }
         $volid = $1;
     }
