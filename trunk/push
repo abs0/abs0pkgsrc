@@ -87,14 +87,14 @@ else
 
 fi
 
-RSYNC="rsync -avH --delete-after --partial --partial-dir=$PARTIALDIR"
-EXCL="$(echo $EXCL|tr ' ' '\n'|sed 's/^/ --exclude /')"
+RSYNC="rsync -SHav --delete --delete-after --partial --partial-dir=$PARTIALDIR"
 if [ -z "$opt_O" ]; then
     RSYNC="$RSYNC -y"
 fi
 if [ -n "$opt_n" ]; then
     RSYNC="$RSYNC -n"
 fi
+EXCL="$(echo $EXCL|tr ' ' '\n'|sed 's/^/ --exclude /')"
 
 cd $ROOT
 while true ; do
