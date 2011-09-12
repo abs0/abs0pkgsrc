@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.10
+DISTNAME=	desktop-core-depends-1.12
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -27,13 +27,14 @@ DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 
 # Medium priority
+DEPENDS+= adobe-flash-plugin>=10.3:../../multimedia/adobe-flash-plugin10.1
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= rdesktop>0:../../net/rdesktop
 DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
 DEPENDS+= gimp>0:../../graphics/gimp
+DEPENDS+= qiv>0:../../graphics/qiv
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
-DEPENDS+= gnash>0:../../multimedia/gnash
 
 # for !kde
 # DEPENDS+= epdfview>0:../../print/epdfview
@@ -45,5 +46,7 @@ DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>0:../../multimedia/vlc
 DEPENDS+= wireshark>0:../../net/wireshark
 DEPENDS+= opera>0:../../www/opera
+
+DEPENDS+= gnash>0:../../multimedia/gnash
 
 .include "../../mk/bsd.pkg.mk"
