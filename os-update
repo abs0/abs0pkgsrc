@@ -101,7 +101,7 @@ extract()
     if [ -n "$extract_etc" ] ; then
 	EXTRACT_TARFILES="$TARFILES"
     else
-	EXTRACT_TARFILES="$(echo $TARFILES | fmt 1 | grep -v 'etc\.t.z$')"
+	EXTRACT_TARFILES="$(echo $TARFILES | fmt 1 | grep -v '/etc\.t.z$')"
     fi
 
     [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
