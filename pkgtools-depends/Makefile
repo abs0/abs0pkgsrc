@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	pkgtools-depends-1.01
+DISTNAME=	pkgtools-depends-1.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,6 +18,6 @@ DEPENDS+= pkgdiff>0:../../pkgtools/pkgdiff
 DEPENDS+= pkglint>0:../../pkgtools/pkglint
 DEPENDS+= pkgsurvey>=0:../../pkgtools/pkgsurvey
 DEPENDS+= url2pkg>0:../../pkgtools/url2pkg
-DEPENDS+= pkgin>0:../../pkgtools/pkgin
+# DEPENDS+= pkgin>0:../../pkgtools/pkgin
 
 .include "../../mk/bsd.pkg.mk"
