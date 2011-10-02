@@ -42,10 +42,13 @@ opts	-a arch Push comma separated arch list
 	-l	Loop
 	-n	No action
 	-o	Push to other OS/Arch
+	-O      Work around for old rsync (no -y
 	-q	Quick (exclude pkgsrc)
 	-r	Receive (pull)
     	-s srcdirs Push comma separated srcdir list
 	-t	Use tar, not rsync
+	-N      push to "$NHOSTS"
+	-v	Verbose
 END
     exit
 fi
