@@ -21,6 +21,7 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
 # Core desktop tools
 DEPENDS+= pidgin>0:../../chat/pidgin
+DEPENDS+= thunderbird>0:../../mail/thunderbird
 
 # Misc desktop packages
 DEPENDS+= filezilla>0:../../net/filezilla
@@ -28,7 +29,6 @@ DEPENDS+= icedtea-web>0:../../www/icedtea-web
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= skype>0:../../net/skype
-DEPENDS+= thunderbird>0:../../mail/thunderbird
 DEPENDS+= x11vnc>0:../../x11/x11vnc
 DEPENDS+= x2vnc>0:../../net/x2vnc
 DEPENDS+= x2x>0:../../x11/x2x
