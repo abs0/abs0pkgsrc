@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.12
+DISTNAME=	desktop-core-depends-1.14
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -35,6 +35,7 @@ DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= qiv>0:../../graphics/qiv
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
+DEPENDS+= x2vnc>0:../../net/x2vnc
 
 # for !kde
 # DEPENDS+= epdfview>0:../../print/epdfview
@@ -47,6 +48,6 @@ DEPENDS+= vlc>0:../../multimedia/vlc
 DEPENDS+= wireshark>0:../../net/wireshark
 DEPENDS+= opera>0:../../www/opera
 
-DEPENDS+= gnash>0:../../multimedia/gnash
+# DEPENDS+= gnash>0:../../multimedia/gnash
 
 .include "../../mk/bsd.pkg.mk"
