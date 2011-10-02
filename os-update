@@ -8,7 +8,11 @@ if [ $(sysctl -n kern.ostype) != NetBSD ] ; then
     exit 1
 fi
 
-FILEDIR=/home/netbsd/arch
+if [ -d /opt/netbsd/arch ] ; then
+    FILEDIR=/opt/netbsd/arch
+else
+    FILEDIR=/home/netbsd/arch
+fi
 KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/).*//').gz
 VERSION=$(uname -r)
 MACHINE=$(uname -m)
