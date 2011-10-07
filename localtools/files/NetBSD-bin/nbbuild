@@ -35,7 +35,12 @@ END
     exit
 fi
 
-NBHOME=$(cd /home/netbsd ; pwd)
+if [ -d /opt/netbsd ] ; then
+    FILEDIR=/opt/netbsd
+else
+    FILEDIR=/home/netbsd
+fi
+NBHOME=$(cd $FILEDIR ; pwd)
 export BSDSRCDIR=$NBHOME/$VERSION
 
 build()
