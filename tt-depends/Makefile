@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tt-depends-1.00
+DISTNAME=	tt-depends-1.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,7 @@ COMMENT=	Meta package for tt depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql90>0:../../databases/postgresql90
+DEPENDS+= postgresql91>0:../../databases/postgresql91
 
 DEPENDS+= p5-Catalyst-Controller-FormBuilder>0:../../www/p5-Catalyst-Controller-FormBuilder
 DEPENDS+= p5-Catalyst-Devel>0:../../www/p5-Catalyst-Devel

@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
 
-DISTNAME=	desktop-extras-depends-1.16
+DISTNAME=	desktop-extras-depends-1.18
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -27,8 +27,6 @@ DEPENDS+= thunderbird>0:../../mail/thunderbird
 DEPENDS+= filezilla>0:../../net/filezilla
 DEPENDS+= icedtea-web>0:../../www/icedtea-web
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
-DEPENDS+= mlview>0:../../editors/mlview
-DEPENDS+= skype>0:../../net/skype
 DEPENDS+= x11vnc>0:../../x11/x11vnc
 DEPENDS+= x2vnc>0:../../net/x2vnc
 DEPENDS+= x2x>0:../../x11/x2x
@@ -42,6 +40,7 @@ DEPENDS+= audacity>0:../../audio/audacity
 DEPENDS+= dvdrip>0:../../multimedia/dvdrip
 DEPENDS+= ffplay>0:../../multimedia/ffplay
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
+DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= gst-plugins0.10-farsight>0:../../wip/gst-plugins0.10-farsight
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= kdenlive>0:../../multimedia/kdenlive
@@ -52,8 +51,9 @@ DEPENDS+= transcode>0:../../multimedia/transcode
 
 # Misc low priority
 DEPENDS+= rapidsvn>0:../../devel/rapidsvn
+DEPENDS+= calibre>0:../../misc/calibre
+DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
-DEPENDS+= adobe-flash-plugin>0:../../multimedia/adobe-flash-plugin
 # DEPENDS+= ckmame>0:../../emulators/ckmame
 # DEPENDS+= mame>0:../../emulators/mame
 DEPENDS+= glx-utils>0:../../graphics/glx-utils

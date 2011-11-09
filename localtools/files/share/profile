@@ -27,7 +27,7 @@ esac
 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin
 export PATH=$PATH:/usr/pkg/sbin:/usr/pkg/bin
-export PATH=$PATH:/usr/X11R7:/usr/games
+export PATH=$PATH:/usr/X11R7/bin:/usr/games
 
 export BLOCKSIZE=1k
 export EDITOR=vi
