@@ -12,10 +12,10 @@ META_PACKAGE=	yes
 
 DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= localtools>0:../../local/localtools
+DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= rsync>0:../../net/rsync
 DEPENDS+= unison>0:../../net/unison			# File sync
 DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
-DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= subversion-base>0:../../devel/subversion-base
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
 DEPENDS+= p5-ack>0:../../textproc/p5-ack
