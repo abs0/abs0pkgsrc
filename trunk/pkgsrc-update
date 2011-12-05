@@ -104,6 +104,22 @@ determine_PKGBINDIR()
     fi
     }
 
+determine_and_wipe_WRKOBJDIR()
+    {
+    # Extract and wipe WRKOBJDIR
+    #
+    WRKOBJDIR=$(show_var WRKOBJDIR)
+    if [ ! -n "$WRKOBJDIR" ] ; then
+	WRKOBJDIR=${TMPDIR:-/var/obj}/nbbuild-$MACHINE
+    fi
+    if [ -d $WRKOBJDIR ] ; then
+	echo "rm -rf $WRKOBJDIR ..."
+	mv $WRKOBJDIR $WRKOBJDIR.old
+	rm -rf $WRKOBJDIR.old &
+    fi
+    mkdir -p $WRKOBJDIR
+    }
+
 fatal()
     {
     echo $* >&2
@@ -240,15 +256,6 @@ if [ -n "$opt_I" ]; then
     exit
 fi
 
-# Update source tree & rebuild vulnerability-list as needed
-#
-if [ $(id -u) != 0 ] ; then
-    if [ -n "$opt_u" ] ; then
-	cvsu pkgsrc
-	as_root download-vulnerability-list
-    fi
-fi
-
 # Ensure the ($PKGSRC) symlink is present to wherever pkgsrc lives
 #
 if [ ! -d $PKGSRC ];then
@@ -259,6 +266,20 @@ if [ ! -d $PKGSRC ];then
 	    ;;
     esac
     confirm_symlink $(echo $0 | sed 's:/local/pkgsrc-update::') $PKGSRC
+fi
+
+# Before update
+if [ -n "$opt_s" ] ; then
+    determine_and_wipe_WRKOBJDIR
+fi
+
+# Update source tree & rebuild vulnerability-list as needed
+#
+if [ $(id -u) != 0 ] ; then
+    if [ -n "$opt_u" ] ; then
+	cvsu pkgsrc
+	as_root download-vulnerability-list
+    fi
 fi
 
 if [ $(uname) = NetBSD ] ; then
@@ -356,18 +377,6 @@ else	# $opt_s
 	(cd /pkgsrc/pkgtools/pkg_install && ${MAKE} clean && ${MAKE} install)
     fi
 
-    # Extract and wipe WRKOBJDIR
-    #
-    WRKOBJDIR=$(show_var WRKOBJDIR)
-    if [ ! -n "$WRKOBJDIR" ] ; then
-	WRKOBJDIR=${TMPDIR:-/var/obj}/nbbuild-$MACHINE
-    fi
-    if [ -d $WRKOBJDIR ] ; then
-	echo "rm -rf $WRKOBJDIR ..."
-	mv $WRKOBJDIR $WRKOBJDIR.old
-	rm -rf $WRKOBJDIR.old &
-    fi
-    mkdir -p $WRKOBJDIR
     LOG=$WRKOBJDIR/update.log
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -s -L $LOG"
 
