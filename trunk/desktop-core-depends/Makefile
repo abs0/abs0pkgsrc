@@ -13,7 +13,6 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # High priorities - build first
-DEPENDS+= jwm>0:../../wm/jwm 					# For !kde
 DEPENDS+= firefox>0:../../www/firefox
 
 .if ${X11_TYPE} == "modular"
