@@ -115,7 +115,7 @@ determine_and_wipe_WRKOBJDIR()
     if [ -d $WRKOBJDIR ] ; then
 	echo "rm -rf $WRKOBJDIR ..."
 	mv $WRKOBJDIR $WRKOBJDIR.old
-	rm -rf $WRKOBJDIR.old &
+	as_root rm -rf $WRKOBJDIR.old &
     fi
     mkdir -p $WRKOBJDIR
     }
