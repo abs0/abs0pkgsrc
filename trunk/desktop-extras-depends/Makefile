@@ -1,7 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-
-DISTNAME=	desktop-extras-depends-1.18
+DISTNAME=	desktop-extras-depends-1.19
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -27,9 +26,6 @@ DEPENDS+= thunderbird>0:../../mail/thunderbird
 DEPENDS+= filezilla>0:../../net/filezilla
 DEPENDS+= icedtea-web>0:../../www/icedtea-web
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
-DEPENDS+= x11vnc>0:../../x11/x11vnc
-DEPENDS+= x2vnc>0:../../net/x2vnc
-DEPENDS+= x2x>0:../../x11/x2x
 DEPENDS+= xosd>0:../../x11/xosd
 
 DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
