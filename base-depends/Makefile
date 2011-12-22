@@ -32,7 +32,7 @@ DEPENDS+= unison>0:../../net/unison			# File sync
 # Archivers/convertors
 DEPENDS+= p7zip>0:../../archivers/p7zip
 DEPENDS+= unix2dos>0:../../converters/unix2dos
-DEPENDS+= unrar>0:../../archivers/ unrar
+DEPENDS+= unrar>0:../../archivers/unrar
 DEPENDS+= zip>0:../../archivers/zip
 
 # CD/DVD tools
