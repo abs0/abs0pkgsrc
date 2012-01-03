@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.19
+DISTNAME=	desktop-extras-depends-1.20
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -37,7 +37,6 @@ DEPENDS+= dvdrip>0:../../multimedia/dvdrip
 DEPENDS+= ffplay>0:../../multimedia/ffplay
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
-DEPENDS+= gst-plugins0.10-farsight>0:../../wip/gst-plugins0.10-farsight
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= kdenlive>0:../../multimedia/kdenlive
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
