@@ -116,7 +116,7 @@ net/wget			*
 pkgtools/pkgdiff		*
 pkgtools/pkgsurvey		*		# pkgsrc admin tool
 pkgtools/url2pkg		*
-security/gnupg			*
+security/gnupg2			*
 shells/bash			*
 sysutils/dirvish		*		# Remote backup
 sysutils/rename			*	
