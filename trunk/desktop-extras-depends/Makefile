@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.20
+DISTNAME=	desktop-extras-depends-1.21
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -29,6 +29,8 @@ DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= xosd>0:../../x11/xosd
 
 DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
+
+DEPENDS+= Transmission-gui>0:../../net/Transmission-gui
 
 # Audio/Video
 DEPENDS+= abcde>0:../../audio/abcde
