@@ -117,7 +117,9 @@ determine_and_wipe_WRKOBJDIR()
 	as_root mv $WRKOBJDIR $WRKOBJDIR.old
 	as_root rm -rf $WRKOBJDIR.old &
     fi
-    mkdir -p $WRKOBJDIR
+    as_root mkdir -p $WRKOBJDIR
+    as_root chown $USER $WRKOBJDIR
+    as_root chown -R $USER $WRKOBJDIR
     }
 
 fatal()
@@ -387,6 +389,7 @@ else	# $opt_s
 	later_pkg_chk_remove=1
     fi
 
+    as_root chown -R $USER $PKGBINDIR
     pkg_check_install cpuflags		devel/cpuflags	 /usr/pkg/bin/cpuflags
     pkg_check_install pkg_chk		pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
 
