@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.18
+DISTNAME=	desktop-core-depends-1.19
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -42,7 +42,7 @@ DEPENDS+= synergy>0:../../net/synergy
 
 # Lower priority
 DEPENDS+= qemu>0:../../emulators/qemu
-DEPENDS+= vlc>0:../../multimedia/vlc
+DEPENDS+= vlc>=2:../../multimedia/vlc2
 DEPENDS+= wireshark>0:../../net/wireshark
 DEPENDS+= opera>0:../../www/opera
 
