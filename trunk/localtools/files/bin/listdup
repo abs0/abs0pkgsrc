@@ -17,8 +17,8 @@ opts:	-h	 This help
 	-l log	 Record deletions in log
 	-r	 Remove duplicate files
 	-s size  Set minimum size to check. Can take k or m suffix
-	-I regex Only include files that match regex in remove list
-	-E regex Exclude files that match regex from remove list
+	-I regex Only include files that match regex
+	-E regex Exclude files that match regex
 	-q	 Quiet - no output unless errors
 	-v	 Verbose
 ";
@@ -75,12 +75,7 @@ foreach my $ent ( sort { $a->{size} <=> $b->{size} } @dups ) {
     else { progress("$ent->{size}\n"); }
     my @remove;
     foreach my $file ( @{ $ent->{files} } ) {
-        if (   ( $opt{I} && $file !~ /$opt{I}/ )
-            || ( $opt{E} && $file =~ /$opt{E}/ ) )
-        {
-            progress("\texclude $file\n");
-        }
-        else { push( @remove, $file ); }
+        push( @remove, $file );
     }
     if ( $opt{r} ) {
         if ( @remove == @{ $ent->{files} } ) {
@@ -108,11 +103,16 @@ sub add {
         my (@list);
 
         if ( !opendir( DIR, $path ) ) { die("Unable to opendir($path): $!"); }
-        @list = grep( $_ ne '.' && $_ ne '..', readdir(DIR) );
+        @list = grep( $_ ne '.' && $_ ne '..' && $_ ne '.svn', readdir(DIR) );
         closedir(DIR);
         foreach (@list) { add("$path/$_"); }
     }
-    elsif ( -s $path > $minsize ) { push( @{ $bysize{ -s $path } }, $path ); }
+    else {
+        return
+          if ( $opt{I} && $path !~ /$opt{I}/ )
+          || ( $opt{E} && $path =~ /$opt{E}/ );
+        if ( -s $path > $minsize ) { push( @{ $bysize{ -s $path } }, $path ); }
+    }
 }
 
 sub progress { print @_ unless $opt{q}; }
