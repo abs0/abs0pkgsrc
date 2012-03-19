@@ -1,8 +1,0 @@
-# $Id: _ZEN_,v 1.1 2004/03/04 19:20:16 abs Exp $
-
-include 	"arch/sparc64/conf/_ULTRA1_"
-
-kbd0	at zstty?
-ms0	at zstty?
-cgsix0		at sbus? slot ? offset ?
-cgsix*		at sbus? slot ? offset ?

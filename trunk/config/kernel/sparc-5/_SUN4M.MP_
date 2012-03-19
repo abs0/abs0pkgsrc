@@ -1,7 +1,0 @@
-# $Id: _SUN4M.MP_,v 1.1 2004/03/04 19:20:16 abs Exp $
-
-include	"arch/sparc/conf/_SUN4M_"
-
-options 	MULTIPROCESSOR		# include multiprocessor support
-
-cpu* 		at mainbus0		# declare additional CPUs

@@ -1,4 +1,0 @@
-include "arch/amd64/conf/_PF_"
-
-# Needed for HP microserver
-no ohci
