@@ -1,12 +1,12 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-monitor-depends-1.02
+DISTNAME=	tickets-monitor-depends-1.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
-MAINTAINER=	abs@tix-me.com
+MAINTAINER=	abs@social-events.net
 HOMEPAGE=	http://www.absd.org/
-COMMENT=	Meta package for tixme server depends
+COMMENT=	Meta package for tickets server depends
 
 META_PACKAGE=	yes
 

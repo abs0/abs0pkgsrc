@@ -18,9 +18,9 @@ SUBDIR+=	mail-depends
 SUBDIR+=	natbsync-depends
 SUBDIR+=	pkgtools-depends
 SUBDIR+=	t365-depends
-SUBDIR+=	tixme-depends
-SUBDIR+=	tixme-monitor-depends
-SUBDIR+=	tixme-munin-plugins
+SUBDIR+=	tickets-depends
+SUBDIR+=	tickets-monitor-depends
+SUBDIR+=	tickets-munin-plugins
 SUBDIR+=	tt-depends
 
 .include "../mk/bsd.pkg.subdir.mk"
