@@ -1,12 +1,12 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tixme-depends-1.26
+DISTNAME=	tickets-depends-1.26
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
 MAINTAINER=	abs@social-events.net
 HOMEPAGE=	http://www.social-events.net/
-COMMENT=	Meta package for tixme server depends
+COMMENT=	Meta package for Social Events tickets server depends
 
 META_PACKAGE=	yes
 
@@ -22,11 +22,10 @@ DEPENDS+= p7zip>0:../../archivers/p7zip			# Archiver
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
 DEPENDS+= p5-Email-Stuff>0:../../mail/p5-Email-Stuff
 DEPENDS+= p5-Moose>0:../../devel/p5-Moose
+DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# Useful while editing
 DEPENDS+= p5-Rose-DB-Object>0:../../databases/p5-Rose-DB-Object
 DEPENDS+= p5-Term-ReadKey>0:../../devel/p5-Term-ReadKey
 DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
-
-DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# Useful while editing
 
 .include "../../mk/bsd.pkg.mk"

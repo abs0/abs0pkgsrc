@@ -108,9 +108,10 @@ determine_and_wipe_WRKOBJDIR()
     {
     # Extract and wipe WRKOBJDIR
     #
-    WRKOBJDIR=$(show_var WRKOBJDIR)
+    # Catch errors as could be called before pkg_install/bmake installed
+    WRKOBJDIR=$(show_var WRKOBJDIR || true)
     if [ ! -n "$WRKOBJDIR" ] ; then
-	WRKOBJDIR=${TMPDIR:-/var/obj}/nbbuild-$MACHINE
+	WRKOBJDIR=${TMPDIR:-/var/obj}/pkg
     fi
     if [ -d $WRKOBJDIR ] ; then
 	echo "rm -rf $WRKOBJDIR ..."
@@ -328,6 +329,7 @@ if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
     opsys=$(uname -s)
     osrev=$(uname -r | sed 's/-.*//')  # eg: Linux 2.6.18-194.26.1.el5
     ospro=$(uname -p)
+    mkdir -p /pkgsrc/packages
     bootstrap=/pkgsrc/packages/bootstrap-pkgsrc-$opsys-$osrev-$ospro.tgz
     if [ -n "$opt_b" -a -f $bootstrap ] ; then
 	echo "Installing binary bootstrap"
@@ -389,7 +391,9 @@ else	# $opt_s
 	later_pkg_chk_remove=1
     fi
 
-    as_root chown -R $USER $PKGBINDIR
+    if [ -d $PKGBINDIR ] ; then
+        as_root chown -R $USER $PKGBINDIR
+    fi
     pkg_check_install cpuflags		devel/cpuflags	 /usr/pkg/bin/cpuflags
     pkg_check_install pkg_chk		pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
 
