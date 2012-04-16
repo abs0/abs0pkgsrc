@@ -1,7 +1,6 @@
 # $NetBSD: Makefile,v 1.58 2003/07/20 14:21:52 abs Exp $
-#
 
-DISTNAME=	localtools-2.94
+DISTNAME=	localtools-2.95
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -26,13 +25,13 @@ BINSCRIPTS!=(cd files ; find ${BINSRC} -type f | egrep -v '.svn|\.orig$$' )
 SHAREFILES!=(cd files/share ; find * -type f | egrep -v '.svn|\.orig$$' )
 
 SHAREDIR=share/local
-USE_TOOLS+=     perl:run
+USE_TOOLS+=	perl:run
 
 DEPENDS+=	p5-Digest-SHA1>0:../../security/p5-Digest-SHA1
 DEPENDS+=	optipng>0:../../graphics/optipng
 
-PLIST_SRC=      ${WRKDIR}/PLIST
-WRKSRC=${WRKDIR}
+PLIST_SRC=	${WRKDIR}/PLIST
+WRKSRC=		${WRKDIR}
 
 INSTALLATION_DIRS= bin ${SHAREDIR}
 PKG_DESTDIR_SUPPORT=	user-destdir
