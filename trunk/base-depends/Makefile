@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.14
+DISTNAME=	base-depends-1.15
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,7 +18,7 @@ DEPENDS+= exim>0:../../mail/exim
 
 # Source controls
 DEPENDS+= subversion-base>0:../../devel/subversion-base
-DEPENDS+= scmgit-base>0:../../devel/scmgit-base
+DEPENDS+= scmgit>0:../../devel/scmgit
 
 # Net tools
 DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
