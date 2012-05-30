@@ -76,16 +76,16 @@ EXCL="$PARTIALDIR work OLD/"
 
 if [ -n "$opt_q" ] ; then
     ROOT=$ROOT/pkgsrc
-    EXCL="$EXCL /distfiles/" # XXX fix to exclude others
+    EXCL="$EXCL /distfiles" # XXX fix to exclude others
 else
-    EXCL="$EXCL /export/ /pkgsrc/distfiles/"
+    EXCL="$EXCL /export /pkgsrc/distfiles"
 
     if [ -z "$opt_s" ] ; then
 	EXCL="$EXCL $(ls $ROOT|egrep -v '^(arch|pkgsrc)$' || true)"
     fi
 
     if [ -n "$opt_o" ] ; then
-	EXCL="$EXCL /pkgsrc/packages/ arch/"
+	EXCL="$EXCL /pkgsrc/packages /arch"
     fi
 
 fi
@@ -104,11 +104,15 @@ while true ; do
     for h in $HOSTS; do
 	echo "$h: $ROOT"
 	if [ -n "$opt_t" ] ; then
+	    EXCL="$(echo $EXCL|sed 's: --exclude /: --exclude ./:g')"
 	    if [ -n "$opt_n" ] ; then
 		echo tar cfvz - $EXCL .
 	    elif [ -n "$opt_r" ] ; then
 		ssh $h "cd $ROOT ; tar cfvz - $EXCL ." | tar xfpz -
 	    else
+		if [ -n "$opt_v" ] ; then
+		    echo "tar cfvz - $EXCL ."
+		fi
 		tar cfvz - $EXCL . | ssh $h "mkdir -p $ROOT && cd $ROOT && tar xfpz -"
 	    fi
 	else
