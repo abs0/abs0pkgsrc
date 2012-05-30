@@ -13,6 +13,7 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # High priorities - build first
+DEPENDS+= opera>0:../../www/opera
 DEPENDS+= firefox>0:../../www/firefox
 
 .if ${X11_TYPE} == "modular"
@@ -44,6 +45,5 @@ DEPENDS+= synergy>0:../../net/synergy
 DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>=2:../../multimedia/vlc2
 DEPENDS+= wireshark>0:../../net/wireshark
-DEPENDS+= opera>0:../../www/opera
 
 .include "../../mk/bsd.pkg.mk"
