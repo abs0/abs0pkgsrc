@@ -91,9 +91,9 @@ extract()
     cd "$DESTDIR"
 
     if [ -z "$opt_f" -a -f etc/release ] && \
-		tar xzfO $TARDIR/base.t?z ./etc/release 2>/dev/null | \
+		tar xqzfO $TARDIR/base.t?z ./etc/release 2>/dev/null | \
 		cmp -s etc/release - ; then
-	echo "$HOST:$DESTDIR etc/release matches existing version ($TARDIR)"
+	echo "$HOST:$DESTDIR etc/release version matches ($TARDIR)"
 	cleanup
 	return
     fi
