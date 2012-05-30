@@ -14,10 +14,6 @@ DEPENDS+= encodings>0:../../fonts/encodings
 
 .include "../../mk/bsd.prefs.mk"
 
-.if ${OPSYS} != "Darwin"
-DEPENDS+= xbattbar>0:../../sysutils/xbattbar
-.endif
-
 # Core desktop tools
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= thunderbird>0:../../mail/thunderbird
@@ -52,8 +48,6 @@ DEPENDS+= rapidsvn>0:../../devel/rapidsvn
 DEPENDS+= calibre>0:../../misc/calibre
 DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
-# DEPENDS+= ckmame>0:../../emulators/ckmame
-# DEPENDS+= mame>0:../../emulators/mame
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= aircrack-ng>0:../../wip/aircrack-ng
