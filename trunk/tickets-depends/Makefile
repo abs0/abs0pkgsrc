@@ -1,5 +1,3 @@
-# $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
-
 DISTNAME=	tickets-depends-1.26
 CATEGORIES=	local
 MASTER_SITES=	# empty
@@ -15,10 +13,7 @@ DEPENDS+= localtools>0:../../local/localtools		# Common scripts/config
 DEPENDS+= fping>0:../../net/fping			# Quick monitoring
 DEPENDS+= p7zip>0:../../archivers/p7zip			# Archiver
 
-# Monitoring and hardware/software inventory
-# DEPENDS+= munin-node>0:../../sysutils/munin-node	# Monitoring
-
-# Used by tools
+# Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
 DEPENDS+= p5-Email-Stuff>0:../../mail/p5-Email-Stuff
 DEPENDS+= p5-Moose>0:../../devel/p5-Moose
