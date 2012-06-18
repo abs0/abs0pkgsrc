@@ -50,7 +50,7 @@ build()
     cd $BSDSRCDIR
 
     LASTMOD=$(stat -t %F -f %Sm CVS/Entries)
-    OBJBASE=/var/obj/nbbuild
+    OBJBASE=/var/obj/nbbuild-$VERSION-$MACHINE
     ARCHDIR=$NBHOME/arch/$VERSION-$MACHINE-$LASTMOD
     LOG=$OBJBASE/nbbuild.log
 
@@ -78,13 +78,16 @@ build()
 
     cd $OBJBASE/releasedir/$MACHINE/binary/sets
     mkdir -p $ARCHDIR
+    echo -n "Recompress to $ARCHDIR"
     for f in *.tgz ; do
+	echo -n " $f"
 	if [ $VERSION = current ] || [ $VERSION -gt 5 ] ; then
 	    zcat $f | xz -9    > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.txz/')
 	else
 	    zcat $f | bzip2 -9 > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.tbz/')
 	fi
     done
+    echo
 
     if [ -z "$opt_u" ]; then
 	rm -rf $OBJBASE
