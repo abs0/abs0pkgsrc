@@ -37,10 +37,6 @@ DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= synergy>0:../../net/synergy
 
-# for !kde
-# DEPENDS+= epdfview>0:../../print/epdfview
-# DEPENDS+= xscreensaver>0:../../x11/xscreensaver
-
 # Lower priority
 DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>=2:../../multimedia/vlc2
