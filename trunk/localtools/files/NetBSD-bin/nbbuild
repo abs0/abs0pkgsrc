@@ -47,6 +47,19 @@ build()
     {
     MACHINE=$1
 
+    case $MACHINE in
+	vax)
+	    FORMAT=tgz
+	    ;;
+	*)
+	    if [ $VERSION = current ] || [ $VERSION -gt 5 ] ; then
+	        FORMAT=txz
+	    else
+	        FORMAT=tbz
+	    fi
+	    ;;
+    esac
+
     cd $BSDSRCDIR
 
     LASTMOD=$(stat -t %F -f %Sm CVS/Entries)
@@ -81,11 +94,15 @@ build()
     echo -n "Recompress to $ARCHDIR"
     for f in *.tgz ; do
 	echo -n " $f"
-	if [ $VERSION = current ] || [ $VERSION -gt 5 ] ; then
-	    zcat $f | xz -9    > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.txz/')
-	else
-	    zcat $f | bzip2 -9 > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.tbz/')
-	fi
+	case $FORMAT in
+	    txz)
+		zcat $f | xz -9    > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.txz/')
+		;;
+	    tbz)
+		zcat $f | bzip2 -9 > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.tbz/')
+		;;
+	    tgz)
+		;;
     done
     echo
 

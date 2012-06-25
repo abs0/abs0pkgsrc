@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.58 2003/07/20 14:21:52 abs Exp $
 
-DISTNAME=	localtools-2.95
+DISTNAME=	localtools-2.96
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
