@@ -26,9 +26,10 @@ esac)
 
 start=$(date +%s)
 
-while getopts D:bd:fhk:nst:u f; do
+while getopts D:Xbd:fhk:nst:u f; do
     case $f in
 	D) opt_D="$OPTARG"; TARDIR="$OPTARG"	;;
+	X) opt_X=1				;;
 	b) opt_b=1				;;
 	d) opt_d="$OPTARG"; DESTDIR="$OPTARG"	;;
 	f) opt_f=-f				;;
@@ -45,6 +46,7 @@ shift `expr $OPTIND - 1`
 if [ -n "$opt_h" ] ; then
 	echo "Usage: os-update [opts] [hosts]
 opts:   -D dir Read source tarfiles and script from dir, and delete after 
+opts:   -X     Exclude X distribution
 	-b     Install from binaries (default)
 	-d dir Full distribution (including etc set)
 	-f     Force (ignore value of /etc/release)
@@ -74,7 +76,11 @@ if [ -z "$TARDIR" ] ; then
     fi
 fi
 
-TARFILES="$(echo $TARDIR/*.t?z)"
+if [ -n "$opt_X" ] ; then
+    TARFILES="$(echo $TARDIR/[a-wyz]*.t?z)"
+else
+    TARFILES="$(echo $TARDIR/*.t?z)"
+fi
 
 cleanup()
     {
