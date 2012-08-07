@@ -3,9 +3,32 @@
 
 # Useful inside screen and suchlist - just repeat command indefinitely
 
+while getopts ad:h f; do
+    case $f in
+        a)  opt_a=1 ;;
+        d)  opt_d="$OPTARG" ;;
+        h)  opt_h=1 ;;
+  esac
+done
+shift $(expr $OPTIND - 1)
+
+if [ -n "$opt_h" ]; then
+    cat << END
+Usage: loop [opts] cmd
+ -a     Auto - restart command after 60 seconds if exits
+ -d sec Sleep sec before restarting
+ -h     This help
+END
+    exit
+fi
+
 while true ; do
     $*
-    if [ $? = 130 ] ; then	# Restart after 5 seconds for a HUP
+    if [ -n "$opt_a" ]; then
+	sleep 60
+    elif [ -n "$opt_d" ]; then
+	sleep $opt_d
+    elif [ $? = 130 ] ; then	# Restart after 5 seconds for a HUP
 	echo sleeping...
 	sleep 5
     else
