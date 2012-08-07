@@ -103,6 +103,7 @@ build()
 		;;
 	    tgz)
 		;;
+	esac
     done
     echo
 
