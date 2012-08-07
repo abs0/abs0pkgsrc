@@ -264,11 +264,14 @@ fi
 if [ ! -d $PKGSRC ];then
     case $0 in
 	/*)
+	    script=$0;
 	    ;;
-	*)  fatal "Initial call to pkgsrc-update must use full path"
+	*)  
+	    script=$(pwd)/$0
+	    script=$(echo $script | sed 's:/\.::')
 	    ;;
     esac
-    confirm_symlink $(echo $0 | sed 's:/local/pkgsrc-update::') $PKGSRC
+    confirm_symlink $(echo $script | sed 's:/local/pkgsrc-update::') $PKGSRC
 fi
 
 # Before update
