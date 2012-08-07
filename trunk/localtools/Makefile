@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.58 2003/07/20 14:21:52 abs Exp $
 
-DISTNAME=	localtools-2.96
+DISTNAME=	localtools-2.97
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -14,6 +14,10 @@ INSTALL_TEMPLATES+=	${.CURDIR}/INSTALL
 USE_LANGUAGES=	# empty
 EXTRACT_ONLY=	# empty
 NO_CHECKSUM=	yes
+
+PKG_DESTDIR_SUPPORT=      user-destdir
+
+.include "../../mk/bsd.prefs.mk"
 
 .if exists(files/${OPSYS}-bin)
 BINSRC=bin ${OPSYS}-bin
