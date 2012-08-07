@@ -30,6 +30,9 @@ DEPENDS+= Transmission-gui>0:../../net/Transmission-gui
 DEPENDS+= Transmission>0:../../net/Transmission
 
 DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
+DEPENDS+= dc-tools>0:../../sysutils/dc-tools
+DEPENDS+= gxemul>0:../../emulators/gxemul
+DEPENDS+= simh>0:../../emulators/simh
 
 # Audio/Video
 DEPENDS+= abcde>0:../../audio/abcde
