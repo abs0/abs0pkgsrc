@@ -91,17 +91,19 @@ build()
 
     cd $OBJBASE/releasedir/$MACHINE/binary/sets
     mkdir -p $ARCHDIR
-    echo -n "Recompress to $ARCHDIR"
+    echo -n "Recompress to $ARCHDIR:"
     for f in *.tgz ; do
-	echo -n " $f"
+	out=$(echo $f|sed "s/\.tgz$/.$FORMAT/")
+	echo -n " $out"
 	case $FORMAT in
 	    txz)
-		zcat $f | xz -9    > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.txz/')
+		zcat $f | xz -9    > $ARCHDIR/$out
 		;;
 	    tbz)
-		zcat $f | bzip2 -9 > $ARCHDIR/$(echo $f|sed 's/\.tgz$/.tbz/')
+		zcat $f | bzip2 -9 > $ARCHDIR/$out
 		;;
 	    tgz)
+		cp $f $ARCHDIR/$out
 		;;
 	esac
     done
