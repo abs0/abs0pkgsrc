@@ -23,6 +23,7 @@ END
 fi
 
 while true ; do
+    date
     $*
     if [ -n "$opt_a" ]; then
 	sleep 60
