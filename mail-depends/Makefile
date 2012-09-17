@@ -19,6 +19,6 @@ DEPENDS+= imapsync>0:../../mail/imapsync
 # Webmail
 DEPENDS+= roundcube>0:../../mail/roundcube
 DEPENDS+= php54-pgsql>0:../../databases/php-pgsql
-DEPENDS+= ap22-php54>0:../../www/ap-php
+DEPENDS+= ap24-php54>0:../../www/ap-php
 
 .include "../../mk/bsd.pkg.mk"

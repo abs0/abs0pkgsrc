@@ -10,7 +10,7 @@ COMMENT=	Meta package for NATBsync server dependencies
 
 META_PACKAGE=	yes
 
-DEPENDS+= ap22-py2{6,7}-wsgi>0:../../www/ap2-wsgi
+DEPENDS+= ap24-py2{6,7}-wsgi>0:../../www/ap2-wsgi
 DEPENDS+= postgresql91>0:../../databases/postgresql91
 DEPENDS+= py2{6,7}-django-registration>0:../../www/py-django-registration
 DEPENDS+= py2{6,7}-django>0:../../www/py-django
