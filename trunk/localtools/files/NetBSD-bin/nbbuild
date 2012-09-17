@@ -47,18 +47,16 @@ build()
     {
     MACHINE=$1
 
-    case $MACHINE in
-	vax)
-	    FORMAT=tgz
-	    ;;
-	*)
-	    if [ $VERSION = current ] || [ $VERSION -gt 5 ] ; then
-	        FORMAT=txz
-	    else
-	        FORMAT=tbz
-	    fi
-	    ;;
-    esac
+    if [ $VERSION = current ] || [ $VERSION -gt 5 ]; then
+	FORMAT=xz
+    else
+	FORMAT=bz
+    fi
+    if [ $MACHINE = vax ]; then
+	DISTFORMAT=tgz
+    else
+	DISTFORMAT=t$FORMAT
+    fi
 
     cd $BSDSRCDIR
 
@@ -77,11 +75,10 @@ build()
 	    -O $OBJBASE/objdir \
 	    -T $OBJBASE/tooldir \
 	    -R $OBJBASE/releasedir \
-	    release"
+	    release iso-image"
     echo $BUILD
     if [ -n "$opt_v" ] ; then
 	COMPLETE=$OBJBASE/ok
-	touch $COMPLETE
 	($BUILD 2>&1 && touch $COMPLETE) | tee $OBJBASE/nbbuild.log
 	[ ! -f $COMPLETE ] && exit
     elif ! $BUILD > $OBJBASE/nbbuild.log 2>&1 ; then
@@ -89,29 +86,39 @@ build()
 	exit 1
     fi
 
-    cd $OBJBASE/releasedir/$MACHINE/binary/sets
-    mkdir -p $ARCHDIR
     echo -n "Recompress to $ARCHDIR:"
+    mkdir -p $ARCHDIR
+
+    cd $OBJBASE/releasedir/$MACHINE/binary/sets
     for f in *.tgz ; do
-	out=$(echo $f|sed "s/\.tgz$/.$FORMAT/")
-	echo -n " $out"
-	case $FORMAT in
-	    txz)
-		zcat $f | xz -9    > $ARCHDIR/$out
-		;;
-	    tbz)
-		zcat $f | bzip2 -9 > $ARCHDIR/$out
-		;;
-	    tgz)
-		cp $f $ARCHDIR/$out
-		;;
-	esac
+	copy_compress $f $ARCHDIR/$(echo $f|sed "s/\.tgz$/.$DISTFORMAT/")
     done
+
+    cp $OBJBASE/releasedir/images/*.iso $ARCHDIR
+
     echo
 
     if [ -z "$opt_u" ]; then
 	rm -rf $OBJBASE
     fi
+    }
+
+copy_compress()
+    {
+    from=$1
+    to=$2
+    echo -n " $(basename $to)"
+    case $from in
+	*.tgz) from_cat="zcat $from" ;;
+	*)     from_cat="cat $from"  ;;
+    esac
+    echo $from_cat >&2
+    case $to in
+	*xz) $from_cat | xz -9    > $to ;;
+	*bz) $from_cat | bzip2 -9 > $to ;;
+	*gz) $from_cat | gzip -9  > $to ;;
+	*)     echo "Unable to determine format of $to"; exit 1 ;;
+    esac
     }
 
 if [ -z "$1" ] ; then

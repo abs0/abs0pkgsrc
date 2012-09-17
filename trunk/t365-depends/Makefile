@@ -15,7 +15,7 @@ DEPENDS+= postgresql91>0:../../databases/postgresql91
 
 DEPENDS+= p5-Module-Install>0:../../devel/p5-Module-Install
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
-DEPENDS+= ap22-fcgid>0:../../www/ap2-fcgid
+DEPENDS+= ap24-fcgid>0:../../www/ap2-fcgid
 
 DEPENDS+= p5-Catalyst-Action-REST>0:../../www/p5-Catalyst-Action-REST
 DEPENDS+= p5-Catalyst-Model-Adaptor>0:../../www/p5-Catalyst-Model-Adaptor

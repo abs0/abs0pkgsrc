@@ -284,7 +284,7 @@ fi
 if [ $(id -u) != 0 ] ; then
     if [ -n "$opt_u" ] ; then
 	cvsu pkgsrc
-	as_root download-vulnerability-list
+	as_root download-vulnerability-list || true
     fi
 fi
 
@@ -309,7 +309,7 @@ if [ -n "$opt_D" ]; then
 fi
 
 if [ -n "$opt_r" ] ; then
-    if [ -n "$opt_b" ] ; then
+    if [ -n "$opt_b" -a -d /usr/pkg/sbin ] ; then
 	# Try to reduce time without packages to a minimum
 	# Before deleting anything, work out what packages will be needed
 	determine_PKGBINDIR
@@ -333,12 +333,17 @@ if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
     osrev=$(uname -r | sed 's/-.*//')  # eg: Linux 2.6.18-194.26.1.el5
     ospro=$(uname -p)
     mkdir -p /pkgsrc/packages
+    if [ -z "$opt_b" ] ; then
+        if ! c++ -v > /dev/null ; then
+	    fatal 'No c++ compiler installed - "yum install -y gcc-c++ libtermcap-devel"?'
+        fi
+    fi
     bootstrap=/pkgsrc/packages/bootstrap-pkgsrc-$opsys-$osrev-$ospro.tgz
     if [ -n "$opt_b" -a -f $bootstrap ] ; then
 	echo "Installing binary bootstrap"
 	cd / ; tar xpzf $bootstrap
-	if [ ! -d /usr/pkg ] ; then
-	    fatal "/usr/pkg not extracted from $bootstrap"
+	if [ ! -d /usr/pkg/bin ] ; then
+	    fatal "/usr/pkg/bin not extracted from $bootstrap"
 	fi
     else
 	echo "Building bootstrap from source"
@@ -361,7 +366,7 @@ if [ -n "$opt_b" ] ; then
 
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -b"
 
-    if [ -n "$opt_r" ] ; then
+    if [ -n "$opt_r_PKGS" ] ; then
 	cd $PKGBINDIR
 	pkg_add $opt_r_PKGS
 	postrun
@@ -411,8 +416,10 @@ PKG_CHK_FLAGS="$PKG_CHK_FLAGS -ak"
 echo "pkg_chk $PKG_CHK_FLAGS..."
 nice pkg_chk $PKG_CHK_FLAGS < /dev/null || true
 if [ ! -n "$opt_b" ] ; then
-    echo "Update pkg_summary.gz"
-    ( cd $PKGBINDIR && ls -t *.t?? | xargs pkg_info -X | gzip -9 > pkg_summary.gz )
+    echo "Update pkg_summary.bz2"
+    ( cd $PKGBINDIR && 
+      ls -t *.tgz | xargs pkg_info -X | bzip2 -9 > pkg_summary.bz2
+    )
 fi
 
 postrun
