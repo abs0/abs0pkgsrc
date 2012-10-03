@@ -12,6 +12,7 @@ META_PACKAGE=	yes
 
 DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= localtools>0:../../local/localtools
+DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
 DEPENDS+= p5-ack>0:../../textproc/p5-ack
 DEPENDS+= exim>0:../../mail/exim
@@ -21,7 +22,6 @@ DEPENDS+= subversion-base>0:../../devel/subversion-base
 DEPENDS+= scmgit>0:../../devel/scmgit
 
 # Net tools
-DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
 DEPENDS+= mtr>0:../../net/mtr				# Better traceroute
 DEPENDS+= netcat>0:../../net/netcat
