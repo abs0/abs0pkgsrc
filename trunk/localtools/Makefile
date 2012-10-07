@@ -15,8 +15,6 @@ USE_LANGUAGES=	# empty
 EXTRACT_ONLY=	# empty
 NO_CHECKSUM=	yes
 
-PKG_DESTDIR_SUPPORT=      user-destdir
-
 .include "../../mk/bsd.prefs.mk"
 
 .if exists(files/${OPSYS}-bin)
@@ -38,7 +36,6 @@ PLIST_SRC=	${WRKDIR}/PLIST
 WRKSRC=		${WRKDIR}
 
 INSTALLATION_DIRS= bin ${SHAREDIR}
-PKG_DESTDIR_SUPPORT=	user-destdir
 
 do-build:
 .for f in ${BINSCRIPTS}
