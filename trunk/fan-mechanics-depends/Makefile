@@ -17,4 +17,6 @@ DEPENDS+= p7zip>0:../../archivers/p7zip			# Archiver
 DEPENDS+= mongodb>0:../../databases/mongodb
 DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
 
+DEPENDS+= apache-tomcat7>0:../../www/apache-tomcat7
+
 .include "../../mk/bsd.pkg.mk"
