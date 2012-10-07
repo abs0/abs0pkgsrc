@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.20
+DISTNAME=	desktop-core-depends-1.21
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -28,6 +28,7 @@ DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
+DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= adobe-flash-plugin>=11:../../multimedia/adobe-flash-plugin11
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= rdesktop>0:../../net/rdesktop
