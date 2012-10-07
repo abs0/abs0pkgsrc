@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.27
+DISTNAME=	tickets-depends-1.28
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -7,6 +7,13 @@ HOMEPAGE=	http://www.social-events.net/
 COMMENT=	Meta package for Social Events tickets server depends
 
 META_PACKAGE=	yes
+
+.include "../../mk/bsd.prefs.mk"
+
+.if ${OPSYS} == NetBSD
+DEPENDS+= apache-ant>0:../../devel/apache-ant
+DEPENDS+= apache-maven>0:../../devel/apache-maven
+.endif
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
@@ -18,10 +25,7 @@ DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
 DEPENDS+= p5-Crypt-OpenPGP>0:../../security/p5-Crypt-OpenPGP
 
-# Generally useful
-# DEPENDS+= localtools>0:../../local/localtools		# Common scripts/config
-# DEPENDS+= fping>0:../../net/fping			# Quick monitoring
-# DEPENDS+= p7zip>0:../../archivers/p7zip			# Archiver
+# Useful if editing
 DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# Useful while editing
 
 .include "../../mk/bsd.pkg.mk"
