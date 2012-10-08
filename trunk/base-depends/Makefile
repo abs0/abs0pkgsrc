@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.16
+DISTNAME=	base-depends-1.17
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,6 +25,7 @@ DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
 DEPENDS+= mtr>0:../../net/mtr				# Better traceroute
 DEPENDS+= netcat>0:../../net/netcat
 DEPENDS+= rsync>0:../../net/rsync
+DEPENDS+= shmux>0:../../sysutils/shmux			# Parallel ssh
 DEPENDS+= ttcp>0:../../benchmarks/ttcp
 
 # Archivers/convertors
