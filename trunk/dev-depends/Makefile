@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	dev-depends-1.06
+DISTNAME=	dev-depends-1.07
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,7 +10,7 @@ COMMENT=	Meta package for tools installed on the dev server
 
 META_PACKAGE=	yes
 
-DEPENDS+= postgresql91>0:../../databases/postgresql91
+DEPENDS+= postgresql92>0:../../databases/postgresql92
 DEPENDS+= ap24-fcgid>0:../../www/ap2-fcgid
 DEPENDS+= ap24-subversion>0:../../www/ap2-subversion
 DEPENDS+= ap24-py2{6,7}-python>0:../../www/ap2-python
