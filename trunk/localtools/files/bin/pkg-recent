@@ -1,5 +1,15 @@
 #!/bin/sh
 # Use '-r' for gnu set compatability
 # could back from the matching time to handle Linux & NetBSD ls differences
+
+pkg_recent()
+{
 ls -lrt /var/db/pkg/*/+DESC | \
     sed -r -e 's:/[^/]*$::' -e 's:/.*/: :' -e 's/.*(.{7}[0-9][0-9]:)/\1/'
+}
+
+if [ -n "$1" ]; then
+    pkg_recent | tail -$1
+else
+    pkg_recent
+fi
