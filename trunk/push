@@ -1,7 +1,8 @@
 #!/bin/sh -e
 # $Id: push,v 1.74 2008/11/13 22:17:46 abs Exp $
 
-NHOSTS="abs@muon.mono.org root@derek.absd.org abs@dev.scguk.com abs@mail.scguk.com root@jeeves.deurmekaar.com"
+NHOSTS="iris.absd.org onyx.absd.org angus.absd.org cerberus.social-events.net root@jeeves.deurmekaar.com"
+# muon.mono.org mail.scguk.com iota.absd.org 
 args=$(getopt Na:hloOqrs:ntv $*)
 if [ $? != 0 ]; then
     opt_h=1
