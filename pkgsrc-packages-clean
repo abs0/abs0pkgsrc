@@ -1,0 +1,57 @@
+#!/usr/pkg/bin/perl
+use warnings;
+use strict;
+
+use Getopt::Long;
+
+my $dry_run;
+my $help_and_usage;
+my $result = GetOptions(
+    'dry-run|n' => \$dry_run,
+    'help'      => \$help_and_usage,
+);
+
+
+chdir('/pkgsrc/packages') || die("chdir failed: $!");
+opendir( DIR, '.' );
+my @basedirs = grep( !-l $_ && -d "$_/All", readdir(DIR) );
+closedir(DIR);
+foreach my $dir (@basedirs) {
+    cleanup($dir);
+}
+
+sub cleanup {
+    my $dir = shift;
+    my %packages;
+    $dir .= '/All';
+    opendir( DIR, $dir );
+    my @packagefiles = readdir(DIR);
+    closedir(DIR);
+    foreach my $packagefile (@packagefiles) {
+        $packagefile =~ /(.*)-\d.*/ || next;
+        push( @{ $packages{$1} }, $packagefile );
+    }
+    foreach my $package ( sort keys %packages ) {
+        while ( @{ $packages{$package} } > 1 ) {
+            my $pkg1 = shift @{$packages{$package}};
+            my $pkg2 = shift @{$packages{$package}};
+	    my $pmatch = $pkg1;
+	    $pmatch =~ s/-(\d)/>$1/;
+	    my $res = system('pkg_admin','pmatch',$pmatch,$pkg2);
+	    my $keep;
+	    my $kill;
+	    if ($res == 0) {
+		$kill = $pkg1;
+		$keep = $pkg2;
+	    } elsif ($res == 256 ) {
+		$keep = $pkg1;
+		$kill = $pkg2;
+	    } else {
+		die("pkg_admin pmatch failed");
+	    }
+	    unshift(@{$packages{$package}}, $keep);
+	    print "rm $dir/$kill\n";
+	    unlink("$dir/$kill") || die "unlink($dir/$kill) failed: $!";
+        }
+    }
+}
