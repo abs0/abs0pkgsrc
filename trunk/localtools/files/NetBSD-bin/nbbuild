@@ -70,12 +70,15 @@ build()
     fi
     mkdir -p $OBJBASE
 
-    BUILD="./build.sh -m $MACHINE -U $opt_u \
+    BUILDSH="./build.sh -m $MACHINE \
 	    -D $OBJBASE/destdir \
 	    -O $OBJBASE/objdir \
 	    -T $OBJBASE/tooldir \
-	    -R $OBJBASE/releasedir \
-	    release iso-image"
+	    -R $OBJBASE/releasedir"
+    BUILD="$BUILDSH -U $opt_u release iso-image"
+    for extra_kernel in $(ls sys/arch/$MACHINE/conf | grep '^_'); do
+	BUILD="$BUILD kernel=$extra_kernel"
+    done
     echo $BUILD
     if [ -n "$opt_v" ] ; then
 	COMPLETE=$OBJBASE/ok
@@ -112,7 +115,6 @@ copy_compress()
 	*.tgz) from_cat="zcat $from" ;;
 	*)     from_cat="cat $from"  ;;
     esac
-    echo $from_cat >&2
     case $to in
 	*xz) $from_cat | xz -9    > $to ;;
 	*bz) $from_cat | bzip2 -9 > $to ;;
