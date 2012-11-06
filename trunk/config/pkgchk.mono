@@ -15,7 +15,7 @@ security/sudo			*		# root access
 pkgtools/pkg_alternatives	*		# java wrapper etc
 
 # Apache2 and related packages
-www/apache22			*
+www/apache24			*
 
 # Mail delivery/webmail
 mail/procmail			*
