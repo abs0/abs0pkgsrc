@@ -3,7 +3,7 @@
 
 NHOSTS="iris.absd.org onyx.absd.org angus.absd.org cerberus.social-events.net root@jeeves.deurmekaar.com"
 # muon.mono.org mail.scguk.com iota.absd.org 
-args=$(getopt Na:hloOqrs:ntv $*)
+args=$(getopt Na:chloOqrs:ntv $*)
 if [ $? != 0 ]; then
     opt_h=1
 fi
@@ -15,6 +15,7 @@ HOSTS=
 while [ $# != 0 ]; do
     case "$1" in
 	-a )	opt_a=$2 ; shift ;;	# Set arch
+	-c )	opt_c=1 ;;		# Clean
 	-h )	opt_h=1 ;;		# Help
 	-l )	opt_l=1 ;;		# Loop
 	-n )	opt_n=1 ;;		# No action
@@ -39,6 +40,7 @@ if [ -n "$opt_h" -o -z "$HOSTS" ]; then
     cat << END
 Usage: push [opts] host [host2...]
 opts	-a arch Push comma separated arch list
+	-c	Clean packages before push
 	-h	This help
 	-l	Loop
 	-n	No action
@@ -74,6 +76,10 @@ HOSTS="$OKHOSTS"
 
 PARTIALDIR=.rsync-partial
 EXCL="$PARTIALDIR work OLD/"
+
+if [ -n "$opt_c" ] ; then
+    /pkgsrc/local/pkgsrc-packages-clean
+fi
 
 if [ -n "$opt_q" ] ; then
     ROOT=$ROOT/pkgsrc
