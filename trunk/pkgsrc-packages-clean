@@ -19,6 +19,7 @@ closedir(DIR);
 foreach my $dir (@basedirs) {
     cleanup($dir);
 }
+exit 0;
 
 sub cleanup {
     my $dir = shift;
