@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.29
+DISTNAME=	tickets-depends-1.30
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,6 +15,9 @@ DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
 .endif
+
+# For FastCGI scripts
+DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
