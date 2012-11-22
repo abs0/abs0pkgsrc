@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.30
+DISTNAME=	tickets-depends-1.31
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,6 +18,7 @@ DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
 
 # For FastCGI scripts
 DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
+DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
