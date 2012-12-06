@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.17
+DISTNAME=	base-depends-1.18
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -9,6 +9,12 @@ HOMEPAGE=	http://www.absd.org/
 COMMENT=	Meta package for tools installed on every host
 
 META_PACKAGE=	yes
+
+.include "../../mk/bsd.prefs.mk"
+
+.if ${OPSYS} == NetBSD
+DEPENDS+= screen>0:../../misc/screen
+.endif
 
 DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= localtools>0:../../local/localtools
