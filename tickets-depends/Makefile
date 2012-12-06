@@ -14,7 +14,7 @@ META_PACKAGE=	yes
 DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 .endif
-.if ${OPSYS} == NetBSD || ${OPSYS} == Darwin ||
+.if ${OPSYS} == NetBSD || ${OPSYS} == Darwin
 DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
 .endif
 
