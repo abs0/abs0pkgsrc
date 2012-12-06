@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.31
+DISTNAME=	tickets-depends-1.32
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -13,6 +13,8 @@ META_PACKAGE=	yes
 .if ${OPSYS} == NetBSD
 DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= apache-maven>0:../../devel/apache-maven
+.endif
+.if ${OPSYS} == NetBSD || ${OPSYS} == Darwin ||
 DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
 .endif
 
