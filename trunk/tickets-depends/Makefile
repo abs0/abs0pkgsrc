@@ -18,10 +18,11 @@ DEPENDS+= apache-maven>0:../../devel/apache-maven
 DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
 .endif
 
-# For FastCGI scripts
+# For member.cgi & friends
+DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
+DEPENDS+= p5-DateTime-Format-Strptime>0:../../time/p5-DateTime-Format-Strptime
 DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 DEPENDS+= p5-UUID-Tiny>0:../../devel/p5-UUID-Tiny
-DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
