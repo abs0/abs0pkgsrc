@@ -23,6 +23,7 @@ DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
 DEPENDS+= p5-DateTime-Format-Strptime>0:../../time/p5-DateTime-Format-Strptime
 DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 DEPENDS+= p5-UUID-Tiny>0:../../devel/p5-UUID-Tiny
+DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
