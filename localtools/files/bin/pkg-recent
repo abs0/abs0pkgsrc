@@ -1,5 +1,5 @@
 #!/bin/sh
-# Use '-r' for gnu set compatability
+# Use '-r' for gnu sed compatibility
 # could back from the matching time to handle Linux & NetBSD ls differences
 
 pkg_recent()
