@@ -47,16 +47,7 @@ build()
     {
     MACHINE=$1
 
-    if [ $VERSION = current ] || [ $VERSION -gt 5 ]; then
-	FORMAT=xz
-    else
-	FORMAT=bz
-    fi
-    if [ $MACHINE = vax ]; then
-	DISTFORMAT=tgz
-    else
-	DISTFORMAT=t$FORMAT
-    fi
+    DISTFORMAT=$(determine_distformat $MACHINE)
 
     cd $BSDSRCDIR
 
@@ -121,6 +112,23 @@ copy_compress()
 	*gz) $from_cat | gzip -9  > $to ;;
 	*)     echo "Unable to determine format of $to"; exit 1 ;;
     esac
+    }
+
+determine_distformat()
+    {
+    if [ $1 = vax ]; then
+	echo tgz
+	return
+    fi
+
+    if [ $VERSION = current ] || [ $VERSION -gt 5 ] ; then
+        mem=`echo $(( $(sysctl -n hw.usermem64) / 1024 / 1024 ))`
+        if [ $mem -gt 1500 ] ; then
+	    echo txz
+	    return
+	fi
+    fi
+    echo tbz
     }
 
 if [ -z "$1" ] ; then
