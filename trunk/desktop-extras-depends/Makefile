@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.24
+DISTNAME=	desktop-extras-depends-1.25
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -55,7 +55,7 @@ DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= aircrack-ng>0:../../wip/aircrack-ng
-DEPENDS+= xcowsay>0:../../wip/xcowsay
+DEPENDS+= xcowsay>0:../../games/xcowsay
 DEPENDS+= handbrake>0:../../multimedia/handbrake
 DEPENDS+= oneko>0:../../x11/oneko
 
