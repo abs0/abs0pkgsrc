@@ -11,7 +11,7 @@ fatal()
 
 umask 002
 
-dlist="/home/netbsd /Library/netbsd"
+dlist="/home/netbsd $HOME/netbsd"
 for d in $dlist ; do
     if [ -d $d ] ; then
         base=$d
@@ -19,7 +19,7 @@ for d in $dlist ; do
     fi
 done
 if [ ! -n "$base" ];then
-    fatal "No ($dilist) - aborting"
+    fatal "No ($dlist) - aborting"
 fi
 
 args=$(getopt d:hl $*)
