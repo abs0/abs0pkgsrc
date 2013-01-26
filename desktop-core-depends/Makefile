@@ -13,7 +13,9 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # High priorities - build first
+.if ${OPSYS} == NetBSD || ${OPSYS} == Linux
 DEPENDS+= opera>0:../../www/opera
+.endif
 DEPENDS+= firefox>0:../../www/firefox
 DEPENDS+= fluxbox>0:../../wm/fluxbox
 
