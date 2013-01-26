@@ -291,7 +291,7 @@ fi
 if [ $(uname) = NetBSD ] ; then
     confirm_symlink $PKGSRC/local/config/mk.conf /etc/mk.conf
 else
-    mkdir -p /usr/pkg/etc
+    as_root mkdir -p /usr/pkg/etc
     confirm_symlink $PKGSRC/local/config/mk.conf /usr/pkg/etc/mk.conf
 fi
 
@@ -339,18 +339,19 @@ if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
         fi
     fi
     bootstrap=/pkgsrc/packages/bootstrap-pkgsrc-$opsys-$osrev-$ospro.tgz
-    if [ -n "$opt_b" -a -f $bootstrap ] ; then
-	echo "Installing binary bootstrap"
-	cd / ; tar xpzf $bootstrap
-	if [ ! -d /usr/pkg/bin ] ; then
-	    fatal "/usr/pkg/bin not extracted from $bootstrap"
-	fi
-    else
+    if [ -z "$opt_b" -o ! -f $bootstrap ] ; then
 	echo "Building bootstrap from source"
 	cd /pkgsrc/bootstrap
-	rm -rf work
-	rm -f /usr/pkg/etc/mk.conf # Is overwritten
-	./bootstrap --gzip-binary-kit $bootstrap
+	as_root rm -rf work /usr/pkg/etc/mk.conf
+	as_root ./bootstrap --gzip-binary-kit $bootstrap
+	as_root rm -rf work
+	echo "bootstrap build complete"
+    else
+        echo "Installing binary bootstrap"
+        as_root tar xpzf $bootstrap -C /
+        if [ ! -d /usr/pkg/bin ] ; then
+	    fatal "/usr/pkg/bin not extracted from $bootstrap"
+        fi
     fi
     confirm_symlink $PKGSRC/local/config/mk.conf /usr/pkg/etc/mk.conf
 fi
