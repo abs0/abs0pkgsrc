@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-core-depends-1.21
+DISTNAME=	desktop-depends-1.21
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
