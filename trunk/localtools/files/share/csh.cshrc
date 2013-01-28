@@ -1,4 +1,3 @@
-# $Id: csh.cshrc,v 1.13 2007/11/13 11:40:55 abs Exp $
 # global settings for the {,t}csh shell
 
 umask 002
@@ -11,7 +10,7 @@ endif
 
 # Keep the EXINIT in non interactive in case running pine or similar in screen
 #
-setenv EXINIT	"set ai sh=/bin/sh sw=4 redraw report=2"
+setenv EXINIT	"set ai et sh=/bin/sh sw=4 redraw report=2"
 setenv EXINIT	"map g 1G|$EXINIT"
 setenv EXINIT	"map  :s/^#.//j|$EXINIT"
 setenv EXINIT	"map  0i# j|$EXINIT"
@@ -22,7 +21,7 @@ setenv EXINIT	"map \f !}fmt 76 77|$EXINIT"
 if ($OSTYPE == NetBSD) then
     setenv PTHREAD_DIAGASSERT AeL
     setenv LC_CTYPE	en_US.UTF-8
-    setenv EXINIT	"set filec=	|$EXINIT"
+    setenv EXINIT	"set extended filec=	|$EXINIT"
 endif
 
 # non-interactive shells exit now
@@ -40,10 +39,6 @@ setenv PAGER		/usr/bin/less
 
 if ( ! $?uid ) then	# In case csh
     set uid=`id -u`
-endif
-
-if (-f /usr/local/bin/classpath) then
-    setenv CLASSPATH	`classpath`
 endif
 
 set	history=1000 time=300 fignore=(CVS RCS .o .out)
