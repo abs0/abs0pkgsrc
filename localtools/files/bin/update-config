@@ -49,15 +49,9 @@ sl /etc/roundcube		/usr/pkg/share/roundcube/config	roundcube
 sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde4
 sl /etc/php.ini			/usr/pkg/etc/php.ini		php
 
-sl /usr/pkg/java/jdk-1.5.0/jre/plugin/i386/ns7/libjavaplugin_oji.so \
-	/usr/pkg/lib/firefox/plugins/libjavaplugin_oji.so jdk15
-
 if [ -x /usr/pkg/bin/nspluginwrapper ] ; then
     nspluginwrapper -a -i
 fi
-
-sl /etc/ampache/ampache.cfg.php	/usr/pkg/share/ampache/config/ampache.cfg.php \
-	ampache
 
 if [ -f /etc/nut/ups.conf ] ; then
     for tty in $(sed 's/#.*//' /etc/nut/ups.conf | \
@@ -66,11 +60,6 @@ if [ -f /etc/nut/ups.conf ] ; then
 	chgrp nut $tty
 	chmod 660 $tty
     done
-fi
-
-if [ ! -x /bin/tcsh ] ; then
-    echo "update-config: Copy /bin/csh /bin/tcsh"
-    cp /bin/csh /bin/tcsh
 fi
 
 if [ -x /usr/sbin/rndc -a ! -h /etc/rndc.key ] ; then
@@ -88,5 +77,7 @@ if pkg_info -e munin-node > /dev/null; then
 	munin-node-configure --shell | sh
     fi
 fi
+
+chmod 660 /dev/putter
 
 cp -p /usr/pkg/share/examples/rc.d/* /etc/rc.d
