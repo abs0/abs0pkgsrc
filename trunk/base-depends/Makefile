@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.18
+DISTNAME=	base-depends-1.20
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,6 +11,8 @@ COMMENT=	Meta package for tools installed on every host
 META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
+
+DEPENDS+= sudo>0:../../security/sudo
 
 .if ${OPSYS} == NetBSD
 DEPENDS+= screen>0:../../misc/screen
@@ -30,6 +32,7 @@ DEPENDS+= scmgit>0:../../devel/scmgit
 DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
 DEPENDS+= mtr>0:../../net/mtr				# Better traceroute
 DEPENDS+= netcat>0:../../net/netcat
+DEPENDS+= nginx>0:../../www/nginx
 DEPENDS+= rsync>0:../../net/rsync
 DEPENDS+= shmux>0:../../sysutils/shmux			# Parallel ssh
 DEPENDS+= ttcp>0:../../benchmarks/ttcp
