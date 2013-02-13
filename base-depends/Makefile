@@ -12,9 +12,8 @@ META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
-DEPENDS+= sudo>0:../../security/sudo
-
 .if ${OPSYS} == NetBSD
+DEPENDS+= sudo>0:../../security/sudo
 DEPENDS+= screen>0:../../misc/screen
 .endif
 
