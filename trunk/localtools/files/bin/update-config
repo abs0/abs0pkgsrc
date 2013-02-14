@@ -78,6 +78,8 @@ if pkg_info -e munin-node > /dev/null; then
     fi
 fi
 
-chmod 660 /dev/putter
+if [ -f /dev/putter ] ; then
+    chmod 660 /dev/putter
+fi
 
 cp -p /usr/pkg/share/examples/rc.d/* /etc/rc.d
