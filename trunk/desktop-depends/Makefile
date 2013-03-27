@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.21
+DISTNAME=	desktop-depends-1.22
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -33,7 +33,7 @@ DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= adobe-flash-plugin>=11:../../multimedia/adobe-flash-plugin11
 DEPENDS+= meld>0:../../devel/meld
-DEPENDS+= rdesktop>0:../../net/rdesktop
+DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= qiv>0:../../graphics/qiv
