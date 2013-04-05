@@ -11,7 +11,7 @@ fatal()
 
 umask 002
 
-dlist="/home/netbsd $HOME/netbsd"
+dlist="/opt/netbsd /home/netbsd /Library/netbsd"
 for d in $dlist ; do
     if [ -d $d ] ; then
         base=$d
