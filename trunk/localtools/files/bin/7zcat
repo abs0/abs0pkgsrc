@@ -1,0 +1,4 @@
+#!/bin/sh
+for f in "$@" ; do
+    7za x -so "$f" 2> /dev/null
+done
