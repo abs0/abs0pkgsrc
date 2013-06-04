@@ -83,10 +83,10 @@ ssh_agent_server()
 
 verbose()
     {
-    [ -n "$opt_v" ] && echo $@ >&2
+    [ -n "$opt_v" ] && echo "ssh-init:" $@ >&2
     }
 
-args=$(getopt cfhpv $*)
+args=$(getopt cfhprv $*)
 if [ $? != 0 ]; then
     opt_error=1
 fi
@@ -97,6 +97,7 @@ while [ $# != 0 ]; do
 	-f )    opt_f=1 ;;
 	-h )    opt_h=1 ;;
 	-p )    opt_p=1 ;;
+	-r )    opt_r=1 ;;
 	-v )    opt_v=1 ;;
 	-- )	shift ; break ;;
     esac
@@ -108,8 +109,8 @@ if [ -n "$opt_h" -o -n "$opt_error" ] ; then
 Usage: ssh-init [-hv]
 opts:	-c Output suitable for a csh shell to eval
 	-f Force key input
-        -r Run as remote
 	-h This help
+        -r Run as remote
 	-s Output suitable for a Bourne shell to eval (default)
 	-p Print out the value of SSH_AUTH_SOCK
 	-v Verbose
