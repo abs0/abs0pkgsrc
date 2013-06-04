@@ -1,4 +1,4 @@
-DISTNAME=	fan-mechanics-depends-1.00
+DISTNAME=	fan-mechanics-depends-1.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,7 +15,7 @@ DEPENDS+= p7zip>0:../../archivers/p7zip			# Archiver
 
 # Used by tools
 DEPENDS+= mongodb>0:../../databases/mongodb
-DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
+DEPENDS+= mysql-server>=5.6:../../databases/mysql56-server
 
 DEPENDS+= apache-tomcat7>0:../../www/apache-tomcat7
 

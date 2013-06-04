@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.33
+DISTNAME=	tickets-depends-1.34
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,7 +15,7 @@ DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 .endif
 .if ${OPSYS} == NetBSD || ${OPSYS} == Darwin
-DEPENDS+= mysql-server>=5.5:../../databases/mysql55-server
+DEPENDS+= mysql-server>=5.6:../../databases/mysql56-server
 .endif
 
 # For member.cgi & friends
