@@ -55,6 +55,7 @@ build()
     OBJBASE=/var/obj/nbbuild-$VERSION-$MACHINE
     ARCHDIR=$NBHOME/arch/$VERSION-$MACHINE-$LASTMOD
     LOG=$OBJBASE/nbbuild.log
+    EXTRA_KERNELS="$(ls sys/arch/$MACHINE/conf | grep '^_')"
 
     if [ -z "$opt_u" ]; then
 	rm -rf $OBJBASE
@@ -67,7 +68,7 @@ build()
 	    -T $OBJBASE/tooldir \
 	    -R $OBJBASE/releasedir"
     BUILD="$BUILDSH -U $opt_u release iso-image"
-    for extra_kernel in $(ls sys/arch/$MACHINE/conf | grep '^_'); do
+    for extra_kernel in $EXTRA_KERNELS; do
 	BUILD="$BUILD kernel=$extra_kernel"
     done
     echo $BUILD
@@ -82,6 +83,11 @@ build()
 
     echo -n "Recompress to $ARCHDIR:"
     mkdir -p $ARCHDIR
+
+    for extra_kernel in $EXTRA_KERNELS; do
+	cd $OBJBASE/objdir/sys/arch/$MACHINE/compile/$extra_kernel
+        tar cf - ./netbsd | gzip -9 > $OBJBASE/releasedir/$MACHINE/binary/sets/kern-$extra_kernel.tgz
+    done
 
     cd $OBJBASE/releasedir/$MACHINE/binary/sets
     for f in *.tgz ; do
@@ -106,6 +112,7 @@ copy_compress()
 	*.tgz) from_cat="zcat $from" ;;
 	*)     from_cat="cat $from"  ;;
     esac
+    rm -f $to
     case $to in
 	*xz) $from_cat | xz -9    > $to ;;
 	*bz) $from_cat | bzip2 -9 > $to ;;
