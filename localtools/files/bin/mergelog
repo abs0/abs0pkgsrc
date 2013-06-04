@@ -7,7 +7,8 @@ use strict;
 use warnings;
 use Cwd;
 
-my $tmpfile = 'TMP.mergelog';
+my $tmpfile   = "TMP.mergelog.$$.7z";
+my $compress7z = "7za a -t7z -m0=lzma -mx=9 -mfb=64 -md=64m -ms=on";
 
 sub mergedir {
     my ( $dir, @files ) = @_;
@@ -21,40 +22,31 @@ sub mergedir {
     }
     foreach my $file (@files) {
         die("Unparsable filename '$file'")
-          if $file !~ /^(.+\.\d{4})(\.\d\d|)(.*)(bz2|gz)$/;
+          if $file !~ /^(.+\D\d{4}-?)(\d\d)(.*)(.bz2|.gz)$/;
         my ( $base, $month, $extra, $ext ) = ( $1, $2, $3, $4 );
-        my $targetfile = "$base$month.$ext";
+        my $targetfile = "$base$month";
         push( @{ $target{$targetfile} }, $file );
     }
     foreach my $targetfile ( sort keys %target ) {
         my $numfiles = @{ $target{$targetfile} };
-        print "$targetfile: ";
-        if ( $numfiles == 1 && $target{$targetfile}[0] =~ /\.(bz2|gz)$/ ) {
-            if ( $target{$targetfile}[0] eq $targetfile ) { print "ok\n"; }
-            elsif ( -f $targetfile ) {
-                print "*** $targetfile already present\n";
-            }
-            else {
-                print "rename\n";
-                safe_rename( $target{$targetfile}[0], $targetfile );
-            }
+        print "$targetfile: ($numfiles) recompress";
+	if ( -f "$targetfile.7z" ) {
+            die "extract $targetfile failed: $!" if system("7za x $targetfile.7z");
+        } else {
+	    unlink $targetfile;
         }
-        else {
-            print "($numfiles) recompress";
-            my $cmd;
-            if ( $targetfile =~ m/\.bz2$/ ) {
-                $cmd = "bzcat @{$target{$targetfile}} | bzip2 -9 > $tmpfile";
-            }
-            else { $cmd = "zcat @{$target{$targetfile}} | gzip -9 > $tmpfile"; }
+        my $cmd;
 
-            die("creation of $tmpfile failed: $!") if system($cmd);
+            if ( $target{$targetfile}[0] =~ m/\.bz2$/ ) { $cmd = 'bzcat'; } else { $cmd = 'zcat'; }
+            $cmd .= " @{$target{$targetfile}} >> $targetfile";
+            die("extract failed: $!") if system($cmd);
+
+	    unlink("$targetfile.7z");
+            die("creation of $tmpfile failed: $!") if system("$compress7z $tmpfile $targetfile");
             die("$tmpfile too small") if -s $tmpfile < 100;
-            safe_rename( $tmpfile, $targetfile );
-            foreach my $file ( @{ $target{$targetfile} } ) {
-                ( $file ne $targetfile ) && safe_unlink($file);
-            }
+            safe_rename( $tmpfile, "$targetfile.7z" );
+                safe_unlink($targetfile, @{ $target{$targetfile} } );
             print "\n";
-        }
     }
     chdir($olddir);
 }
@@ -73,5 +65,6 @@ sub safe_rename {
 
 sub safe_unlink {
     my (@files) = @_;
+
     unlink(@files) || die("unlink(@files) failed: $!");
 }
