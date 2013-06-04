@@ -1,7 +1,7 @@
 #!/bin/sh -e
 # $Id: push,v 1.74 2008/11/13 22:17:46 abs Exp $
 
-NHOSTS="iris.absd.org onyx.absd.org angus.absd.org cerberus.social-events.net root@jeeves.deurmekaar.com"
+NHOSTS="iris.absd.org onyx.absd.org angus.absd.org root@jeeves.deurmekaar.com"
 # muon.mono.org mail.scguk.com iota.absd.org 
 args=$(getopt Na:chloOqrs:ntv $*)
 if [ $? != 0 ]; then
