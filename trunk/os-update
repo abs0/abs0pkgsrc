@@ -61,7 +61,7 @@ opts:   -X     Exclude X distribution
 fi
 
 if [ -n "$opt_s" ] ; then
-    if ! nbbuild $opt_u -t $VERSION ; then
+    if ! nice -n 20 nbbuild $opt_u -t $VERSION ; then
 	echo nbbuild failed
 	exit 1
     fi
@@ -106,6 +106,8 @@ extract()
 
     if [ -n "$opt_d" -o ! -d $DESTDIR/etc ] ; then
 	extract_etc=1
+    else
+	extract_etc=
     fi
 
     if [ -n "$extract_etc" ] ; then
