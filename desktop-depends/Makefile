@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.22
+DISTNAME=	desktop-depends-1.23
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,7 +17,7 @@ META_PACKAGE=	yes
 DEPENDS+= opera>0:../../www/opera
 .endif
 DEPENDS+= firefox>0:../../www/firefox
-DEPENDS+= fluxbox>0:../../wm/fluxbox
+DEPENDS+= enlightenment>0:../../wm/enlightenment
 
 .if ${X11_TYPE} == "modular"
 DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
