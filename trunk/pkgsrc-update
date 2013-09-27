@@ -415,7 +415,7 @@ fi
 PKG_CHK_FLAGS="$PKG_CHK_FLAGS -ak"
 
 echo "pkg_chk $PKG_CHK_FLAGS..."
-nice pkg_chk $PKG_CHK_FLAGS < /dev/null || true
+nice -n 20 pkg_chk $PKG_CHK_FLAGS < /dev/null || true
 if [ ! -n "$opt_b" ] ; then
     echo "Update pkg_summary.bz2"
     ( cd $PKGBINDIR && 
