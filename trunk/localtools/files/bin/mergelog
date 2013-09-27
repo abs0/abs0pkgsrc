@@ -21,9 +21,14 @@ sub mergedir {
         closedir(DIR);
     }
     foreach my $file (@files) {
+        my ( $base, $month, $extra, $ext );
+        if ($file =~ /^(.+\D\d{4}-?)(\d\d)(.*)(.bz2|.gz|.7z)$/){
+          ( $base, $month, $extra, $ext ) = ( $1, $2, $3, $4 );
+	} elsif ($file =~ /^(.+\D\d{4}-?)(\d\d)(\d+)$/) {
+          ( $base, $month, $extra, $ext ) = ( $1, $2, $3, '' );
+	} else {
         die("Unparsable filename '$file'")
-          if $file !~ /^(.+\D\d{4}-?)(\d\d)(.*)(.bz2|.gz|.7z)$/;
-        my ( $base, $month, $extra, $ext ) = ( $1, $2, $3, $4 );
+	}
         my $targetfile = "$base$month";
         if ( $file ne "$targetfile.7z" ) {
             push( @{ $target{$targetfile}{$ext} }, $file );
@@ -42,9 +47,10 @@ sub mergedir {
             my @files = @{ $target{$targetfile}{$ext} };
             my $cmd;
 
-            if    ( $ext =~ m/\.bz2$/ ) { $cmd = 'bzcat'; }
-            elsif ( $ext =~ m/\.gz$/ )  { $cmd = 'zcat'; }
-            elsif ( $ext =~ m/\.7z$/ )  { $cmd = '7zcat'; }
+            if    ( $ext eq '.bz2' ) { $cmd = 'bzcat'; }
+            elsif ( $ext eq '.gz' )  { $cmd = 'zcat'; }
+            elsif ( $ext eq '.7z' )  { $cmd = '7zcat'; }
+            elsif ( $ext eq '' )  { $cmd = 'cat'; }
             else { die "Do not know how to extract '$ext'" }
             $cmd .= " @files >> $targetfile";
             die("extract failed: $!") if system($cmd);
