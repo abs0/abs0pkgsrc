@@ -12,10 +12,11 @@ VERSION=$(case "$VERSION" in
     *) echo $VERSION | sed 's/\..*//' ;;
 esac)
 
-while getopts Cht:uv f; do
+while getopts Chit:uv f; do
   case $f in
 	C) VERSION=current	;;
 	h) opt_h=1		;;
+	i) opt_i=1		;;
 	t) VERSION="$OPTARG"	;;
 	u) opt_u=-u		;;
 	v) opt_v=1		;;
@@ -28,6 +29,7 @@ if [ -n "$opt_h" ] ; then
 Usage: nbbuild [opts] [arch ...]
 [opts]	-C     Build 'current' directory
 	-h     This help
+	-i     Build iso-image
 	-t tag Build 'tag' directory
 	-u     MKUPDATE=yes
 	-v     Verbose (display build log to stdout)
@@ -67,7 +69,10 @@ build()
 	    -O $OBJBASE/objdir \
 	    -T $OBJBASE/tooldir \
 	    -R $OBJBASE/releasedir"
-    BUILD="$BUILDSH -U $opt_u release iso-image"
+    BUILD="$BUILDSH -U $opt_u release"
+    if [ -n "$opt_i" ]; then
+        BUILD="$BUILD iso-image"
+    fi
     for extra_kernel in $EXTRA_KERNELS; do
 	BUILD="$BUILD kernel=$extra_kernel"
     done
@@ -94,7 +99,9 @@ build()
 	copy_compress $f $ARCHDIR/$(echo $f|sed "s/\.tgz$/.$DISTFORMAT/")
     done
 
-    cp $OBJBASE/releasedir/images/*.iso $ARCHDIR
+    if [ -n "$opt_i" ]; then
+      cp $OBJBASE/releasedir/images/*.iso $ARCHDIR
+    fi
 
     echo
 
