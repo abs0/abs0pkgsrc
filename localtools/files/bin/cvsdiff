@@ -41,7 +41,7 @@ sub parse_commit_messages {
         if ( $line =~ /^\.$/ ) { last; }
         while ( $line =~ /^cvs rdiff/ ) {
             my $rest;
-            if ( $line !~ /(cvs rdiff( -kk) -r\S+ -r\S+\s+\S+)\s*(.*)/ ) {
+            if ( $line !~ /(cvs rdiff( -u|-kk) -r\S+ -r\S+\s+\S+)\s*(.*)/ ) {
                 print "** Unable to parse $line **";
                 $fatal = 1;
                 last;
@@ -61,11 +61,11 @@ sub parse_commit_messages {
     }
     foreach my $line (@lines) {
         if ( $opt{m} ) {
-            $line =~ s/rdiff( -kk)?/up -kk/;
+            $line =~ s/rdiff( -u|-kk)?/up -kk/;
             $line =~ s/-r/-j/g;
             $line =~ s# $sub/# #g;
         }
-        else { $line =~ s/rdiff/rdiff -u/; }
+        else { $line =~ s/rdiff( -u|-kk)/rdiff -u -kk/; }
     }
     if ($fatal) { exit 1; }
     if ( $opt{v} ) { print "----\n", join( ";\n", @lines ), "\n"; }
