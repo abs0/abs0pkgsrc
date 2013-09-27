@@ -2,7 +2,7 @@
 # $Id: push,v 1.74 2008/11/13 22:17:46 abs Exp $
 
 NHOSTS="iris.absd.org onyx.absd.org angus.absd.org root@jeeves.deurmekaar.com"
-# muon.mono.org mail.scguk.com iota.absd.org 
+# muon.mono.org mail.scguk.com iota.absd.org root@jeeves.deurmekaar.com"
 args=$(getopt Na:chloOqrs:ntv $*)
 if [ $? != 0 ]; then
     opt_h=1
@@ -33,9 +33,7 @@ while [ $# != 0 ]; do
     esac
     shift
 done
-if [ -z "$HOSTS" ] ; then
-    HOSTS="$HOSTS $@"
-fi
+HOSTS="$HOSTS $@"
 if [ -n "$opt_h" -o -z "$HOSTS" ]; then
     cat << END
 Usage: push [opts] host [host2...]
