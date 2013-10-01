@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tt-depends-1.03
+DISTNAME=	tt-depends-1.04
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -31,7 +31,8 @@ DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
 # DEPENDS+= p5-YAML>0:../../textproc/p5-YAML
 # DEPENDS+= p5-Catalyst-Devel>0:../../www/p5-Catalyst-Devel
 # DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
-# DEPENDS+= ap24-fcgid>0:../../www/ap2-fcgid
+
+DEPENDS+= ap24-fcgid>0:../../www/ap2-fcgid
 
 # Needed by additional scripts
 DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
