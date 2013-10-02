@@ -92,7 +92,7 @@ sub db_backup {
 sub db_list {
     my (@dbs);
     foreach my $line ( run_cmd('psql -lt') ) {
-        push( @dbs, $1 ) if $line =~ /^\s*(\S+)\s*\|/ && $1 ne 'template0';
+        push( @dbs, $1 ) if $line =~ /^\s(\S+)\s*\|/ && $1 ne 'template0';
     }
     die 'No databases found' unless @dbs;
     sort @dbs;
