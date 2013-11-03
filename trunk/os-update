@@ -122,36 +122,46 @@ extract()
     [ -d kernels ] &&		run "mv kernels kernels.old"
     				run "mkdir -p kernels"
 
-    for tarfile in $EXTRACT_TARFILES ; do
-	case "$tarfile" in
-	    */kern-*)
-		kern=$(echo $tarfile | sed -e 's:.*/kern-::' -e 's:\.t.z$::')
-				run "cd kernels && tar xzpf $tarfile"
-				run "mv kernels/netbsd kernels/$kern"
-				run "gzip -9 kernels/$kern"
-		;;
-	    *)
-				run "tar xzpf $tarfile"
-		;;
-	esac
+    # Must extract kernel first
+    for tarfile in "$(echo $TARFILES | fmt 1 | grep '/kern-[^/]*$')" ; do
+        kern=$(echo $tarfile | sed -e 's:.*/kern-::' -e 's:\.t.z$::')
+                        run "cd kernels && tar xzpf $tarfile"
+                        run "mv kernels/netbsd kernels/$kern"
+                        run "gzip -9 kernels/$kern"
     done
 
     if [ -z "$opt_n" -a ! -f $KERNEL ] ; then
 	echo "**** Unable to locate $KERNEL"
 	KERNEL=kernels/GENERIC.gz
     fi
+
+    case $KERNEL in
+      *DOM0*)
+        DOM0_KERNEL=$KERNEL
+        KERNEL=kernels/GENERIC.gz
+        ;;
+      *)
+        DOM0_KERNEL=kernels/XEN3_DOM0.gz
+        ;;
+    esac
+
 				run "cp $KERNEL netbsd.new"
 				run "mv netbsd.new netbsd"
     if [ -f netbsd.dom0 ] ; then
-	run "gzcat kernels/XEN3_DOM0.gz > netbsd.dom0.new"
+	run "gzcat $DOM0_KERNEL > netbsd.dom0.new"
 	run "mv netbsd.dom0.new netbsd.dom0"
     fi
+
+    for tarfile in "$(echo $TARFILES | fmt 1 | grep -v '/kern-[^/]*$')" ; do
+                        run "tar xzpf $tarfile"
+    done
+
 				run "usr/sbin/postinstall -s $TARDIR/etc.t?z -d $DESTDIR fix || true"
 				run "(cd dev && ./MAKEDEV all)"
 				run "rm -rf kernels.old"
 
     if [ -n "$extract_etc" ] ; then
-				run "cd / ; pax -rvw bin/tcsh etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db bin/tcsh $DESTDIR"
+				run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db $DESTDIR"
     fi
 
     if [ ! -f boot ] ; then
