@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	base-depends-1.23
+DISTNAME=	base-depends-1.24
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,7 +25,7 @@ DEPENDS+= p5-ack>0:../../textproc/p5-ack
 
 # Source controls
 DEPENDS+= subversion-base>0:../../devel/subversion-base
-DEPENDS+= git>0:../../devel/git
+DEPENDS+= git-base>0:../../devel/git-base
 
 # Net tools
 DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
