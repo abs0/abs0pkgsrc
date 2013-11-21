@@ -52,7 +52,7 @@ PS1=
 [ -n "$WINDOW" ] && PS1="$WINDOW:"
 [ $UID != 0 ] && PS1="${USER}@${PS1}"
 if [ -n "$ZSH_VERSION" ] ; then
-    PS1="(${PS1}%m %B%~%b)%h%# "
+    PS1="(${PS1}%m %B%3~%b)%h%# "
 elif [ -n "$BASH_VERSION" ] ; then
     PS1="(${PS1}\h \w)\!\\$ "
 else # ksh/sh

@@ -11,7 +11,7 @@ COMMENT=	Meta package for tt depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql92>0:../../databases/postgresql92
+DEPENDS+= postgresql93>0:../../databases/postgresql93
 
 DEPENDS+= p5-Catalyst-Runtime>0:../../www/p5-Catalyst-Runtime
 #
