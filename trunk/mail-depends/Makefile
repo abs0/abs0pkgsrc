@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	mail-depends-1.04
+DISTNAME=	mail-depends-1.05
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -19,7 +19,7 @@ DEPENDS+= imapsync>0:../../mail/imapsync
 DEPENDS+= roundcube>0:../../mail/roundcube
 DEPENDS+= spawn-fcgi>0:../../www/spawn-fcgi
 
-DEPENDS+= php54-pgsql>0:../../databases/php-pgsql
-DEPENDS+= ap24-php54>0:../../www/ap-php
+DEPENDS+= php55-pgsql>0:../../databases/php-pgsql
+DEPENDS+= ap24-php55>0:../../www/ap-php
 
 .include "../../mk/bsd.pkg.mk"
