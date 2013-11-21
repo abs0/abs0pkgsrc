@@ -110,24 +110,23 @@ extract()
 	extract_etc=
     fi
 
+    KERN_TARFILES="$(echo $TARFILES | fmt 1 | grep '/kern-[^/]*$')"
     if [ -n "$extract_etc" ] ; then
-	EXTRACT_TARFILES="$TARFILES"
+	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | grep -v '/kern-[^/]*$')"
     else
-	EXTRACT_TARFILES="$(echo $TARFILES | fmt 1 | grep -v '/etc\.t.z$')"
+	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | egrep -v '/(kern-|etc\.)[^/]*$')"
     fi
 
-    [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
-    [ -f netbsd.dom0 ] &&	run "ln -f netbsd.dom0 onetbsd.dom0"
     [ -d kernels.old ] &&	run "rm -rf kernels.old"
     [ -d kernels ] &&		run "mv kernels kernels.old"
     				run "mkdir -p kernels"
 
     # Must extract kernel first
-    for tarfile in "$(echo $TARFILES | fmt 1 | grep '/kern-[^/]*$')" ; do
+    for tarfile in $KERN_TARFILES; do
         kern=$(echo $tarfile | sed -e 's:.*/kern-::' -e 's:\.t.z$::')
-                        run "cd kernels && tar xzpf $tarfile"
-                        run "mv kernels/netbsd kernels/$kern"
-                        run "gzip -9 kernels/$kern"
+                        	run "cd kernels && tar xzpf $tarfile"
+                        	run "mv kernels/netbsd kernels/$kern"
+                        	run "gzip -9 kernels/$kern"
     done
 
     if [ -z "$opt_n" -a ! -f $KERNEL ] ; then
@@ -145,15 +144,17 @@ extract()
         ;;
     esac
 
+    [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
 				run "cp $KERNEL netbsd.new"
 				run "mv netbsd.new netbsd"
+    [ -f netbsd.dom0 ] &&	run "ln -f netbsd.dom0 onetbsd.dom0"
     if [ -f netbsd.dom0 ] ; then
-	run "gzcat $DOM0_KERNEL > netbsd.dom0.new"
-	run "mv netbsd.dom0.new netbsd.dom0"
+				run "gzcat $DOM0_KERNEL > netbsd.dom0.new"
+				run "mv netbsd.dom0.new netbsd.dom0"
     fi
 
-    for tarfile in "$(echo $TARFILES | fmt 1 | grep -v '/kern-[^/]*$')" ; do
-                        run "tar xzpf $tarfile"
+    for tarfile in $OTHER_TARFILES ; do
+                        	run "tar xzpf $tarfile"
     done
 
 				run "usr/sbin/postinstall -s $TARDIR/etc.t?z -d $DESTDIR fix || true"
