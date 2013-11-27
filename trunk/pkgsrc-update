@@ -281,11 +281,13 @@ fi
 
 # Update source tree & rebuild vulnerability-list as needed
 #
-if [ $(id -u) != 0 ] ; then
-    if [ -n "$opt_u" ] ; then
-	cvsu pkgsrc
-	as_root download-vulnerability-list || true
+if [ -n "$opt_u" ] ; then
+    if [ $(id -u) != 0 ] ; then
+        cvsu pkgsrc
+    else
+        echo "Skipping 'cvsu pkgsrc' as root"
     fi
+    as_root download-vulnerability-list || true
 fi
 
 if [ $(uname) = NetBSD ] ; then
@@ -298,6 +300,11 @@ fi
 if [ $# != 0 ] ; then
     determine_PKGBINDIR
     stream_to_remote_hosts "$@"
+    exit
+fi
+
+if [ -n "$opt_r" -a $(id -u) != 0 ] ; then
+    as_root $0 "$@"
     exit
 fi
 
