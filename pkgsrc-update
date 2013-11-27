@@ -13,6 +13,7 @@ export TMPDIR=/tmp
 start=$(date +%s)
 umask 022
 
+saved_args="$@"
 args=$(getopt bhklrsuvD:IU:P: $*)
 if [ $? != 0 ]; then
     opt_h=1
@@ -304,7 +305,7 @@ if [ $# != 0 ] ; then
 fi
 
 if [ -n "$opt_r" -a $(id -u) != 0 ] ; then
-    as_root $0 "$@"
+    as_root $0 "$saved_args"
     exit
 fi
 
