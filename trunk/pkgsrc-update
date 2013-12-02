@@ -89,16 +89,16 @@ determine_PKGBINDIR()
 	PKGBINDIR=$opt_P/All
     elif [ -d /pkgsrc/pkgtools/pkg_chk ] ; then
 	PKGBINDIR=$(show_var PACKAGES)
-	# XXX Ugly hack for when cpuflags not installed - just try to
-	# find any directory which matches
-	if [ ! -d $PKGBINDIR ] ; then
-	    echo "* Unable to locate $PKGBINDIR"
-	    PKGBINDIR=$(echo $PKGBINDIR | sed 's/5\.99\.[0-9]*/5.1/')
-	    if [ ! -d $PKGBINDIR ] ; then
-		PKGBINDIR=$(echo $PKGBINDIR* | sed 's/ .*//')
-	    fi
-	    echo "* Using $PKGBINDIR"
-	fi
+	while [ ! -d $PKGBINDIR ] ; do
+	    echo "* Trying $PKGBINDIR"
+            # Try stripping off lowest OS version component
+            test_PKGBINDIR=$(echo $PKGBINDIR | sed 's/\.[0-9][0-9]*-/-/')
+            if [ $test_PKGBINDIR = $PKGBINDIR ] ; then
+	        echo "** Unable to locate a PKGBINDIR"
+                break;
+            fi
+            PKGBINDIR=$test_PKGBINDIR
+        done
 	PKGBINDIR=$PKGBINDIR/All
     else
 	PKGBINDIR=.
