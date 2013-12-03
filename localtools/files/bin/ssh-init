@@ -4,8 +4,8 @@
 # Setup ssh environment/agent to use consistent ssh socket.
 #
 # Add to startup scripts
-# t?csh:     if ( -f /usr/pkg/bin/ssh-init ) eval `ssh-init -c`
 # {ba,k,}sh: [ -f /usr/pkg/bin/ssh-init ] && eval $(ssh-init -s)
+# t?csh:     if ( -f /usr/pkg/bin/ssh-init ) eval `ssh-init -c`
 
 auth_sock_canonify()
     {
@@ -110,7 +110,7 @@ Usage: ssh-init [-hv]
 opts:	-c Output suitable for a csh shell to eval
 	-f Force key input
 	-h This help
-        -r Run as remote
+        -r Run as remote (just setup socket location)
 	-s Output suitable for a Bourne shell to eval (default)
 	-p Print out the value of SSH_AUTH_SOCK
 	-v Verbose
