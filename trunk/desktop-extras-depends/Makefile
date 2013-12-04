@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.27
+DISTNAME=	desktop-extras-depends-1.28
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -49,7 +49,6 @@ DEPENDS+= transcode>0:../../multimedia/transcode
 
 # Misc low priority
 DEPENDS+= rapidsvn>0:../../devel/rapidsvn
-DEPENDS+= calibre>0:../../misc/calibre
 DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
