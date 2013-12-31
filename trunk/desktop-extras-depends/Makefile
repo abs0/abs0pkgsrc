@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.28
+DISTNAME=	desktop-extras-depends-1.29
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,6 +17,7 @@ DEPENDS+= encodings>0:../../fonts/encodings
 # Core desktop tools
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= thunderbird>0:../../mail/thunderbird
+DEPENDS+= okular>0:../../print/okular
 
 # Misc desktop packages
 DEPENDS+= filezilla>0:../../net/filezilla
