@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.29
+DISTNAME=	desktop-extras-depends-1.30
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,7 +25,7 @@ DEPENDS+= icedtea-web>0:../../www/icedtea-web
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= xosd>0:../../x11/xosd
 
-DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
+DEPENDS+= synergy>0:../../net/synergy
 
 DEPENDS+= transmission-qt>0:../../net/transmission-qt
 
@@ -49,12 +49,10 @@ DEPENDS+= mplayer>0:../../multimedia/mplayer
 DEPENDS+= transcode>0:../../multimedia/transcode
 
 # Misc low priority
-DEPENDS+= rapidsvn>0:../../devel/rapidsvn
 DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
-DEPENDS+= aircrack-ng>0:../../wip/aircrack-ng
 DEPENDS+= xcowsay>0:../../games/xcowsay
 DEPENDS+= handbrake>0:../../multimedia/handbrake
 DEPENDS+= oneko>0:../../x11/oneko

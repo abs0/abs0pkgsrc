@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.23
+DISTNAME=	desktop-depends-1.25
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,7 +17,7 @@ META_PACKAGE=	yes
 DEPENDS+= opera>0:../../www/opera
 .endif
 DEPENDS+= firefox>0:../../www/firefox
-DEPENDS+= enlightenment>0:../../wm/enlightenment
+DEPENDS+= fluxbox>0:../../wm/fluxbox
 
 .if ${X11_TYPE} == "modular"
 DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
@@ -30,18 +30,17 @@ DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
-DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= adobe-flash-plugin>=11:../../multimedia/adobe-flash-plugin11
-DEPENDS+= meld>0:../../devel/meld
-DEPENDS+= wpa_gui>0:../../net/wpa_gui
-DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
 DEPENDS+= gimp>0:../../graphics/gimp
+DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
+DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= qiv>0:../../graphics/qiv
-DEPENDS+= pidgin>0:../../chat/pidgin
+DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
+DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
-DEPENDS+= synergy>0:../../net/synergy
 
 # Lower priority
+DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
 DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>=2:../../multimedia/vlc2
 DEPENDS+= wireshark>0:../../net/wireshark
