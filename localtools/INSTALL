@@ -25,7 +25,7 @@ POST-INSTALL)
 	cat >> /etc/profile <<END
 # Added by pkgsrc/localtools
 ENV=/usr/pkg/share/local/profile
-[ -n "$BASH_VERSION" ] && . /usr/pkg/share/local/profile
+[ -n "\$BASH_VERSION" ] && . \$ENV
 END
     fi
 
