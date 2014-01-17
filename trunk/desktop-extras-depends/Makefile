@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.30
+DISTNAME=	desktop-extras-depends-1.31
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -46,10 +46,8 @@ DEPENDS+= kdenlive>0:../../multimedia/kdenlive
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer
-DEPENDS+= transcode>0:../../multimedia/transcode
 
 # Misc low priority
-DEPENDS+= mlview>0:../../editors/mlview
 DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
