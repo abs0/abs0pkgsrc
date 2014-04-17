@@ -9,6 +9,10 @@ PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
 ENV=
 
 export TMPDIR=/tmp
+export UPDATE_TARGET=package-install
+if [ -n "$PKG_PATH" ]; then
+    unset PKG_PATH
+fi
 
 start=$(date +%s)
 umask 022
