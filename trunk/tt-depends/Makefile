@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	tt-depends-1.05
+DISTNAME=	tt-depends-1.06
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -23,10 +23,11 @@ DEPENDS+= p5-Catalyst-Authentication-Store-DBIx-Class>0:../../www/p5-Catalyst-Au
 DEPENDS+= p5-Catalyst-View-TT>0:../../www/p5-Catalyst-View-TT
 DEPENDS+= p5-Catalyst-Controller-FormBuilder>0:../../www/p5-Catalyst-Controller-FormBuilder
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
+DEPENDS+= p5-Catalyst-Engine-HTTP-Prefork>0:../../www/p5-Catalyst-Engine-HTTP-Prefork
+DEPENDS+= p5-Template-Plugin-Number-Format>0:../../textproc/p5-Template-Plugin-Number-Format
 
 # DEPENDS+= p5-Catalyst-Plugin-ConfigLoader>0:../../www/p5-Catalyst-Plugin-ConfigLoader
 # DEPENDS+= p5-Catalyst-Plugin-Static-Simple>0:../../www/p5-Catalyst-Plugin-Static-Simple
-# DEPENDS+= p5-Template-Plugin-Number-Format>0:../../textproc/p5-Template-Plugin-Number-Format
 # DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 # DEPENDS+= ap24-fcgid>0:../../www/ap2-fcgid
 
