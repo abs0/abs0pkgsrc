@@ -57,7 +57,7 @@ build()
     OBJBASE=/var/obj/nbbuild-$VERSION-$MACHINE
     ARCHDIR=$NBHOME/arch/$VERSION-$MACHINE-$LASTMOD
     LOG=$OBJBASE/nbbuild.log
-    EXTRA_KERNELS="$(ls sys/arch/$MACHINE/conf | grep '^_')"
+    EXTRA_KERNELS="$(ls sys/arch/$MACHINE/conf | grep '^_' || true)"
 
     if [ -z "$opt_u" ]; then
 	rm -rf $OBJBASE
