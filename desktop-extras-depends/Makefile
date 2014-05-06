@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.32
+DISTNAME=	desktop-extras-depends-1.33
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -36,6 +36,7 @@ DEPENDS+= simh>0:../../emulators/simh
 
 # Audio/Video
 DEPENDS+= abcde>0:../../audio/abcde
+DEPENDS+= amarok>0:../../audio/amarok
 DEPENDS+= audacity>0:../../audio/audacity
 DEPENDS+= dvdrip>0:../../multimedia/dvdrip
 DEPENDS+= ffplay>0:../../multimedia/ffplay
