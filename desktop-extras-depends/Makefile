@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.33
+DISTNAME=	desktop-extras-depends-1.34
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -33,6 +33,7 @@ DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 DEPENDS+= dc-tools>0:../../sysutils/dc-tools
 DEPENDS+= gxemul>0:../../emulators/gxemul
 DEPENDS+= simh>0:../../emulators/simh
+DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
 DEPENDS+= abcde>0:../../audio/abcde

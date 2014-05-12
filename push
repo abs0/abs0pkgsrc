@@ -83,7 +83,7 @@ if [ -n "$opt_q" ] ; then
     ROOT=$ROOT/pkgsrc
     EXCL="$EXCL /distfiles" # XXX fix to exclude others
 else
-    EXCL="$EXCL /export /pkgsrc/distfiles"
+    EXCL="$EXCL /current /export /pkgsrc/distfiles"
 
     if [ -z "$opt_s" ] ; then
 	EXCL="$EXCL $(ls $ROOT|egrep -v '^(arch|pkgsrc)$' || true)"
