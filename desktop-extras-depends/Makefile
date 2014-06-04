@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.34
+DISTNAME=	desktop-extras-depends-1.35
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,6 +18,7 @@ DEPENDS+= encodings>0:../../fonts/encodings
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= thunderbird>0:../../mail/thunderbird
 DEPENDS+= okular>0:../../print/okular
+DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 
 # Misc desktop packages
 DEPENDS+= filezilla>0:../../net/filezilla
@@ -27,9 +28,6 @@ DEPENDS+= xosd>0:../../x11/xosd
 
 DEPENDS+= synergy>0:../../net/synergy
 
-DEPENDS+= transmission-qt>0:../../net/transmission-qt
-
-DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 DEPENDS+= dc-tools>0:../../sysutils/dc-tools
 DEPENDS+= gxemul>0:../../emulators/gxemul
 DEPENDS+= simh>0:../../emulators/simh
