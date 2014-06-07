@@ -1,6 +1,4 @@
-# $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
-
-DISTNAME=	base-depends-1.24
+DISTNAME=	base-depends-1.25
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -37,6 +35,7 @@ DEPENDS+= shmux>0:../../sysutils/shmux			# Parallel ssh
 DEPENDS+= ttcp>0:../../benchmarks/ttcp
 DEPENDS+= mosh>0:../../net/mosh				# remote shell
 DEPENDS+= openvpn>0:../../net/openvpn			# VPN
+DEPENDS+= grive>0:../../net/grive			# Google Drive
 
 # Archivers/convertors
 DEPENDS+= p7zip>0:../../archivers/p7zip
