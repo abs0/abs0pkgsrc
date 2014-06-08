@@ -22,8 +22,8 @@ DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
 DEPENDS+= p5-ack>0:../../textproc/p5-ack
 
 # VM
-DEPENDS+= sysutils/xenkernel42>0:../../sysutils/xenkernel42
-DEPENDS+= sysutils/xentools42>0:../../sysutils/xentools42
+DEPENDS+= xenkernel42>0:../../sysutils/xenkernel42
+DEPENDS+= xentools42>0:../../sysutils/xentools42
 
 # Source controls
 DEPENDS+= subversion-base>0:../../devel/subversion-base
