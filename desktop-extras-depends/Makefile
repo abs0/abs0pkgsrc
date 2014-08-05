@@ -35,7 +35,6 @@ DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
 DEPENDS+= abcde>0:../../audio/abcde
-DEPENDS+= amarok>0:../../audio/amarok
 DEPENDS+= audacity>0:../../audio/audacity
 DEPENDS+= dvdrip>0:../../multimedia/dvdrip
 DEPENDS+= ffplay>0:../../multimedia/ffplay
@@ -48,7 +47,6 @@ DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer
 
 # Misc low priority
-DEPENDS+= sqlitebrowser>0:../../databases/sqlitebrowser
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= inkscape>0:../../graphics/inkscape
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
