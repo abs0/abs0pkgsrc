@@ -1,4 +1,4 @@
-#!/usr/pkg/bin/perl
+#!/usr/bin/env perl
 # $Id: mergelog,v 1.5 2007/01/31 17:07:02 abs Exp $
 
 # Merge split webserver logs
@@ -7,8 +7,11 @@ use strict;
 use warnings;
 use Cwd;
 
-my $tmpfile    = "TMP.mergelog.$$.7z";
-my $compress7z = "7za a -t7z -m0=lzma -mx=9 -mfb=64 -md=64m -ms=on";
+my $tmpfile = "TMP.mergelog.$$.7z";
+
+# Grr, bloody Ubuntu has to be different with 7rz
+my $compress7z = ( ( -f '/usr/bin/7zr' ) ? '7zr' : '7za' )
+  . ' a -t7z -m0=lzma -mx=9 -mfb=64 -md=64m -ms=on';
 
 sub mergedir {
     my ( $dir, @files ) = @_;
@@ -22,13 +25,15 @@ sub mergedir {
     }
     foreach my $file (@files) {
         my ( $base, $month, $extra, $ext );
-        if ($file =~ /^(.+\D\d{4}-?)(\d\d)(.*)(.bz2|.gz|.7z)$/){
-          ( $base, $month, $extra, $ext ) = ( $1, $2, $3, $4 );
-	} elsif ($file =~ /^(.+\D\d{4}-?)(\d\d)(\d+)$/) {
-          ( $base, $month, $extra, $ext ) = ( $1, $2, $3, '' );
-	} else {
-        die("Unparsable filename '$file'")
-	}
+        if ( $file =~ /^(.+\D\d{4}-?)(\d\d)(.*)(.bz2|.gz|.7z)$/ ) {
+            ( $base, $month, $extra, $ext ) = ( $1, $2, $3, $4 );
+        }
+        elsif ( $file =~ /^(.+\D\d{4}-?)(\d\d)-?(\d+)$/ ) {
+            ( $base, $month, $extra, $ext ) = ( $1, $2, $3, '' );
+        }
+        else {
+            die("Unparsable filename '$file'");
+        }
         my $targetfile = "$base$month";
         if ( $file ne "$targetfile.7z" ) {
             push( @{ $target{$targetfile}{$ext} }, $file );
@@ -50,10 +55,10 @@ sub mergedir {
             if    ( $ext eq '.bz2' ) { $cmd = 'bzcat'; }
             elsif ( $ext eq '.gz' )  { $cmd = 'zcat'; }
             elsif ( $ext eq '.7z' )  { $cmd = '7zcat'; }
-            elsif ( $ext eq '' )  { $cmd = 'cat'; }
-            else { die "Do not know how to extract '$ext'" }
+            elsif ( $ext eq '' )     { $cmd = 'cat'; }
+            else                     { die "Do not know how to extract '$ext'" }
             $cmd .= " @files >> $targetfile";
-            die("extract failed: $!") if system($cmd);
+            die("extract failed ($cmd): $!") if system($cmd);
         }
 
         unlink("$targetfile.7z");
@@ -62,8 +67,8 @@ sub mergedir {
         die("$tmpfile too small") if -s $tmpfile < 100;
         safe_rename( $tmpfile, "$targetfile.7z" );
         foreach my $ext ( keys %{ $target{$targetfile} } ) {
-            safe_unlink( $targetfile, @{ $target{$targetfile}{$ext} });
-}
+            safe_unlink( $targetfile, @{ $target{$targetfile}{$ext} } );
+        }
         print "\n";
     }
     chdir($olddir);
