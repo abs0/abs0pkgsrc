@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.36
+DISTNAME=	desktop-extras-depends-1.37
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -36,7 +36,6 @@ DEPENDS+= tme>0:../../emulators/tme
 # Audio/Video
 DEPENDS+= abcde>0:../../audio/abcde
 DEPENDS+= audacity>0:../../audio/audacity
-DEPENDS+= dvdrip>0:../../multimedia/dvdrip
 DEPENDS+= ffplay2>0:../../multimedia/ffplay2
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
@@ -48,6 +47,7 @@ DEPENDS+= mplayer>0:../../multimedia/mplayer
 DEPENDS+= pgadmin3>0:../../databases/pgadmin3
 
 # Misc low priority
+DEPENDS+= calibre>0:../../misc/calibre
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= inkscape>0:../../graphics/inkscape
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
