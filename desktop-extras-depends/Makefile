@@ -27,7 +27,9 @@ DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= xosd>0:../../x11/xosd
 
 DEPENDS+= synergy>0:../../net/synergy
+DEPENDS+= pgadmin3>0:../../databases/pgadmin3
 
+# Emulators
 DEPENDS+= dc-tools>0:../../sysutils/dc-tools
 DEPENDS+= gxemul>0:../../emulators/gxemul
 DEPENDS+= simh>0:../../emulators/simh
@@ -44,7 +46,6 @@ DEPENDS+= kdenlive>0:../../multimedia/kdenlive
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer
-DEPENDS+= pgadmin3>0:../../databases/pgadmin3
 
 # Misc low priority
 DEPENDS+= calibre>0:../../misc/calibre
