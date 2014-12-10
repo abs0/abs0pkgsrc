@@ -27,7 +27,9 @@ DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= xosd>0:../../x11/xosd
 
 DEPENDS+= synergy>0:../../net/synergy
-DEPENDS+= pgadmin3>0:../../databases/pgadmin3
+
+# Uses wxGTK28 which conflicts with wxGTK30 needed by filezilla
+# DEPENDS+= pgadmin3>0:../../databases/pgadmin3
 
 # Emulators
 DEPENDS+= dc-tools>0:../../sysutils/dc-tools
