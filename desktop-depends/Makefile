@@ -42,7 +42,7 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 # Lower priority
 DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
 DEPENDS+= qemu>0:../../emulators/qemu
-DEPENDS+= vlc>=2:../../multimedia/vlc20
+DEPENDS+= vlc>=2:../../multimedia/vlc2
 DEPENDS+= wireshark>0:../../net/wireshark
 
 .include "../../mk/bsd.pkg.mk"
