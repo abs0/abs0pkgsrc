@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.35
+DISTNAME=	tickets-depends-1.36
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -35,6 +35,9 @@ DEPENDS+= p5-Term-ReadKey>0:../../devel/p5-Term-ReadKey
 DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
 DEPENDS+= p5-Crypt-OpenPGP>0:../../security/p5-Crypt-OpenPGP
+
+# Because python 2 and non ascii just... fails
+DEPENDS+= python33>0:../../lang/python33
 
 # Useful if editing
 DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# Useful while editing
