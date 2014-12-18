@@ -16,17 +16,22 @@ toggle_mute()
     esac
     }
 
+getvol()
+{
+mixerctl $DEV -n $VAR | sed 's/,.*//'
+}
+
 eval $(mixerctl $DEV -a | awk -F= /master=/'{print "VAR="$1}')
-VOL=$(mixerctl $DEV -n $VAR | sed 's/,.*//')
+VOL=$(getvol)
 case "$1" in
     "")
 	echo $VOL
 	exit
 	;;
     +)
-	VOL=$(($VOL + 1)) ;;
+	VOL=$(($VOL + 3)) ;;
     -)
-	VOL=$(($VOL - 8)) ;;
+	VOL=$(($VOL - 3)) ;;
     +* | -*)
 	VOL=$(($VOL + $1)) ;;
     mute)
@@ -39,4 +44,11 @@ if [ $VOL -lt 0 ] ; then
 elif [ $VOL -gt 255 ] ; then
     VOL=255
 fi
-mixerctl $DEV -w $VAR=$VOL
+mixerctl $DEV -w $VAR=$VOL > /dev/null
+
+# If we have a valid X display, try to show the current volume
+if [ -n "$DISPLAY" ]; then
+  PERCENTAGE=$(( 100 \* $(getvol) / 255 ))
+  pkill osd_cat
+  osd_cat -d 1 -p bottom -b percentage -o 22 -c green -P $PERCENTAGE
+fi
