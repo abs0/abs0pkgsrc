@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.58 2003/07/20 14:21:52 abs Exp $
 
-DISTNAME=	localtools-2.101
+DISTNAME=	localtools-2.102
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -29,7 +29,6 @@ SHAREFILES!=(cd files/share ; find * -type f | egrep -v '.svn|\.orig$$' )
 SHAREDIR=share/local
 USE_TOOLS+=	perl:run
 
-DEPENDS+=	p5-Digest-SHA1>0:../../security/p5-Digest-SHA1
 DEPENDS+=	optipng>0:../../graphics/optipng
 
 PLIST_SRC=	${WRKDIR}/PLIST
