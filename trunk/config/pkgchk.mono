@@ -70,7 +70,6 @@ mail/p5-MIME-Lite		*		# stig
 mail/p5-MIME-tools		*
 math/p5-Number-Latin		*		# used by link cgi script
 security/p5-Digest-MD5		*
-security/p5-Digest-SHA1		*		# wanted by live
 textproc/p5-Text-CSV-Hash	*
 textproc/p5-Text-Substitute	*		# Used by many cgi & systemconf
 textproc/p5-XML-Parser		*		# wanted by live
