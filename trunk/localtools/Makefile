@@ -26,8 +26,9 @@ BINSRC=bin
 BINSCRIPTS!=(cd files ; find ${BINSRC} -type f | egrep -v '.svn|\.orig$$' )
 SHAREFILES!=(cd files/share ; find * -type f | egrep -v '.svn|\.orig$$' )
 
-SHAREDIR=share/local
+SHAREDIR=	share/local
 USE_TOOLS+=	perl:run
+# Cannot easily use REPLACE_PERL as run before build against DESTDIR
 
 DEPENDS+=	optipng>0:../../graphics/optipng
 
