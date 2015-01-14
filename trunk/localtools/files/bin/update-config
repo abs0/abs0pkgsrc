@@ -78,7 +78,7 @@ if pkg_info -e munin-node > /dev/null; then
     fi
 fi
 
-if [ -f /dev/putter ] ; then
+if [ -c /dev/putter ] ; then
     chmod 660 /dev/putter
 fi
 
