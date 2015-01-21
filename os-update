@@ -13,7 +13,7 @@ if [ -d /opt/netbsd/arch ] ; then
 else
     FILEDIR=/home/netbsd/arch
 fi
-KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/).*//').gz
+KERNEL=kernels/$(sysctl -n kern.version|sed -n '1p'|sed -e 's/.*(//' -e 's/[.)].*//').gz
 VERSION=$(uname -r)
 MACHINE=$(uname -m)
 HOST=$(sysctl -n kern.hostname | sed 's:\..*::')
@@ -26,9 +26,10 @@ esac)
 
 start=$(date +%s)
 
-while getopts D:Xbd:fhk:nst:u f; do
+while getopts D:KXbd:fhk:nst:u f; do
     case $f in
 	D) opt_D="$OPTARG"; TARDIR="$OPTARG"	;;
+	K) opt_K=1				;;
 	X) opt_X=1				;;
 	b) opt_b=1				;;
 	d) opt_d="$OPTARG"; DESTDIR="$OPTARG"	;;
@@ -41,12 +42,13 @@ while getopts D:Xbd:fhk:nst:u f; do
 	u) opt_u=-u				;;
     esac
 done
-shift `expr $OPTIND - 1`
+shift $(expr $OPTIND - 1)
 
 if [ -n "$opt_h" ] ; then
 	echo "Usage: os-update [opts] [hosts]
 opts:   -D dir Read source tarfiles and script from dir, and delete after 
 opts:   -X     Exclude X distribution
+	-K     Just install kernels
 	-b     Install from binaries (default)
 	-d dir Full distribution (including etc set)
 	-f     Force (ignore value of /etc/release)
@@ -153,21 +155,24 @@ extract()
 				run "mv netbsd.dom0.new netbsd.dom0"
     fi
 
-    for tarfile in $OTHER_TARFILES ; do
+    if [ -z "$opt_K" ] ; then
+
+        for tarfile in $OTHER_TARFILES ; do
                         	run "tar xzpf $tarfile"
-    done
+        done
 
 				run "usr/sbin/postinstall -s $TARDIR/etc.t?z -d $DESTDIR fix || true"
 				run "(cd dev && ./MAKEDEV all)"
 				run "rm -rf kernels.old"
 
-    if [ -n "$extract_etc" ] ; then
+        if [ -n "$extract_etc" ] ; then
 				run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db $DESTDIR"
-    fi
+        fi
 
-    if [ ! -f boot ] ; then
+        if [ ! -f boot ] ; then
 				run "cp -p usr/mdec/boot boot"
 				echo "*** Run installboot, check ssh keys, rc.conf, fstab ***"
+        fi
     fi
 
     cleanup
