@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.27
+DISTNAME=	desktop-depends-1.28
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -35,7 +35,7 @@ DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= xzgv>0:../../graphics/xzgv
-DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
+DEPENDS+= tigervnc>0:../../net/tigervnc
 DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 
