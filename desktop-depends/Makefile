@@ -35,7 +35,6 @@ DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= xzgv>0:../../graphics/xzgv
-DEPENDS+= tigervnc>0:../../net/tigervnc
 DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 

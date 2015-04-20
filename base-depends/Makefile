@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.25
+DISTNAME=	base-depends-1.26
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -22,8 +22,9 @@ DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
 DEPENDS+= p5-ack>0:../../textproc/p5-ack
 
 # VM
-DEPENDS+= xenkernel42>0:../../sysutils/xenkernel42
-DEPENDS+= xentools42>0:../../sysutils/xentools42
+DEPENDS+= xenkernel45>0:../../sysutils/xenkernel45
+DEPENDS+= xentools45>0:../../sysutils/xentools45
+DEPENDS+= xe-guest-utilities>0:../../sysutils/xe-guest-utilities
 
 # Source controls
 DEPENDS+= subversion-base>0:../../devel/subversion-base
