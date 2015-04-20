@@ -58,4 +58,7 @@ DEPENDS+= xcowsay>0:../../games/xcowsay
 DEPENDS+= handbrake>0:../../multimedia/handbrake
 DEPENDS+= oneko>0:../../x11/oneko
 
+# fails
+# DEPENDS+= tigervnc>0:../../net/tigervnc
+
 .include "../../mk/bsd.pkg.mk"
