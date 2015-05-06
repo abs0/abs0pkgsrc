@@ -39,7 +39,7 @@ DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
 DEPENDS+= abcde>0:../../audio/abcde
-DEPENDS+= audacity>0:../../audio/audacity
+# DEPENDS+= audacity>0:../../audio/audacity # wxGTK28/30 conflict with filezilla
 DEPENDS+= ffplay2>0:../../multimedia/ffplay2
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
