@@ -37,10 +37,10 @@ export LC_COLLATE="C" # Avoid braindamage with [A-Z] matching 'a' (RHEL)
 export PAGER=less
 export TMPDIR=/tmp
 
-opsys=$(uname -s)
-osrev=$(uname -r | sed 's/[-_].*//')  # eg: Linux 2.6.18-194.26.1.el5
-ospro=$(uname -p)
-export PKG_PATH=/pkgsrc/packages/$opsys-$osrev-$ospro/All
+# opsys=$(uname -s)
+# osrev=$(uname -r | sed 's/[-_].*//')  # eg: Linux 2.6.18-194.26.1.el5
+# ospro=$(uname -p)
+# export PKG_PATH=/pkgsrc/packages/$opsys-$osrev-$ospro/All
 
 # Exit now if non interactive
 case $- in
