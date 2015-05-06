@@ -1,11 +1,32 @@
-#!/usr/pkg/bin/perl
+#!/usr/bin/env perl
 # $Id: mergelog,v 1.5 2007/01/31 17:07:02 abs Exp $
+# Free software - no warranty
 
-# Merge split webserver logs
-
+use Cwd;
+use Getopt::Long;
 use strict;
 use warnings;
-use Cwd;
+
+my $help_and_usage;
+my $dry_run;
+
+my $result = GetOptions(
+    'help'      => \$help_and_usage,
+    'dry-run|n' => \$dry_run,
+);
+
+if ( !$result || $help_and_usage || !@ARGV ) {
+    print qq{Usage: mergelog [opts] file [files..]
+
+options:
+ --dry-run        Show details but do not modify any files
+ --help           This help
+
+mergelog merges multiple log files into per month .7z compressed files
+
+};
+    exit;
+}
 
 my $tmpfile = "TMP.mergelog.$$.7z";
 
@@ -40,31 +61,29 @@ sub mergedir {
         }
     }
     foreach my $targetfile ( sort keys %target ) {
-        print "$targetfile: recompress";
+        print "$targetfile:";
+        print "\n" if $dry_run;
         if ( -f "$targetfile.7z" ) {
-            die "extract $targetfile failed: $!"
-              if system("7za x $targetfile.7z");
+            run_command("7za x $targetfile.7z");
         }
-        else {
-            unlink $targetfile;
+        elsif ( -f $targetfile ) {
+            safe_unlink($targetfile);
         }
+
         foreach my $ext ( keys %{ $target{$targetfile} } ) {
             my @files = @{ $target{$targetfile}{$ext} };
             my $cmd;
-
             if    ( $ext eq '.bz2' ) { $cmd = 'bzcat'; }
             elsif ( $ext eq '.gz' )  { $cmd = 'zcat'; }
             elsif ( $ext eq '.7z' )  { $cmd = '7zcat'; }
             elsif ( $ext eq '' )     { $cmd = 'cat'; }
             else                     { die "Do not know how to extract '$ext'" }
             $cmd .= " @files >> $targetfile";
-            die("extract failed ($cmd): $!") if system($cmd);
+            run_command($cmd);
         }
 
-        unlink("$targetfile.7z");
-        die("creation of $tmpfile failed: $!")
-          if system("$compress7z $tmpfile $targetfile");
-        die("$tmpfile too small") if -s $tmpfile < 100;
+        run_command("$compress7z $tmpfile $targetfile");
+        die("$tmpfile too small") if ! $dry_run && -s $tmpfile < 100;
         safe_rename( $tmpfile, "$targetfile.7z" );
         foreach my $ext ( keys %{ $target{$targetfile} } ) {
             safe_unlink( $targetfile, @{ $target{$targetfile}{$ext} } );
@@ -81,13 +100,33 @@ foreach my $arg (@ARGV) {
 }
 @files && mergedir( '.', @files );
 
+sub run_command {
+    my @cmd = @_;
+    if ($dry_run) {
+        print "  @cmd\n";
+    }
+    elsif ( system(@cmd) ) {
+        die "@cmd failed: $!";
+    }
+}
+
 sub safe_rename {
     my ( $to, $from ) = @_;
-    rename( $to, $from ) || die("rename($to, $from) failed: $!");
+    if ($dry_run) {
+        print "  rename( $to, $from )\n";
+    }
+    else {
+        rename( $to, $from ) || die("rename($to, $from) failed: $!");
+    }
 }
 
 sub safe_unlink {
     my (@files) = @_;
 
-    unlink(@files) || die("unlink(@files) failed: $!");
+    if ($dry_run) {
+        print "  unlink(@files)\n";
+    }
+    else {
+        unlink(@files) || die("unlink(@files) failed: $!");
+    }
 }
