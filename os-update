@@ -166,7 +166,7 @@ extract()
 				run "rm -rf kernels.old"
 
         if [ -n "$extract_etc" ] ; then
-				run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db $DESTDIR"
+				run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db $DESTDIR || true"
         fi
 
         if [ ! -f boot ] ; then
