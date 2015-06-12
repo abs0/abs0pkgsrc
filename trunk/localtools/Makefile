@@ -23,8 +23,8 @@ BINSRC=bin ${OPSYS}-bin
 BINSRC=bin
 .endif
 
-BINSCRIPTS!=(cd files ; find ${BINSRC} -type f | egrep -v '.svn|\.orig$$' )
-SHAREFILES!=(cd files/share ; find * -type f | egrep -v '.svn|\.orig$$' )
+BINSCRIPTS!=(cd files ; find ${BINSRC} -type f | egrep -v '\.orig$$' )
+SHAREFILES!=(cd files/share ; find * -type f | egrep -v '\.orig$$' )
 
 SHAREDIR=	share/local
 USE_TOOLS+=	perl:run
