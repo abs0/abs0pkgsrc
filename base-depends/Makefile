@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.27
+DISTNAME=	base-depends-1.28
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -46,6 +46,7 @@ DEPENDS+= p7zip>0:../../archivers/p7zip
 DEPENDS+= unix2dos>0:../../converters/unix2dos
 DEPENDS+= unrar>0:../../archivers/unrar
 DEPENDS+= zip>0:../../archivers/zip
+DEPENDS+= rdfind>0:../../sysutils/rdfind
 
 # CD/DVD tools
 DEPENDS+= cdrtools>0:../../sysutils/cdrtools
