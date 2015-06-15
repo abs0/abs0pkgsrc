@@ -1,4 +1,4 @@
-#!/usr/pkg/bin/perl
+#!/usr/bin/env perl
 # $Id: listdup,v 1.4 2006/11/10 11:40:59 abs Exp $
 
 use strict;

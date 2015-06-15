@@ -1,4 +1,4 @@
-#!/usr/pkg/bin/perl
+#!/usr/bin/env perl
 # $Id: pgsql-backup,v 1.1 2008/07/24 15:35:51 abs Exp $
 
 use strict;

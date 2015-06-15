@@ -1,4 +1,4 @@
-#!/usr/pkg/bin/perl
+#!/usr/bin/env perl
 # $Id: munin-setup-plugins,v 1.1 2007/05/02 15:52:31 abs Exp $
 
 use warnings;
