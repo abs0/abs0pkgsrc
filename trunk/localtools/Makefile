@@ -27,7 +27,7 @@ SHAREFILES!=(cd ${FILESDIR}/share ; find * -type f | egrep -v '\.orig$$' )
 
 SHAREDIR=	share/local
 USE_TOOLS+=	perl:run tar
-REPLACE_PERL+=	bin/mergelog
+REPLACE_PERL+=	bin/*
 
 DEPENDS+=	optipng>0:../../graphics/optipng
 
