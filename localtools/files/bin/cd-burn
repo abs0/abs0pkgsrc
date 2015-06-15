@@ -1,4 +1,4 @@
-#!/usr/pkg/bin/perl -T
+#!/usr/bin/env perl -T
 # $Id: cd-burn,v 1.9 2006/12/05 10:18:33 abs Exp $
 
 # Burn a set of files or image to cd or dvd

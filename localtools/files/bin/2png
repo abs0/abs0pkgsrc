@@ -1,4 +1,4 @@
-#!/usr/pkg/bin/perl
+#!/usr/bin/env perl
 # $Id: 2png,v 1.15 2008/01/08 15:10:34 abs Exp $
 
 use strict;

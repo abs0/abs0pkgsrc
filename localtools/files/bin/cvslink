@@ -1,4 +1,4 @@
-#!/usr/pkg/bin/perl
+#!/usr/bin/env perl
 # $Id: cvslink,v 1.5 2007/03/18 23:36:38 abs Exp $
 
 # Simple script to link CVS Root and Repository files

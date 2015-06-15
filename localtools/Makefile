@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.58 2003/07/20 14:21:52 abs Exp $
 
-DISTNAME=	localtools-2.103
+DISTNAME=	localtools-2.104
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -12,23 +12,22 @@ USE_PKGINSTALL=		yes
 INSTALL_TEMPLATES+=	${.CURDIR}/INSTALL
 
 USE_LANGUAGES=	# empty
-EXTRACT_ONLY=	# empty
 NO_CHECKSUM=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
-.if exists(files/${OPSYS}-bin)
+.if exists(${FILESDIR}/${OPSYS}-bin)
 BINSRC=bin ${OPSYS}-bin
 .else
 BINSRC=bin
 .endif
 
-BINSCRIPTS!=(cd files ; find ${BINSRC} -type f | egrep -v '\.orig$$' )
-SHAREFILES!=(cd files/share ; find * -type f | egrep -v '\.orig$$' )
+BINSCRIPTS!=(cd ${FILESDIR} ; find ${BINSRC} -type f | egrep -v '\.orig$$' )
+SHAREFILES!=(cd ${FILESDIR}/share ; find * -type f | egrep -v '\.orig$$' )
 
 SHAREDIR=	share/local
-USE_TOOLS+=	perl:run
-# Cannot easily use REPLACE_PERL as run before build against DESTDIR
+USE_TOOLS+=	perl:run tar
+REPLACE_PERL+=	bin/mergelog
 
 DEPENDS+=	optipng>0:../../graphics/optipng
 
@@ -36,6 +35,9 @@ PLIST_SRC=	${WRKDIR}/PLIST
 WRKSRC=		${WRKDIR}
 
 INSTALLATION_DIRS= bin ${SHAREDIR}
+
+do-extract:
+	tar cf - -C ${FILESDIR} . | tar xf - -C ${WRKSRC}
 
 do-build:
 .for f in ${BINSCRIPTS}
@@ -47,10 +49,10 @@ do-build:
 
 do-install:
 .for f in ${BINSCRIPTS}
-	${INSTALL_SCRIPT} ${FILESDIR}/${f} ${DESTDIR}${PREFIX}/bin/`basename ${f}`
+	${INSTALL_SCRIPT} ${WRKSRC}/${f} ${DESTDIR}${PREFIX}/bin/`basename ${f}`
 .endfor
 .for f in ${SHAREFILES}
-	${INSTALL_DATA} ${FILESDIR}/share/${f} ${DESTDIR}${PREFIX}/${SHAREDIR}/${f}
+	${INSTALL_DATA} ${WRKSRC}/share/${f} ${DESTDIR}${PREFIX}/${SHAREDIR}/${f}
 .endfor
 
 .include "../../mk/bsd.pkg.mk"
