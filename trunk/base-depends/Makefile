@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.28
+DISTNAME=	base-depends-1.29
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -12,7 +12,6 @@ META_PACKAGE=	yes
 
 .if ${OPSYS} == NetBSD
 DEPENDS+= sudo>0:../../security/sudo
-DEPENDS+= screen>0:../../misc/screen
 .endif
 
 DEPENDS+= zsh>0:../../shells/zsh
@@ -39,7 +38,7 @@ DEPENDS+= shmux>0:../../sysutils/shmux			# Parallel ssh
 DEPENDS+= ttcp>0:../../benchmarks/ttcp
 DEPENDS+= mosh>0:../../net/mosh				# remote shell
 DEPENDS+= openvpn>0:../../net/openvpn			# VPN
-DEPENDS+= grive>0:../../net/grive			# Google Drive
+DEPENDS+= grive2>0:../../net/grive2			# Google Drive
 
 # Archivers/convertors
 DEPENDS+= p7zip>0:../../archivers/p7zip
