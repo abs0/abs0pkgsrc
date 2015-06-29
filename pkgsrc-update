@@ -407,7 +407,8 @@ else	# $opt_s
     LOG=$WRKOBJDIR/update.log
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -s -L $LOG"
 
-    nice -n 20 pkg_rolling-replace -Bsu || true
+    # XXX maybe continue on error if -k ?
+    nice -n 20 pkg_rolling-replace -Bsu
     if [ -z "$opt_r" -a -x /usr/pkg/sbin/pkg_chk ] ; then
 	echo "pkg_chk -Br"
 	pkg_chk -Br -P $PKGBINDIR
