@@ -95,7 +95,7 @@ else
 
 fi
 
-RSYNC="rsync -SHav --delete --delete-after --partial --partial-dir=$PARTIALDIR"
+RSYNC="rsync -SHhav --delete --delete-after --partial --partial-dir=$PARTIALDIR"
 if [ -z "$opt_O" ]; then
     RSYNC="$RSYNC -y"
 fi

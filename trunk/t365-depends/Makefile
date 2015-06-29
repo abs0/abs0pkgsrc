@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	t365-depends-1.02
+DISTNAME=	t365-depends-1.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,7 @@ COMMENT=	Meta package for t365 depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql93>0:../../databases/postgresql93
+DEPENDS+= postgresql94>0:../../databases/postgresql94
 
 DEPENDS+= p5-Module-Install>0:../../devel/p5-Module-Install
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql
