@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.38
+DISTNAME=	desktop-extras-depends-1.39
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,6 +25,7 @@ DEPENDS+= filezilla>0:../../net/filezilla
 DEPENDS+= icedtea-web>0:../../www/icedtea-web
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= xosd>0:../../x11/xosd
+DEPENDS+= yed>0:../../editors/yed
 
 DEPENDS+= synergy>0:../../net/synergy
 
@@ -50,14 +51,17 @@ DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer
 
 # Misc low priority
-DEPENDS+= calibre>0:../../misc/calibre
+# DEPENDS+= calibre>0:../../misc/calibre # XXX failing on GL lib path
+
 DEPENDS+= dillo>0:../../www/dillo
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= handbrake>0:../../multimedia/handbrake
 DEPENDS+= inkscape>0:../../graphics/inkscape
+DEPENDS+= midori>0:../../www/midori
 DEPENDS+= oneko>0:../../x11/oneko
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= xcowsay>0:../../games/xcowsay
+DEPENDS+= youtube-dl>0:../../net/youtube-dl
 
 # fails
 # DEPENDS+= tigervnc>0:../../net/tigervnc
