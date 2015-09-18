@@ -18,7 +18,7 @@ start=$(date +%s)
 umask 022
 
 saved_args="$@"
-args=$(getopt bhklrsuvD:IU:P: $*)
+args=$(getopt bhklrsuvRD:IU:P: $*)
 if [ $? != 0 ]; then
     opt_h=1
 fi
@@ -33,6 +33,7 @@ while [ $# != 0 ]; do
 	-h )	opt_h=1 ;;		# Help
 	-k )	opt_k=-k ;;		# Keep going
 	-l )	opt_l=1 ;;		# List
+	-R )	opt_R=1 ;;		# Skip rolling replace
 	-r )	opt_r=-r ;;		# Force remove before install
 	-s )	opt_s=-s ;;		# Source (default)
 	-u )	opt_u=1 ;;		# Run cvs Update
@@ -53,6 +54,7 @@ opts
 	-b	Use binary packages
 	-h	This help
 	-k	Keep going on errors (for -b)
+        -R	Skip rolling replace
 	-l	List packages that would be copied/installed (only for remote)
 	-r	Rotate /usr/pkg to /usr/OLDpkg
 	-u    	Run cvs Update
@@ -408,7 +410,9 @@ else	# $opt_s
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -s -L $LOG"
 
     # XXX maybe continue on error if -k ?
-    nice -n 20 pkg_rolling-replace -Bsu
+    if [ -z "$opt_R" ]; then
+        nice -n 20 pkg_rolling-replace -Bsu
+    fi
     if [ -z "$opt_r" -a -x /usr/pkg/sbin/pkg_chk ] ; then
 	echo "pkg_chk -Br"
 	pkg_chk -Br -P $PKGBINDIR
