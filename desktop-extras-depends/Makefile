@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.39
+DISTNAME=	desktop-extras-depends-1.40
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -49,9 +49,6 @@ DEPENDS+= kdenlive>0:../../multimedia/kdenlive
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer
-
-# Misc low priority
-# DEPENDS+= calibre>0:../../misc/calibre # XXX failing on GL lib path
 
 DEPENDS+= dillo>0:../../www/dillo
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
