@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.29
+DISTNAME=	desktop-depends-1.30
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -42,7 +42,7 @@ DEPENDS+= xzgv>0:../../graphics/xzgv
 # Lower priority
 DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
 DEPENDS+= qemu>0:../../emulators/qemu
-DEPENDS+= vlc>=2:../../multimedia/vlc2
+DEPENDS+= vlc>=2:../../multimedia/vlc
 DEPENDS+= wireshark>0:../../net/wireshark
 
 .include "../../mk/bsd.pkg.mk"
