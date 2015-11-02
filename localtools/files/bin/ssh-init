@@ -45,13 +45,15 @@ setup_server()
     else
 	verbose "SSH_AUTH_SOCK defined..."
 	# Ignore any non 'CANONICAL_AUTH_SOCK' SSH_AUTH_SOCK, and create new if needed
-	if [ -n "$opt_f" -o "$TERM" != screen -o "$WINDOW" = 0 ] ;then
+	if [ -n "$opt_f" -o -z "$opt_l" -o "$TERM" != screen -o "$WINDOW" = 0 ] ;then
 	    verbose "Not (screen & WINDOW=0)... or -f given"
 	    SSH_ADD=$(ssh-add -l 2>&1)
 	    verbose "SSH_ADD=$SSH_ADD"
 	    case "$SSH_ADD" in
 		# Create new ssh agent, and add default identity
-		"Could not open a connection to your authentication agent.")
+		"Could not open a connection to your authentication agent." | \
+                "Error connecting to agent"*)
+                    echo 1
                     start_ssh_agent
 		    ssh-add $SSH_KEY
 		    ;;
@@ -83,7 +85,7 @@ verbose()
     [ -n "$opt_v" ] && echo "ssh-init:" $@ >&2
     }
 
-args=$(getopt cfhiprv $*)
+args=$(getopt cfhilprv $*)
 if [ $? != 0 ]; then
     opt_error=1
 fi
@@ -94,6 +96,7 @@ while [ $# != 0 ]; do
 	-f )    opt_f=1 ;;
 	-h )    opt_h=1 ;;
 	-i )    opt_i=1 ;;
+	-l )    opt_l=1 ;;
 	-p )    opt_p=1 ;;
 	-r )    opt_r=1 ;;
 	-v )    opt_v=1 ;;
@@ -109,6 +112,7 @@ opts:	-c Output suitable for a csh shell to eval
 	-f Force key input
 	-h This help
 	-i Initialise ssh-agent & socket but do not add identities
+	-l Running on login (designed to be called from login scripts)
         -r Run as remote (just setup socket location)
 	-s Output suitable for a Bourne shell to eval
 	-p Print out the value of SSH_AUTH_SOCK
