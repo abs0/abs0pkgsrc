@@ -33,8 +33,8 @@ while [ $# != 0 ]; do
 	-h )	opt_h=1 ;;		# Help
 	-k )	opt_k=-k ;;		# Keep going
 	-l )	opt_l=1 ;;		# List
-	-R )	opt_R=1 ;;		# Skip rolling replace
-	-r )	opt_r=-r ;;		# Force remove before install
+	-R )	opt_R=1;;		# Skip rolling replace
+	-r )	opt_r=-r; opt_R=1 ;;	# Force remove before install
 	-s )	opt_s=-s ;;		# Source (default)
 	-u )	opt_u=1 ;;		# Run cvs Update
 	-v )	opt_v=-v ;;		# Verbose
@@ -56,7 +56,7 @@ opts
 	-k	Keep going on errors (for -b)
         -R	Skip rolling replace
 	-l	List packages that would be copied/installed (only for remote)
-	-r	Rotate /usr/pkg to /usr/OLDpkg
+	-r	Rotate /usr/pkg to /usr/OLDpkg (implies -R)
 	-u    	Run cvs Update
 	-v    	Verbose
 
