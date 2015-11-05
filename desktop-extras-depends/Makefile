@@ -17,7 +17,6 @@ DEPENDS+= encodings>0:../../fonts/encodings
 # Core desktop tools
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= thunderbird>0:../../mail/thunderbird
-DEPENDS+= okular>0:../../print/okular
 DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 
 # Misc desktop packages
@@ -45,7 +44,6 @@ DEPENDS+= ffplay2>0:../../multimedia/ffplay2
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
-DEPENDS+= kdenlive>0:../../multimedia/kdenlive
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer

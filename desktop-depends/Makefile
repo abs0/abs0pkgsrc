@@ -32,7 +32,6 @@ DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 # Medium priority
 DEPENDS+= adobe-flash-plugin>=11:../../multimedia/adobe-flash-plugin11
 DEPENDS+= gimp>0:../../graphics/gimp
-DEPENDS+= gwenview>0:../../graphics/gwenview
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= wpa_gui>0:../../net/wpa_gui
