@@ -1,4 +1,4 @@
-DISTNAME=	kde-subset-1.00
+DISTNAME=	kde-subset-1.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,6 +14,7 @@ DEPENDS+= gwenview>0:../../graphics/gwenview
 DEPENDS+= kde-baseapps4>0:../../x11/kde-baseapps4
 DEPENDS+= kde-runtime4>0:../../x11/kde-runtime4
 DEPENDS+= kde-workspace4>0:../../x11/kde-workspace4
+DEPENDS+= kdeartwork4>0:../../misc/kdeartwork4
 
 DEPENDS+= ark>0:../../archivers/ark
 DEPENDS+= dolphin-plugins>0:../../devel/dolphin-plugins
