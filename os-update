@@ -26,7 +26,7 @@ esac)
 
 start=$(date +%s)
 
-while getopts D:KXbd:fhk:nst:u f; do
+while getopts D:KXbd:fghk:nst:u f; do
     case $f in
 	D) opt_D="$OPTARG"; TARDIR="$OPTARG"	;;
 	K) opt_K=1				;;
@@ -34,6 +34,7 @@ while getopts D:KXbd:fhk:nst:u f; do
 	b) opt_b=1				;;
 	d) opt_d="$OPTARG"; DESTDIR="$OPTARG"	;;
 	f) opt_f=-f				;;
+	g) opt_g=1				;;
 	h) opt_h=1				;;
 	k) KERNEL="kernels/$OPTARG.gz"		;;
 	n) opt_n=1				;;
@@ -52,6 +53,7 @@ opts:   -X     Exclude X distribution
 	-b     Install from binaries (default)
 	-d dir Full distribution (including etc set)
 	-f     Force (ignore value of /etc/release)
+	-g     Get directly from nyftp.netbsd.org (use nbgetdaily)
 	-h     This help
 	-k nam Override name of kernel to install
 	-n     No write (do not actually make any changes)
@@ -60,6 +62,10 @@ opts:   -X     Exclude X distribution
 	-u     Run build with -u (and do not delete before or after build)
 ";
     exit
+fi
+
+if [ -n "$opt_g" ] ; then
+    nbgetdaily
 fi
 
 if [ -n "$opt_s" ] ; then
