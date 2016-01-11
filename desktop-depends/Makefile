@@ -42,6 +42,6 @@ DEPENDS+= xzgv>0:../../graphics/xzgv
 DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
 DEPENDS+= qemu>0:../../emulators/qemu
 DEPENDS+= vlc>=2:../../multimedia/vlc
-DEPENDS+= wireshark>0:../../net/wireshark
+DEPENDS+= wireshark>0:../../net/wireshark2
 
 .include "../../mk/bsd.pkg.mk"

@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.41
+DISTNAME=	desktop-extras-depends-1.42
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -27,6 +27,7 @@ DEPENDS+= xosd>0:../../x11/xosd
 DEPENDS+= yed>0:../../editors/yed
 
 DEPENDS+= synergy>0:../../net/synergy
+DEPENDS+= syncthing-gtk>0:../../net/syncthing-gtk
 
 # Uses wxGTK28 which conflicts with wxGTK30 needed by filezilla
 # DEPENDS+= pgadmin3>0:../../databases/pgadmin3
