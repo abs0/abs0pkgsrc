@@ -48,7 +48,9 @@ DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer
-DEPENDS+= kodi>0:../../multimedia/kodi
+
+# musepack / libmpcdec conflict
+# DEPENDS+= kodi>0:../../multimedia/kodi
 
 DEPENDS+= dillo>0:../../www/dillo
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
