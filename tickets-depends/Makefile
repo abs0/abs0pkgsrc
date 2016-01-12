@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.36
+DISTNAME=	tickets-depends-1.37
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -20,11 +20,11 @@ DEPENDS+= mysql-server>=5.6:../../databases/mysql56-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 # For member.cgi & friends
-DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
-DEPENDS+= p5-DateTime-Format-Strptime>0:../../time/p5-DateTime-Format-Strptime
-DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
-DEPENDS+= p5-UUID-Tiny>0:../../devel/p5-UUID-Tiny
-DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
+# DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
+# DEPENDS+= p5-DateTime-Format-Strptime>0:../../time/p5-DateTime-Format-Strptime
+# DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
+# DEPENDS+= p5-UUID-Tiny>0:../../devel/p5-UUID-Tiny
+# DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
