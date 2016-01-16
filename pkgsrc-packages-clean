@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 
+use File::Find;
 use Getopt::Long;
 
 my $dry_run;
@@ -24,8 +25,8 @@ exit 0;
 sub cleanup {
     my $dir = shift;
     my %packages;
-    $dir .= '/All';
-    opendir( DIR, $dir );
+    my $alldir = $dir . '/All';
+    opendir( DIR, $alldir );
     my @packagefiles = readdir(DIR);
     closedir(DIR);
     foreach my $packagefile (@packagefiles) {
@@ -51,8 +52,13 @@ sub cleanup {
 		die("pkg_admin pmatch failed");
 	    }
 	    unshift(@{$packages{$package}}, $keep);
-	    print "rm $dir/$kill\n";
-	    unlink("$dir/$kill") || die "unlink($dir/$kill) failed: $!";
+	    print "rm $alldir/$kill\n";
+	    unlink("$alldir/$kill") || die "unlink($alldir/$kill) failed: $!";
         }
     }
+    find( \&remove_dangling_symlinks, $dir );
+}
+
+sub remove_dangling_symlinks {
+  unlink($_) if (lstat $_ and not stat $_);
 }
