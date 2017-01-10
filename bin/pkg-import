@@ -1,0 +1,32 @@
+#!/bin/sh -e
+
+if [ -n "$1" ] ; then
+    cd $1
+fi
+
+DIR=$(pwd | sed 's:.*/pkgsrc/:pkgsrc/:')
+YEAR=$(date +%G)
+
+echo
+echo "=================> $DIR"
+pkglint
+make clean
+echo
+
+if [ -d work ]; then
+    echo "work present"
+    exit 1
+fi
+
+make changes-entry CTYPE=Added
+LINE=$(tail -1 /pkgsrc/doc/CHANGES-$YEAR | sed -e 's/ \[.*//' -e 's/  //')
+MSG=/tmp/m
+(
+  echo $LINE;
+  echo "";
+  cat DESCR
+) > $MSG
+cat $MSG
+IMPORT="cvs -d cvs.netbsd.org:/cvsroot import $DIR TNF pkgsrc-base"
+echo $IMPORT
+$IMPORT

@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.37
+DISTNAME=	tickets-depends-1.39
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,7 +15,7 @@ DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 .endif
 .if ${OPSYS} == NetBSD || ${OPSYS} == Darwin
-DEPENDS+= mysql-server>=5.6:../../databases/mysql56-server
+DEPENDS+= mysql-server>=5.7:../../databases/mysql57-server
 .endif
 DEPENDS+= innotop>0:../../databases/innotop
 
@@ -35,9 +35,6 @@ DEPENDS+= p5-Term-ReadKey>0:../../devel/p5-Term-ReadKey
 DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 DEPENDS+= p5-XML-Simple>0:../../textproc/p5-XML-Simple
 DEPENDS+= p5-Crypt-OpenPGP>0:../../security/p5-Crypt-OpenPGP
-
-# Because python 2 and non ascii just... fails
-DEPENDS+= python33>0:../../lang/python33
 
 # Useful if editing
 DEPENDS+= p5-Perl-Tidy>0:../../devel/p5-Perl-Tidy	# Useful while editing

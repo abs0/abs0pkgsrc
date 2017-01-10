@@ -1,7 +1,7 @@
 #!/bin/sh -e
 # $Id: os-update,v 1.58 2008/11/18 15:01:54 abs Exp $
 
-PATH=/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+PATH=/usr/bin:/bin:/usr/sbin:/sbin:$PATH:/pkgsrc/local/bin
 
 if [ $(sysctl -n kern.ostype) != NetBSD ] ; then
     echo "This can only be run on NetBSD"
@@ -48,12 +48,12 @@ shift $(expr $OPTIND - 1)
 if [ -n "$opt_h" ] ; then
 	echo "Usage: os-update [opts] [hosts]
 opts:   -D dir Read source tarfiles and script from dir, and delete after 
-opts:   -X     Exclude X distribution
+        -X     Exclude X distribution
 	-K     Just install kernels
 	-b     Install from binaries (default)
 	-d dir Full distribution (including etc set)
 	-f     Force (ignore value of /etc/release)
-	-g     Get directly from nyftp.netbsd.org (use nbgetdaily)
+	-g     Get directly from nycdn.netbsd.org (use nbgetdaily)
 	-h     This help
 	-k nam Override name of kernel to install
 	-n     No write (do not actually make any changes)

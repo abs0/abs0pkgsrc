@@ -1,0 +1,9 @@
+#!/bin/sh -e
+PATH=/pkgsrc/local/bin:$PATH
+if ! ssh-add -l  ; then
+    echo "No key"
+    exit 1
+fi
+# nbgetdaily -t HEAD
+os-update -g
+pkgsrc-update -us

@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.30
+DISTNAME=	desktop-depends-1.33
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -31,17 +31,18 @@ DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
 DEPENDS+= adobe-flash-plugin>=11:../../multimedia/adobe-flash-plugin11
+DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= gimp>0:../../graphics/gimp
-DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= xzgv>0:../../graphics/xzgv
 
 # Lower priority
-DEPENDS+= dhcpcd-gtk>0:../../net/dhcpcd-gtk
 DEPENDS+= qemu>0:../../emulators/qemu
-DEPENDS+= vlc>=2:../../multimedia/vlc
-DEPENDS+= wireshark>0:../../net/wireshark2
+DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
+DEPENDS+= wireshark>0:../../net/wireshark
+DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
+DEPENDS+= open-vm-tools>0:../../sysutils/open-vm-tools
 
 .include "../../mk/bsd.pkg.mk"

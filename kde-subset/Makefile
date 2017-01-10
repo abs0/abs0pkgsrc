@@ -1,4 +1,4 @@
-DISTNAME=	kde-subset-1.01
+DISTNAME=	kde-subset-1.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 

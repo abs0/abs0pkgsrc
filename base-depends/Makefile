@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.29
+DISTNAME=	base-depends-1.35
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -19,14 +19,19 @@ DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
 DEPENDS+= p5-ack>0:../../textproc/p5-ack
+DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
-DEPENDS+= xenkernel45>0:../../sysutils/xenkernel45
-DEPENDS+= xentools45>0:../../sysutils/xentools45
+DEPENDS+= xenkernel46>0:../../sysutils/xenkernel46
+DEPENDS+= xentools46>0:../../sysutils/xentools46
+
+DEPENDS+= htop>0:../../sysutils/htop
 
 # Source controls
 DEPENDS+= subversion-base>0:../../devel/subversion-base
 DEPENDS+= git-base>0:../../devel/git-base
+DEPENDS+= git-svn>0:../../devel/git-svn
+DEPENDS+= bfg>0:../../devel/bfg
 
 # Net tools
 DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
@@ -46,11 +51,13 @@ DEPENDS+= unix2dos>0:../../converters/unix2dos
 DEPENDS+= unrar>0:../../archivers/unrar
 DEPENDS+= zip>0:../../archivers/zip
 DEPENDS+= rdfind>0:../../sysutils/rdfind
+DEPENDS+= poppler-utils>0:../../print/poppler-utils	# pdfseparate etc
 
 # CD/DVD tools
 DEPENDS+= cdrtools>0:../../sysutils/cdrtools
 
 # Security
 DEPENDS+= gnupg2>0:../../security/gnupg2
+DEPENDS+= mozilla-rootcerts>0:../../security/mozilla-rootcerts
 
 .include "../../mk/bsd.pkg.mk"

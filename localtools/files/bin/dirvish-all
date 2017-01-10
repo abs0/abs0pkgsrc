@@ -22,4 +22,4 @@ else
 	true # Without this true the loop does not run correctly
 	dirvish-runall --config $conf $@ &
     done
-fi  
+fi

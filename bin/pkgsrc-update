@@ -63,6 +63,9 @@ opts
 END
     exit
 fi
+if [ -z "$opt_b" ]; then
+  opt_s=1
+fi
 
 as_root()
 {
@@ -410,7 +413,8 @@ else	# $opt_s
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -s -L $LOG"
 
     # XXX maybe continue on error if -k ?
-    if [ -z "$opt_R" ]; then
+    if [ -n "$opt_s" -a -z "$opt_R" ]; then
+        pkg_check_install pkg_rolling-replace pkgtools/pkg_rolling-replace /usr/pkg/bin/pkg_rolling-replace
         nice -n 20 pkg_rolling-replace -Bsu
     fi
     if [ -z "$opt_r" -a -x /usr/pkg/sbin/pkg_chk ] ; then

@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.58 2003/07/20 14:21:52 abs Exp $
 
-DISTNAME=	localtools-2.105
+DISTNAME=	localtools-2.107
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -27,9 +27,10 @@ SHAREFILES!=(cd ${FILESDIR}/share ; find * -type f | egrep -v '\.orig$$' )
 
 SHAREDIR=	share/local
 USE_TOOLS+=	perl:run tar
-REPLACE_PERL+=	bin/*
+REPLACE_PERL+=	bin/* NetBSD-bin/*
 
 DEPENDS+=	optipng>0:../../graphics/optipng
+DEPENDS+=	p5-Modern-Perl>0:../../devel/p5-Modern-Perl
 
 PLIST_SRC=	${WRKDIR}/PLIST
 WRKSRC=		${WRKDIR}

@@ -1,0 +1,120 @@
+#!/bin/sh -e
+
+download_sets()
+    {
+    downloadbase=$1
+    dir=$2
+    cd $dir
+    sets=$(ftp -o - $downloadbase | sed -n 's/.*<a href="\([^"]*z\)".*/\1/p')
+    if [ -z "$sets" ]; then
+        echo "No sets found in $downloadbase"
+        rmdir $dir
+        exit 1
+    fi
+    for f in $sets ; do
+        if [ -f $(txz_name $f) ] ; then
+            echo "$(txz_name $f) already present"
+        else
+	    ftp -R $downloadbase$f
+        fi
+    done
+    }
+
+parseurl()
+    {
+    url=$1
+    echo $url | awk -v arch=`uname -m` -F/ '
+	{
+	if ($6 == "HEAD")
+	    { print "tag=current" }
+	else
+	    {
+	    tag=$6
+	    sub("netbsd-", "", tag)
+	    print "tag="tag
+	    }
+	print "date=" substr($7,1,4) "-" substr($7,5,2) "-" substr($7,7,2)
+        if ($8 != "") {
+          arch=$8
+        }
+	print "arch="arch
+	print "download="$1"/"$2"/"$3"/"$4"/"$5"/"$6"/"$7"/"arch"/binary/sets/"
+	}
+'
+    }
+
+recompress()
+    {
+    if ! ls *.tgz >/dev/null 2>&1 ; then
+        echo "No files found to recompress"
+        return
+    fi
+    echo -n "recompress:";
+    for f in *.tgz ; do
+	base=$(echo $f|sed 's/\.tgz$//')
+	echo -n " $base"
+	zcat $f | xz -9    > tmp && mv tmp $base.txz
+	rm -f $f
+    done
+    echo
+    }
+
+txz_name()
+{
+      echo "$@" | sed 's/\.tgz$/.txz/'
+}
+
+while getopts ht: f; do
+    case $f in
+	h) opt_h=1				;;
+	t) opt_t="$OPTARG"			;;
+    esac
+done
+shift $(expr $OPTIND - 1)
+
+if [ -n "$opt_h" ] ; then
+	echo "Usage: nbgetdaily [opts] [url]
+opts:   -h     This help
+	-t tag Set OS tag to download (default to running OS)
+";
+    exit
+fi
+
+base=/opt/netbsd/arch
+
+if [ -n "$1" ] ; then
+    url=$1
+    case $url in
+        */)
+	    ;;
+        *)
+	    url=$url/
+	    ;;
+    esac
+else
+    if [ -n "$opt_t" ]; then
+        rev=$opt_t
+    else
+        rev=netbsd-$(uname -r | sed 's/\..*//')
+    fi
+    urlbase=http://nycdn.netbsd.org/pub/NetBSD-daily/$rev
+    echo -n "Latest: "
+    url=$urlbase/$(ftp -o - $urlbase|awk -F'"' '/a href/{u=$2}END{print u}')
+    echo $url
+fi
+
+eval $(parseurl $url)
+
+dir=$base/$tag-$arch-$date
+if [ -z "$tag" -o -z "$arch" -o -z "$date" ] ; then
+    echo "$dir has blank tag, arch and/or date"
+    parseurl $url
+    exit 1
+fi
+
+echo "downloading into $dir"
+mkdir -p $dir
+cd $dir
+
+download_sets $download $dir
+recompress

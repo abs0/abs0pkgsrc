@@ -53,7 +53,6 @@ setup_server()
 		# Create new ssh agent, and add default identity
 		"Could not open a connection to your authentication agent." | \
                 "Error connecting to agent"*)
-                    echo 1
                     start_ssh_agent
 		    ssh-add $SSH_KEY
 		    ;;

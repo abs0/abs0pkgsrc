@@ -1,0 +1,28 @@
+#!/usr/bin/env perl
+my $disks = `sysctl -n hw.disknames`;
+for my $disk (split(' ', $disks)) {
+  next if $disk !~ /^raid/;
+  open(RAIDCTL, "raidctl -s $disk|") || die "raidctl failed: $!";
+  my %status;
+  my $other = '';
+  while (<RAIDCTL>) {
+    chomp;
+    if(m#^\s+/dev/(\S+): (\S.*)#) {
+       push (@{$status{$2}}, $1);
+    }
+    if(m#^(Parity status: (.*))# && $2 ne 'clean') {
+       print " $1";
+    }
+    if(m#^((Reconstruction|Parity Re-write|Copyback)(.*))# && $3 ne ' is 100% complete.') {
+       my $msg = $1;
+       $msg =~ s/\.$//;
+       $other .= " ($msg)";
+    }
+  }
+  print "$disk:";
+  foreach my $status (sort keys %status) {
+    print ' ', join(',', sort @{$status{$status}});
+    print ($status eq 'optimal' ? '' : uc(":$status"));
+  }
+  print "$other\n";
+}

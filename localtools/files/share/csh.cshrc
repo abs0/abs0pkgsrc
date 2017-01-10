@@ -10,7 +10,7 @@ endif
 
 # Keep the EXINIT in non interactive in case running pine or similar in screen
 #
-setenv EXINIT	"set ai et sh=/bin/sh sw=4 redraw report=2"
+setenv EXINIT	"set ai et sh=/bin/sh sw=2 redraw report=2"
 setenv EXINIT	"map g 1G|$EXINIT"
 setenv EXINIT	"map  :s/^#.//j|$EXINIT"
 setenv EXINIT	"map  0i# j|$EXINIT"

@@ -1,0 +1,36 @@
+#!/bin/sh -e
+
+if [ -n "$1" ] ; then
+    cd $1
+fi
+
+DIR=$(pwd | sed 's:.*/pkgsrc/:pkgsrc/:')
+YEAR=$(date +%G)
+
+if [ ! -f changelog ] ; then
+    echo "No changelog file"
+    exit 1
+fi
+
+echo
+echo "=================> $DIR"
+if ! pkglint -Wall ; then
+    echo Sleep 5
+    sleep 5
+fi
+make clean
+echo
+
+make changes-entry
+LINE=$(tail -1 /pkgsrc/doc/CHANGES-$YEAR | sed -e 's/ \[.*//' -e 's/  //')
+MSG=/tmp/m
+(
+  echo $LINE;
+  echo "";
+  cat changelog
+) > $MSG
+cat $MSG
+rm changelog
+IMPORT="cvs ci"
+echo $IMPORT
+$IMPORT

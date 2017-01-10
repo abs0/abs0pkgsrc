@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.42
+DISTNAME=	desktop-extras-depends-1.48
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,19 +15,27 @@ DEPENDS+= encodings>0:../../fonts/encodings
 .include "../../mk/bsd.prefs.mk"
 
 # Core desktop tools
+DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
+DEPENDS+= shotwell>0:../../graphics/shotwell
+DEPENDS+= okular>0:../../print/okular
+DEPENDS+= gwenview>0:../../graphics/gwenview
+DEPENDS+= synergy>0:../../net/synergy
+DEPENDS+= xosd>0:../../x11/xosd
+DEPENDS+= gmplayer>0:../../multimedia/gmplayer
+DEPENDS+= mpv>0:../../multimedia/mpv
+DEPENDS+= vlc>=2:../../multimedia/vlc20
+
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= thunderbird>0:../../mail/thunderbird
-DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
+DEPENDS+= kdenlive>0:../../multimedia/kdenlive
 
 # Misc desktop packages
-DEPENDS+= filezilla>0:../../net/filezilla
-DEPENDS+= icedtea-web>0:../../www/icedtea-web
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
-DEPENDS+= xosd>0:../../x11/xosd
 DEPENDS+= yed>0:../../editors/yed
 
-DEPENDS+= synergy>0:../../net/synergy
 DEPENDS+= syncthing-gtk>0:../../net/syncthing-gtk
+DEPENDS+= sql-workbench>0:../../databases/sql-workbench
+DEPENDS+= netbeans-ide>0:../../devel/netbeans-ide
 
 # Uses wxGTK28 which conflicts with wxGTK30 needed by filezilla
 # DEPENDS+= pgadmin3>0:../../databases/pgadmin3
@@ -43,7 +51,6 @@ DEPENDS+= abcde>0:../../audio/abcde
 # DEPENDS+= audacity>0:../../audio/audacity # wxGTK28/30 conflict with filezilla
 DEPENDS+= ffplay2>0:../../multimedia/ffplay2
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
-DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= mencoder>0:../../multimedia/mencoder
@@ -61,8 +68,5 @@ DEPENDS+= oneko>0:../../x11/oneko
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= xcowsay>0:../../games/xcowsay
 DEPENDS+= youtube-dl>0:../../net/youtube-dl
-
-# fails
-# DEPENDS+= tigervnc>0:../../net/tigervnc
 
 .include "../../mk/bsd.pkg.mk"
