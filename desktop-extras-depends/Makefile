@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.48
+DISTNAME=	desktop-extras-depends-1.49
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -21,9 +21,7 @@ DEPENDS+= okular>0:../../print/okular
 DEPENDS+= gwenview>0:../../graphics/gwenview
 DEPENDS+= synergy>0:../../net/synergy
 DEPENDS+= xosd>0:../../x11/xosd
-DEPENDS+= gmplayer>0:../../multimedia/gmplayer
 DEPENDS+= mpv>0:../../multimedia/mpv
-DEPENDS+= vlc>=2:../../multimedia/vlc20
 
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= thunderbird>0:../../mail/thunderbird
@@ -59,6 +57,7 @@ DEPENDS+= mplayer>0:../../multimedia/mplayer
 # musepack / libmpcdec conflict
 # DEPENDS+= kodi>0:../../multimedia/kodi
 
+DEPENDS+= calibre>0:../../misc/calibre
 DEPENDS+= dillo>0:../../www/dillo
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= handbrake>0:../../multimedia/handbrake
