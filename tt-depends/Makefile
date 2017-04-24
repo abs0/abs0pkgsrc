@@ -11,7 +11,7 @@ COMMENT=	Meta package for tt depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql95>0:../../databases/postgresql95
+DEPENDS+= postgresql96>0:../../databases/postgresql96
 
 DEPENDS+= p5-Catalyst-Devel>0:../../www/p5-Catalyst-Devel
 DEPENDS+= p5-Catalyst-Plugin-Session-State-Cookie>0:../../www/p5-Catalyst-Plugin-Session-State-Cookie

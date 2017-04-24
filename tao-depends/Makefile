@@ -1,10 +1,10 @@
-DISTNAME=	tao-depends-1.01
+DISTNAME=	tao-depends-1.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
 MAINTAINER=	abs@trainasone.com
 HOMEPAGE=	http://www.trainasone.com/
-COMMENT=	Meta package for TAO server depends
+COMMENT=	Meta package for TAO dev/server depends
 
 META_PACKAGE=	yes
 
@@ -13,9 +13,10 @@ META_PACKAGE=	yes
 .if ${OPSYS} == NetBSD
 DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= apache-maven>0:../../devel/apache-maven
+DEPENDS+= gradle>0:../../devel/gradle
 .endif
 
-DEPENDS+= postgresql95>0:../../databases/postgresql95
+DEPENDS+= postgresql96>0:../../databases/postgresql96
 #@ DEPENDS+= couchdb>0:../../databases/couchdb
 
 .include "../../mk/bsd.pkg.mk"
