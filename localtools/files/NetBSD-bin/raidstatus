@@ -7,7 +7,7 @@ for my $disk (split(' ', $disks)) {
   my $other = '';
   while (<RAIDCTL>) {
     chomp;
-    if(m#^\s+/dev/(\S+): (\S.*)#) {
+    if(m#^\s{4}\s*+(?:/dev/)?(\S+): (\S.*)#) {
        push (@{$status{$2}}, $1);
     }
     if(m#^(Parity status: (.*))# && $2 ne 'clean') {
