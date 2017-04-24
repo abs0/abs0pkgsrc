@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.33
+DISTNAME=	desktop-depends-1.36
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -30,13 +30,14 @@ DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
-DEPENDS+= adobe-flash-plugin>=11:../../multimedia/adobe-flash-plugin11
+DEPENDS+= adobe-flash-player>=0:../../multimedia/adobe-flash-player
 DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= xzgv>0:../../graphics/xzgv
+DEPENDS+= git-gitk>0:../../devel/git-gitk
 
 # Lower priority
 DEPENDS+= qemu>0:../../emulators/qemu
