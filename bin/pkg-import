@@ -27,6 +27,6 @@ MSG=/tmp/m
   cat DESCR
 ) > $MSG
 cat $MSG
-IMPORT="cvs -d cvs.netbsd.org:/cvsroot import $DIR TNF pkgsrc-base"
+IMPORT="cvs -d cvs.netbsd.org:/cvsroot add ."
 echo $IMPORT
 $IMPORT
