@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.35
+DISTNAME=	base-depends-1.36
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -22,14 +22,15 @@ DEPENDS+= p5-ack>0:../../textproc/p5-ack
 DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
-DEPENDS+= xenkernel46>0:../../sysutils/xenkernel46
-DEPENDS+= xentools46>0:../../sysutils/xentools46
+DEPENDS+= xenkernel48>0:../../sysutils/xenkernel48
+DEPENDS+= xentools48>0:../../sysutils/xentools48
 
 DEPENDS+= htop>0:../../sysutils/htop
 
 # Source controls
 DEPENDS+= subversion-base>0:../../devel/subversion-base
 DEPENDS+= git-base>0:../../devel/git-base
+DEPENDS+= git-docs>0:../../devel/git-docs
 DEPENDS+= git-svn>0:../../devel/git-svn
 DEPENDS+= bfg>0:../../devel/bfg
 
@@ -41,6 +42,7 @@ DEPENDS+= nginx>0:../../www/nginx			# http/proxy server
 DEPENDS+= rsync>0:../../net/rsync
 DEPENDS+= shmux>0:../../sysutils/shmux			# Parallel ssh
 DEPENDS+= ttcp>0:../../benchmarks/ttcp
+DEPENDS+= iperf3>0:../../net/iperf3			# Benchmark
 DEPENDS+= mosh>0:../../net/mosh				# remote shell
 DEPENDS+= openvpn>0:../../net/openvpn			# VPN
 DEPENDS+= grive2>0:../../net/grive2			# Google Drive
