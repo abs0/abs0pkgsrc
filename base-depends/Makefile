@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.36
+DISTNAME=	base-depends-1.38
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,7 +18,7 @@ DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
-DEPENDS+= p5-ack>0:../../textproc/p5-ack
+DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
 DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
@@ -28,10 +28,8 @@ DEPENDS+= xentools48>0:../../sysutils/xentools48
 DEPENDS+= htop>0:../../sysutils/htop
 
 # Source controls
-DEPENDS+= subversion-base>0:../../devel/subversion-base
 DEPENDS+= git-base>0:../../devel/git-base
 DEPENDS+= git-docs>0:../../devel/git-docs
-DEPENDS+= git-svn>0:../../devel/git-svn
 DEPENDS+= bfg>0:../../devel/bfg
 
 # Net tools
@@ -55,11 +53,14 @@ DEPENDS+= zip>0:../../archivers/zip
 DEPENDS+= rdfind>0:../../sysutils/rdfind
 DEPENDS+= poppler-utils>0:../../print/poppler-utils	# pdfseparate etc
 
-# CD/DVD tools
+# DVD/CD/media tools
+DEPENDS+= abcde>0:../../audio/abcde
 DEPENDS+= cdrtools>0:../../sysutils/cdrtools
+DEPENDS+= flac2mp3>0:../../audio/flac2mp3
+DEPENDS+= get_iplayer>0:../../net/get_iplayer
 
 # Security
 DEPENDS+= gnupg2>0:../../security/gnupg2
-DEPENDS+= mozilla-rootcerts>0:../../security/mozilla-rootcerts
+DEPENDS+= mozilla-rootcerts-openssl>0:../../security/mozilla-rootcerts-openssl
 
 .include "../../mk/bsd.pkg.mk"
