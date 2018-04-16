@@ -22,17 +22,13 @@ options:
  --dry-run        Show details but do not modify any files
  --help           This help
 
-mergelog merges multiple log files into per month .7z compressed files
+mergelog merges multiple log files into per month .xz compressed files
 
 };
     exit;
 }
 
-my $tmpfile = "TMP.mergelog.$$.7z";
-
-# Grr, bloody Ubuntu has to be different with 7rz
-my $compress7z = ( ( -f '/usr/bin/7zr' ) ? '7zr' : '7za' )
-  . ' a -t7z -m0=lzma -mx=9 -mfb=64 -md=64m -ms=on';
+my $tmpfile = "TMP.mergelog.$$.xz";
 
 sub mergedir {
     my ( $dir, @files ) = @_;
@@ -46,7 +42,7 @@ sub mergedir {
     }
     foreach my $file (@files) {
         my ( $base, $month, $extra, $ext );
-        if ( $file =~ /^(.+\D\d{4}-?)(\d\d)(.*)(.bz2|.gz|.7z)$/ ) {
+        if ( $file =~ /^(.+\D\d{4}-?)(\d\d)(.*)(\.bz2|\.gz|\.7z|\.xz)$/ ) {
             ( $base, $month, $extra, $ext ) = ( $1, $2, $3, $4 );
         }
         elsif ( $file =~ /^(.+\D\d{4}-?)(\d\d)-?(\d+)$/ ) {
@@ -56,14 +52,16 @@ sub mergedir {
             die("Unparsable filename '$file'");
         }
         my $targetfile = "$base$month";
-        if ( $file ne "$targetfile.7z" ) {
+        if ( $file ne "$targetfile.xz" ) {
             push( @{ $target{$targetfile}{$ext} }, $file );
         }
     }
     foreach my $targetfile ( sort keys %target ) {
         print "$targetfile:";
         print "\n" if $dry_run;
-        if ( -f "$targetfile.7z" ) {
+        if ( -f "$targetfile.xz" ) {
+            run_command("xz -d $targetfile.xz");
+        } elsif ( -f "$targetfile.7z" ) {
             run_command("7za x $targetfile.7z");
         }
         elsif ( -f $targetfile ) {
@@ -73,7 +71,8 @@ sub mergedir {
         foreach my $ext ( keys %{ $target{$targetfile} } ) {
             my @files = @{ $target{$targetfile}{$ext} };
             my $cmd;
-            if    ( $ext eq '.bz2' ) { $cmd = 'bzcat'; }
+            if    ( $ext eq '.xz' ) { $cmd = 'xzcat'; }
+            elsif ( $ext eq '.bz2' ) { $cmd = 'bzcat'; }
             elsif ( $ext eq '.gz' )  { $cmd = 'zcat'; }
             elsif ( $ext eq '.7z' )  { $cmd = '7zcat'; }
             elsif ( $ext eq '' )     { $cmd = 'cat'; }
@@ -82,9 +81,9 @@ sub mergedir {
             run_command($cmd);
         }
 
-        run_command("$compress7z $tmpfile $targetfile");
-        die("$tmpfile too small") if ! $dry_run && -s $tmpfile < 100;
-        safe_rename( $tmpfile, "$targetfile.7z" );
+        run_command("xz -9v -c $targetfile > $tmpfile");
+        die("$tmpfile too small") if !$dry_run && -s $tmpfile < 100;
+        safe_rename( $tmpfile, "$targetfile.xz" );
         foreach my $ext ( keys %{ $target{$targetfile} } ) {
             safe_unlink( $targetfile, @{ $target{$targetfile}{$ext} } );
         }

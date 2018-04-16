@@ -79,9 +79,9 @@ exit;
 sub compress_cmd {
     my ($file) = @_;
 
-    # Ensure datasize unlimited so 7zip does not fail
+    # Ensure datasize unlimited so xz does not fail
     return q{sh -c 'ulimit -d $(ulimit -Hd);ulimit -d;}
-      . "7z a -bd -ms=on -mx=$compression -si $file.7z'";
+      . "xz -9 > $file.xz'";
 }
 
 sub db_backup {
@@ -113,7 +113,6 @@ sub run_cmd {
     my $pid = open3( \*WTRFH, \*RDRFH, \*ERRFH, $cmd );
     close(WTRFH);
 
-    # XXX does not pick up some error returns from 7z
     my @errs = <ERRFH>;
     close(ERRFH);
     my @output = <RDRFH>;
