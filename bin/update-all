@@ -6,4 +6,4 @@ if ! ssh-add -l  ; then
 fi
 # nbgetdaily -t HEAD
 os-update -g
-pkgsrc-update -us
+pkgsrc-update -us "$@"
