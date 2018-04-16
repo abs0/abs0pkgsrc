@@ -20,6 +20,11 @@ download_sets()
     done
     }
 
+find_latest_directory()
+{
+    ftp -o - $1|awk -F'"' '/a href/{u=$2}END{print u}'
+}
+
 parseurl()
     {
     url=$1
@@ -97,9 +102,20 @@ else
     else
         rev=netbsd-$(uname -r | sed 's/\..*//')
     fi
-    urlbase=http://nycdn.netbsd.org/pub/NetBSD-daily/$rev
+
     echo -n "Latest: "
-    url=$urlbase/$(ftp -o - $urlbase|awk -F'"' '/a href/{u=$2}END{print u}')
+    urlbase=https://nycdn.netbsd.org/pub/NetBSD-daily/$rev
+    dir=$(find_latest_directory $urlbase)
+    if [ -z "$dir" ];then
+        urlbase=https://nyftp.netbsd.org/pub/NetBSD-daily/$rev
+        dir=$(find_latest_directory $urlbase)
+        if [ -z "$dir" ];then
+            echo "Unable to determine latest dir from $urlbase"
+            exit 1
+        fi
+    fi
+
+    url=$urlbase/$dir
     echo $url
 fi
 
