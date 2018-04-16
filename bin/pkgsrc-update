@@ -294,6 +294,7 @@ fi
 if [ -n "$opt_u" ] ; then
     if [ $(id -u) != 0 ] ; then
         cvsu pkgsrc
+        (cd /pkgsrc/wip && git stash && git pull && git stash list || git stash pop)
     else
         echo "Skipping 'cvsu pkgsrc' as root"
     fi
@@ -336,7 +337,6 @@ if [ -n "$opt_r" ] ; then
 	pkg_check_install cpuflags devel/cpuflags /usr/pkg/bin/cpuflags
 	determine_PKGBINDIR
 	pkg_check_install pkg_chk pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
-	pkg_check_install pkg_rolling-replace pkgtools/pkg_rolling-replace /usr/pkg/sbin/pkg_rolling-replace
 	opt_r_PKGS=$(pkg_chk $PKG_CHK_FLAGS -P $PKGBINDIR -lb $opt_k)
 	if [ -z "$opt_r_PKGS" ] ; then
 	    fatal "No packages found?"
