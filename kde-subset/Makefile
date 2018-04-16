@@ -3,7 +3,7 @@ CATEGORIES=	local
 MASTER_SITES=	# empty
 
 MAINTAINER=	abs@absd.org
-HOMEPAGE=	http://www.kde.org/
+HOMEPAGE=	https://www.kde.org/
 COMMENT=	Useful subset of KDE
 
 META_PACKAGE=	yes

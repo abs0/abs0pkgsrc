@@ -121,7 +121,6 @@ sysutils/dirvish		*		# Remote backup
 sysutils/rename			*	
 sysutils/smartmontools		i386		# Monitor disks
 textproc/ispell-british		*
-www/htmlfix			*
 www/wdg-validate		*
 
 #	Clutter
