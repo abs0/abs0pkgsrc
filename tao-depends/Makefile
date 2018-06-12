@@ -17,7 +17,7 @@ DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= geckodriver>0:../../www/geckodriver
 .endif
 
-DEPENDS+= postgresql96>0:../../databases/postgresql96
+DEPENDS+= postgresql10>0:../../databases/postgresql10
 #@ DEPENDS+= couchdb>0:../../databases/couchdb
 
 .include "../../mk/bsd.pkg.mk"

@@ -17,6 +17,7 @@ DEPENDS+= encodings>0:../../fonts/encodings
 # Useful multimedia desktop tools
 # DEPENDS+= okular>0:../../print/okular
 DEPENDS+= qpdfview>0:../../print/qpdfview
+DEPENDS+= xfce4-screenshooter>0:../../x11/xfce4-screenshooter
 # DEPENDS+= gwenview>0:../../graphics/gwenview
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= mpv>0:../../multimedia/mpv

@@ -10,7 +10,7 @@ COMMENT=	Meta package for tools installed on the dev server
 
 META_PACKAGE=	yes
 
-DEPENDS+= postgresql96>0:../../databases/postgresql96
+DEPENDS+= postgresql10>0:../../databases/postgresql10
 DEPENDS+= ap24-fcgid>0:../../www/ap2-fcgid
 DEPENDS+= ap24-subversion>0:../../www/ap2-subversion
 DEPENDS+= ap24-py2{6,7}-python>0:../../www/ap2-python

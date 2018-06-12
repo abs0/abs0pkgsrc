@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.39
+DISTNAME=	desktop-depends-1.40
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -28,6 +28,8 @@ DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
+DEPENDS+= slim>0:../../x11/slim
+DEPENDS+= slim-themes>0:../../graphics/slim-themes
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= synergy>0:../../net/synergy
@@ -35,6 +37,7 @@ DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= wireshark>0:../../net/wireshark
 DEPENDS+= xsel>0:../../x11/xsel
+DEPENDS+= conky>0:../../sysutils/conky
 
 # Lower priority
 DEPENDS+= qemu>0:../../emulators/qemu
