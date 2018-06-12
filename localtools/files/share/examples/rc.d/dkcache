@@ -1,0 +1,28 @@
+#! /bin/sh
+#
+# PROVIDE: dkcache
+# REQUIRE: DISKS
+# BEFORE: fsck
+
+$_rc_subr_loaded . /etc/rc.subr
+
+name=dkcache
+rcvar=$name
+start_cmd=dkcache_start
+stop_cmd=:
+
+dkcache_start ()
+{
+        for dev in $(sysctl -n hw.disknames); do
+                case "$dev" in
+                	dk[0-9]*) ;; # Does not support
+                	raid[0-9]*) ;; # Does not support
+                	vg[0-9]*) ;; # Does not support
+                	cgd[0-9]*) ;; # Does not support
+                	*) dkctl $dev setcache $dkcache_flags;;
+                esac
+        done
+}
+
+load_rc_config $name
+run_rc_command "$1"

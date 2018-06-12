@@ -1,0 +1,7 @@
+#!/bin/sh -e
+export PATH=/usr/pkg/bin:$PATH
+if pkill syncthing ; then
+    sleep 5
+fi
+cd
+syncthing -no-browser > syncthing.log 2>&1 < /dev/null &
