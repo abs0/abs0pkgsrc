@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.02
+DISTNAME=	tao-depends-1.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -12,7 +12,6 @@ META_PACKAGE=	yes
 
 .if ${OPSYS} == NetBSD
 DEPENDS+= apache-ant>0:../../devel/apache-ant
-DEPENDS+= apache-maven>0:../../devel/apache-maven
 DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= geckodriver>0:../../www/geckodriver
 .endif
