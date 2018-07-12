@@ -24,7 +24,6 @@ DEPENDS+= mpv>0:../../multimedia/mpv
 
 # Desktop dev tools
 DEPENDS+= git-gitk>0:../../devel/git-gitk
-DEPENDS+= syncthing-gtk>0:../../net/syncthing-gtk
 DEPENDS+= sql-workbench>0:../../databases/sql-workbench
 
 # Emulators
