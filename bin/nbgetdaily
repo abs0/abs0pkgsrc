@@ -58,7 +58,7 @@ recompress()
     for f in *.tgz ; do
 	base=$(echo $f|sed 's/\.tgz$//')
 	echo -n " $base"
-	zcat $f | xz -9    > tmp && mv tmp $base.txz
+	zcat $f | xz -9    > $base.txz.tmp && mv $base.txz.tmp $base.txz
 	rm -f $f
     done
     echo
