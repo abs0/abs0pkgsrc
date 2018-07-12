@@ -35,7 +35,7 @@ DEPENDS+=	p5-Modern-Perl>0:../../devel/p5-Modern-Perl
 PLIST_SRC=	${WRKDIR}/PLIST
 WRKSRC=		${WRKDIR}
 
-INSTALLATION_DIRS= bin ${SHAREDIR}
+INSTALLATION_DIRS= bin ${SHAREDIR} ${SHAREDIR}/examples/rc.d
 
 do-extract:
 	tar cf - -C ${FILESDIR} . | tar xf - -C ${WRKSRC}
