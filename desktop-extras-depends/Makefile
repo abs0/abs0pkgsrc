@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.53
+DISTNAME=	desktop-extras-depends-1.54
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -57,7 +57,10 @@ DEPENDS+= thunderbird>0:../../mail/thunderbird
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 DEPENDS+= yed>0:../../editors/yed
+
+# youtube-dl needs ffmpeg3
 DEPENDS+= youtube-dl>0:../../net/youtube-dl
+DEPENDS+= ffmpeg3>0:../../multimedia/ffmpeg3
 
 # lower priority
 .include "../../mk/bsd.pkg.mk"
