@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.38
+DISTNAME=	base-depends-1.39
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -22,8 +22,8 @@ DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
 DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
-DEPENDS+= xenkernel48>0:../../sysutils/xenkernel48
-DEPENDS+= xentools48>0:../../sysutils/xentools48
+DEPENDS+= xenkernel411>0:../../sysutils/xenkernel411
+DEPENDS+= xentools411>0:../../sysutils/xentools411
 
 DEPENDS+= htop>0:../../sysutils/htop
 
