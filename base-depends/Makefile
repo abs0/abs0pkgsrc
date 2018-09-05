@@ -30,7 +30,6 @@ DEPENDS+= htop>0:../../sysutils/htop
 # Source controls
 DEPENDS+= git-base>0:../../devel/git-base
 DEPENDS+= git-docs>0:../../devel/git-docs
-DEPENDS+= bfg>0:../../devel/bfg
 
 # Net tools
 DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
@@ -43,7 +42,6 @@ DEPENDS+= ttcp>0:../../benchmarks/ttcp
 DEPENDS+= iperf3>0:../../net/iperf3			# Benchmark
 DEPENDS+= mosh>0:../../net/mosh				# remote shell
 DEPENDS+= openvpn>0:../../net/openvpn			# VPN
-DEPENDS+= grive2>0:../../net/grive2			# Google Drive
 
 # Archivers/convertors
 DEPENDS+= p7zip>0:../../archivers/p7zip
