@@ -16,7 +16,6 @@ SUBDIR+=	dev-depends
 SUBDIR+=	localtools
 SUBDIR+=	mail-depends
 SUBDIR+=	natbsync-depends
-SUBDIR+=	pkgtools-depends
 SUBDIR+=	t365-depends
 SUBDIR+=	tickets-depends
 SUBDIR+=	tickets-monitor-depends
