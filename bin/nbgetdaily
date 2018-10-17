@@ -22,7 +22,7 @@ download_sets()
 
 find_latest_directory()
 {
-    ftp -o - $1|awk -F'"' '/a href/{u=$2}END{print u}'
+    ftp -o - $1|awk -F'"' '/a href.*Z/{u=$2}END{print u}'
 }
 
 parseurl()
