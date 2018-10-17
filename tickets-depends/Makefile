@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.40
+DISTNAME=	tickets-depends-1.41
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -28,6 +28,7 @@ DEPENDS+= innotop>0:../../databases/innotop
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
+DEPENDS+= p5-Array-Compare>0:../../devel/p5-Array-Compare
 DEPENDS+= p5-Moose>0:../../devel/p5-Moose
 DEPENDS+= p5-Rose-DB-Object>0:../../databases/p5-Rose-DB-Object
 DEPENDS+= p5-Email-Stuff>0:../../mail/p5-Email-Stuff
