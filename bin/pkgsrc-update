@@ -294,7 +294,11 @@ fi
 if [ -n "$opt_u" ] ; then
     if [ $(id -u) != 0 ] ; then
         cvsu pkgsrc
-        (cd /pkgsrc/wip && git stash && git pull && git stash list || git stash pop)
+        if [ ! -e /usr/pkg/bin/git ] ; then
+            echo "No git found, skip wip update"
+        else
+            (cd /pkgsrc/wip && git stash && git pull && git stash list || git stash pop)
+        fi
     else
         echo "Skipping 'cvsu pkgsrc' as root"
     fi
