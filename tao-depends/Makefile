@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.03
+DISTNAME=	tao-depends-1.04
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,6 +14,7 @@ META_PACKAGE=	yes
 DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= geckodriver>0:../../www/geckodriver
+DEPENDS+= bfg>0:../../devel/bfg
 .endif
 
 DEPENDS+= postgresql10>0:../../databases/postgresql10
