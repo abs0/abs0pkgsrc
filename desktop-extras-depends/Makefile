@@ -44,7 +44,6 @@ DEPENDS+= handbrake>0:../../multimedia/handbrake
 # DEPENDS+= kodi>0:../../multimedia/kodi
 
 # Misc lesser priority
-DEPENDS+= calibre>0:../../misc/calibre
 DEPENDS+= netsurf>0:../../www/netsurf
 DEPENDS+= dillo>0:../../www/dillo
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
