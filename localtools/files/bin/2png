@@ -92,10 +92,10 @@ sub convert2png {
         progress( ' -> ' . size( -s $tmpfile ) );
     }
 
-    my $optipng = 'optipng -q';
-    if   ( $opt{9} ) { $optipng .= " -o 7"; }
-    else             { $optipng .= " -o 5"; }
-    system("$optipng '$tmpfile'") && exit 1;
+    my @optipng = ('optipng', '-q');
+    if   ( $opt{9} ) { push(@optipng, '-o', '7'); }
+    else             { push(@optipng, '-o', '5'); }
+    system(@optipng, $tmpfile) && exit 1;
 
     utime $oldmtime, $oldmtime, $tmpfile if $opt{t};
     my $newsize = -s $tmpfile;
