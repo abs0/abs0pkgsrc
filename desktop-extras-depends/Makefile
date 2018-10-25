@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.54
+DISTNAME=	desktop-extras-depends-1.55
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -40,6 +40,7 @@ DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= mplayer>0:../../multimedia/mplayer
 DEPENDS+= handbrake>0:../../multimedia/handbrake
 
+DEPENDS+= gpxsee>0:../../geography/gpxsee
 # musepack / libmpcdec conflict
 # DEPENDS+= kodi>0:../../multimedia/kodi
 
