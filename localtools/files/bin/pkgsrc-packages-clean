@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /pkgsrc/local/bin/pkgsrc-packages-clean "$@"
