@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.40
+DISTNAME=	desktop-depends-1.41
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,6 +25,7 @@ DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
 # additional fonts
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
+DEPENDS+= ubuntu-font>0:../../fonts/ubuntu-fonts
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
