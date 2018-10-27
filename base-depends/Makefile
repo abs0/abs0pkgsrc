@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.39
+DISTNAME=	base-depends-1.40
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -55,7 +55,9 @@ DEPENDS+= poppler-utils>0:../../print/poppler-utils	# pdfseparate etc
 DEPENDS+= abcde>0:../../audio/abcde
 DEPENDS+= cdrtools>0:../../sysutils/cdrtools
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
-DEPENDS+= get_iplayer>0:../../net/get_iplayer
+
+DEPENDS+= get_iplayer>0:../../net/get_iplayer # get_iplayer needs ffmpeg
+DEPENDS+= ffmpeg4>0:../../multimedia/ffmpeg4
 
 # Security
 DEPENDS+= gnupg2>0:../../security/gnupg2
