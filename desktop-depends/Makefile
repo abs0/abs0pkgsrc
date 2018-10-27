@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.41
+DISTNAME=	desktop-depends-1.42
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,7 +15,6 @@ META_PACKAGE=	yes
 # High priorities - build first
 DEPENDS+= firefox>0:../../www/firefox
 DEPENDS+= jwm>0:../../wm/jwm
-DEPENDS+= adobe-flash-player>=0:../../multimedia/adobe-flash-player
 
 .if ${X11_TYPE} == "modular"
 DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
