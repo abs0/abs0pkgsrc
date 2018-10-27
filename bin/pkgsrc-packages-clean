@@ -37,9 +37,12 @@ sub cleanup {
         while ( @{ $packages{$package} } > 1 ) {
             my $pkg1 = shift @{$packages{$package}};
             my $pkg2 = shift @{$packages{$package}};
-	    my $pmatch = $pkg1;
-	    $pmatch =~ s/-(\d)/>$1/;
-	    my $res = system('pkg_admin','pmatch',$pmatch,$pkg2);
+	    my $pmatch1 = $pkg1;
+	    $pmatch1 =~ s/-(\d)/>$1/;
+            $pmatch1 =~ s/\.tgz$//;
+            my $pmatch2 = $pkg2;
+            $pmatch2 =~ s/\.tgz$//;
+	    my $res = system('pkg_admin','pmatch',$pmatch1,$pmatch2);
 	    my $keep;
 	    my $kill;
 	    if ($res == 0) {
@@ -52,13 +55,12 @@ sub cleanup {
 		die("pkg_admin pmatch failed");
 	    }
 	    unshift(@{$packages{$package}}, $keep);
-	    print "rm $alldir/$kill\n";
-	    unlink("$alldir/$kill") || die "unlink($alldir/$kill) failed: $!";
+            if ($dry_run) {
+	      print "$alldir/$kill ($keep)\n";
+            } else {
+	      print "rm $alldir/$kill\n";
+	      unlink("$alldir/$kill") || die "unlink($alldir/$kill) failed: $!";
+            }
         }
     }
-    find( \&remove_dangling_symlinks, $dir );
-}
-
-sub remove_dangling_symlinks {
-  unlink($_) if (lstat $_ and not stat $_);
 }
