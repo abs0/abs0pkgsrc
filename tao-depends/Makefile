@@ -1,4 +1,6 @@
-DISTNAME=	tao-depends-1.04
+# $NetBSD$
+
+DISTNAME=	tao-depends-1.05
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,7 +19,7 @@ DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= bfg>0:../../devel/bfg
 .endif
 
-DEPENDS+= postgresql10>0:../../databases/postgresql10
+DEPENDS+= postgresql11>0:../../databases/postgresql11
 #@ DEPENDS+= couchdb>0:../../databases/couchdb
 
 .include "../../mk/bsd.pkg.mk"
