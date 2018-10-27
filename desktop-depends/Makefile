@@ -25,7 +25,7 @@ DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
 # additional fonts
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
-DEPENDS+= ubuntu-font>0:../../fonts/ubuntu-fonts
+DEPENDS+= ubuntu-fonts>0:../../fonts/ubuntu-fonts
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
