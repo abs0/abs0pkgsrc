@@ -27,6 +27,7 @@ MSG=/tmp/m
   cat DESCR
 ) > $MSG
 cat $MSG
-IMPORT="cvs -d cvs.netbsd.org:/cvsroot add ."
-echo $IMPORT
-$IMPORT
+# IMPORT="cvs -d cvs.netbsd.org:/cvsroot add ."
+# echo $IMPORT
+# $IMPORT
+echo "Use plain cvs add"
