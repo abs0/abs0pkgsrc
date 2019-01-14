@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-# $Id: 2png,v 1.15 2008/01/08 15:10:34 abs Exp $
 
 use strict;
 use warnings;
@@ -92,10 +91,10 @@ sub convert2png {
         progress( ' -> ' . size( -s $tmpfile ) );
     }
 
-    my @optipng = ('optipng', '-q');
-    if   ( $opt{9} ) { push(@optipng, '-o', '7'); }
-    else             { push(@optipng, '-o', '5'); }
-    system(@optipng, $tmpfile) && exit 1;
+    my @optipng = ( 'optipng', '-fix', '-o', ( $opt{9} ? '7' : '5' ) );
+    push( @optipng, '-q' ) if !$opt{v};
+    push( @optipng, $tmpfile );
+    die "**** @optipng failed" if system(@optipng);
 
     utime $oldmtime, $oldmtime, $tmpfile if $opt{t};
     my $newsize = -s $tmpfile;
