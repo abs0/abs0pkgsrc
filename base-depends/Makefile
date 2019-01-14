@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.40
+DISTNAME=	base-depends-1.41
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -58,6 +58,8 @@ DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 
 DEPENDS+= get_iplayer>0:../../net/get_iplayer # get_iplayer needs ffmpeg
 DEPENDS+= ffmpeg4>0:../../multimedia/ffmpeg4
+
+DEPENDS+= renameutils>0:../../sysutils/renameutils
 
 # Security
 DEPENDS+= gnupg2>0:../../security/gnupg2
