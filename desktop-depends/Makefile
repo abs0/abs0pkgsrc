@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.42
+DISTNAME=	desktop-depends-1.46
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,10 +15,11 @@ META_PACKAGE=	yes
 # High priorities - build first
 DEPENDS+= firefox>0:../../www/firefox
 DEPENDS+= jwm>0:../../wm/jwm
+DEPENDS+= dmenu>0:../../x11/dmenu
 
 .if ${X11_TYPE} == "modular"
-DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
-DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
+# DEPENDS+= modular-xorg>0:../../meta-pkgs/modular-xorg
+# DEPENDS+= ssh-askpass>0:../../security/ssh-askpass
 .endif
 
 # additional fonts
@@ -29,13 +30,13 @@ DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
 
 # Medium priority
 DEPENDS+= slim>0:../../x11/slim
+DEPENDS+= xdotool>0:../../x11/xdotool
 DEPENDS+= slim-themes>0:../../graphics/slim-themes
 DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= meld>0:../../devel/meld
+DEPENDS+= zathura-pdf-poppler>0:../../print/zathura-pdf-poppler
 DEPENDS+= synergy>0:../../net/synergy
-DEPENDS+= wpa_gui>0:../../net/wpa_gui
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
-DEPENDS+= wireshark>0:../../net/wireshark
 DEPENDS+= xsel>0:../../x11/xsel
 DEPENDS+= conky>0:../../sysutils/conky
 
@@ -45,5 +46,7 @@ DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= tigervnc>0:../../net/tigervnc
 DEPENDS+= open-vm-tools>0:../../sysutils/open-vm-tools
 DEPENDS+= xcowsay>0:../../games/xcowsay
+DEPENDS+= mpv>0:../../multimedia/mpv
+DEPENDS+= xfce4-screenshooter>0:../../x11/xfce4-screenshooter
 
 .include "../../mk/bsd.pkg.mk"
