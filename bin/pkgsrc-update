@@ -276,7 +276,7 @@ if [ ! -d $PKGSRC ];then
 	/*)
 	    script=$0;
 	    ;;
-	*)  
+	*)
 	    script=$(pwd)/$0
 	    script=$(echo $script | sed 's:/\.::')
 	    ;;
@@ -455,7 +455,7 @@ echo "pkg_chk $PKG_CHK_FLAGS..."
 nice -n 20 pkg_chk $PKG_CHK_FLAGS < /dev/null || true
 if [ ! -n "$opt_b" ] ; then
     echo "Update pkg_summary.bz2"
-    ( cd $PKGBINDIR && 
+    ( cd $PKGBINDIR &&
       ls -t *.tgz | xargs pkg_info -X | bzip2 -9 > pkg_summary.bz2
     )
 fi

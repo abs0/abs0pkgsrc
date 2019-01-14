@@ -65,7 +65,7 @@ devel/p5-Config-IniFiles	*
 devel/p5-Date-Manip		*		# fuzzy
 devel/p5-IO-Stty		*		# mono::bot
 devel/p5-IO-Tty			*		# mono::bot
-devel/p5-Perl-Tidy		*		# Reformat perl 
+devel/p5-Perl-Tidy		*		# Reformat perl
 mail/p5-MIME-Lite		*		# stig
 mail/p5-MIME-tools		*
 math/p5-Number-Latin		*		# used by link cgi script

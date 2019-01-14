@@ -47,7 +47,7 @@ shift $(expr $OPTIND - 1)
 
 if [ -n "$opt_h" ] ; then
 	echo "Usage: os-update [opts] [hosts]
-opts:   -D dir Read source tarfiles and script from dir, and delete after 
+opts:   -D dir Read source tarfiles and script from dir, and delete after
         -X     Exclude X distribution
 	-K     Just install kernels
 	-b     Install from binaries (default)

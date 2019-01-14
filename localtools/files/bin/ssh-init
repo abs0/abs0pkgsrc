@@ -117,7 +117,7 @@ opts:	-c Output suitable for a csh shell to eval
 	-p Print out the value of SSH_AUTH_SOCK
 	-v Verbose
 END
-    [ -z "$opt_error" ] 
+    [ -z "$opt_error" ]
     exit
 fi
 
