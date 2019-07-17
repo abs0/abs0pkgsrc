@@ -8,6 +8,9 @@ PKG_UPDATE_SPOOL=/var/run/pkgsrc-update
 # unset ENV to ensure it does not disrupt PATH or other settings
 ENV=
 
+# unset DISPLAY to ensure no builds try to use it
+DISPLAY=
+
 export TMPDIR=/tmp
 export UPDATE_TARGET=package-install
 if [ -n "$PKG_PATH" ]; then
