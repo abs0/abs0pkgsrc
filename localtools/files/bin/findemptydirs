@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+
+use Modern::Perl '2019';
+use File::Find;
+
+die "Must specify directory or directories to search\n" if !@ARGV;
+
+find( \&wanted, @ARGV );
+
+sub wanted {
+    if ( $_ eq '.git' || $_ eq 'CVS' || $_ eq '.stfolder' ) {
+        $File::Find::prune = 1;
+        return;
+    }
+    if ( -d $_ && opendir( DIR, $_ ) ) {
+        if ( !grep( $_ ne '.' && $_ ne '..' && $_ ne 'CVS', readdir(DIR) ) ) {
+            print $File::Find::name . "\n";
+        }
+        closedir(DIR);
+    }
+}
+
