@@ -22,7 +22,7 @@ opts:	-9 Try much harder to compress
 	-t Keep original timestamps
 	-v Verbose
 
-2png uses ImageMagick to convert the files specified to .png (if
+2png uses GraphicsMagick to convert the files specified to .png (if
 not already in that format), then optipng to optimise the size.
 The resultant file should be pixel for pixel identical to the
 source.
@@ -85,7 +85,7 @@ sub convert2png {
             progress( ' contains ' . scalar(@identify) . " images\n" );
             return;
         }
-        my @convert = qw(convert);
+        my @convert = qw(gm convert);
         push( @convert, qw(-geometry 1000x700>) ) if $opt{s};
         $tmpfile = filter( $file, $file, @convert );
         progress( ' -> ' . size( -s $tmpfile ) );
