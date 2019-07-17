@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.41
+DISTNAME=	base-depends-1.42
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -35,7 +35,7 @@ DEPENDS+= git-docs>0:../../devel/git-docs
 DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
 DEPENDS+= mtr>0:../../net/mtr				# Better traceroute
 DEPENDS+= netcat>0:../../net/netcat
-DEPENDS+= nginx>0:../../www/nginx			# http/proxy server
+DEPENDS+= nginx>0:../../www/nginx-devel			# http/proxy server
 DEPENDS+= rsync>0:../../net/rsync
 DEPENDS+= shmux>0:../../sysutils/shmux			# Parallel ssh
 DEPENDS+= ttcp>0:../../benchmarks/ttcp
