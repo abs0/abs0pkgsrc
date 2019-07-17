@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.46
+DISTNAME=	desktop-depends-1.47
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,6 +15,7 @@ META_PACKAGE=	yes
 # High priorities - build first
 DEPENDS+= firefox>0:../../www/firefox
 DEPENDS+= jwm>0:../../wm/jwm
+DEPENDS+= openbox>0:../../wm/openbox
 DEPENDS+= dmenu>0:../../x11/dmenu
 
 .if ${X11_TYPE} == "modular"
@@ -38,10 +39,12 @@ DEPENDS+= zathura-pdf-poppler>0:../../print/zathura-pdf-poppler
 DEPENDS+= synergy>0:../../net/synergy
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= xsel>0:../../x11/xsel
+DEPENDS+= xosd>0:../../x11/xosd
 DEPENDS+= conky>0:../../sysutils/conky
 
 # Lower priority
 DEPENDS+= qemu>0:../../emulators/qemu
+DEPENDS+= haxm>0:../../emulators/haxm
 DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= tigervnc>0:../../net/tigervnc
 DEPENDS+= open-vm-tools>0:../../sysutils/open-vm-tools

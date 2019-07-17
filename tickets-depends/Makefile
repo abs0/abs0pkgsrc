@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.41
+DISTNAME=	tickets-depends-1.42
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,6 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 .if ${OPSYS} == NetBSD
-DEPENDS+= apache-ant>0:../../devel/apache-ant
 DEPENDS+= gradle>0:../../devel/gradle
 .endif
 .if ${OPSYS} == NetBSD || ${OPSYS} == Darwin

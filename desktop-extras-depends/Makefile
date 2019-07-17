@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.60
+DISTNAME=	desktop-extras-depends-1.61
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -33,6 +33,7 @@ DEPENDS+= ffplay4>0:../../multimedia/ffplay4
 DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
 DEPENDS+= libao-pulse>0:../../audio/libao-pulse
 DEPENDS+= mencoder>0:../../multimedia/mencoder
+DEPENDS+= easytag>0:../../audio/easytag
 
 DEPENDS+= wireshark>0:../../net/wireshark
 DEPENDS+= gpxsee>0:../../geography/gpxsee
@@ -42,6 +43,7 @@ DEPENDS+= gpxsee>0:../../geography/gpxsee
 
 # Misc lesser priority
 DEPENDS+= netsurf>0:../../www/netsurf
+DEPENDS+= arandr>0:../../x11/arandr
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= oneko>0:../../x11/oneko
 DEPENDS+= pidgin>0:../../chat/pidgin
