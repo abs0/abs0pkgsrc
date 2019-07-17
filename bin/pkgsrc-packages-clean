@@ -58,7 +58,7 @@ sub cleanup {
             if ($dry_run) {
 	      print "$alldir/$kill ($keep)\n";
             } else {
-	      print "rm $alldir/$kill\n";
+	      print "rm $alldir/$kill ($keep)\n";
 	      unlink("$alldir/$kill") || die "unlink($alldir/$kill) failed: $!";
             }
         }
