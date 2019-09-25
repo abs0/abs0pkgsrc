@@ -14,6 +14,8 @@ DEPENDS+= encodings>0:../../fonts/encodings
 
 .include "../../mk/bsd.prefs.mk"
 
+DEPENDS+= jwm>0:../../wm/jwm
+
 # Useful multimedia desktop tools
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
 DEPENDS+= wpa_gui>0:../../net/wpa_gui

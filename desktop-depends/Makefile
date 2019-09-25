@@ -14,7 +14,6 @@ META_PACKAGE=	yes
 
 # High priorities - build first
 DEPENDS+= firefox>0:../../www/firefox
-DEPENDS+= jwm>0:../../wm/jwm
 DEPENDS+= openbox>0:../../wm/openbox
 DEPENDS+= dmenu>0:../../x11/dmenu
 
