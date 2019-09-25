@@ -37,10 +37,10 @@ END
 END
     fi
 
-    for f in /root/.cshrc /root/.login /root/.tcshrc ; do
+    for f in /root/.login ; do
 	if [ -f $f ] ; then
-	    echo "Removing $f"
-	    rm -f $f
+	    echo "Move $f aside"
+	    mv $f $f.no
 	fi
     done
 
