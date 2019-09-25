@@ -98,7 +98,14 @@ if [ -n "$1" ] ; then
     esac
 else
     if [ -n "$opt_t" ]; then
-        rev=$opt_t
+        case "$t" in
+          netbsd-* | head)
+            rev=$opt_t
+            ;;
+          *)
+            rev=netbsd-$opt_t
+            ;;
+        esac
     else
         rev=netbsd-$(uname -r | sed 's/\..*//')
     fi

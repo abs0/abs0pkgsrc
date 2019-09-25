@@ -65,7 +65,7 @@ opts:   -D dir Read source tarfiles and script from dir, and delete after
 fi
 
 if [ -n "$opt_g" ] ; then
-    nbgetdaily
+    nbgetdaily -t $VERSION
 fi
 
 if [ -n "$opt_s" ] ; then
