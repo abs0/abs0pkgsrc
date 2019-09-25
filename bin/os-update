@@ -76,8 +76,8 @@ if [ -n "$opt_s" ] ; then
 fi
 
 if [ -z "$TARDIR" ] ; then
-    ETCTAR_MATCH="$FILEDIR/$VERSION-$MACHINE-*/etc.t?z"
-    TARDIR=$(ls $ETCTAR_MATCH | sed -n -e 's:/etc\.t.z::' -e '$p')
+    ETCTAR_MATCH="$FILEDIR/$VERSION-$MACHINE-*/etc.t*z"
+    TARDIR=$(ls $ETCTAR_MATCH | sed -n -e 's:/etc\.t.*z::' -e '$p')
     if [ -z "$TARDIR" ] ; then
 	echo "Unable to locate $ETCTAR_MATCH"
 	exit 1
@@ -85,9 +85,9 @@ if [ -z "$TARDIR" ] ; then
 fi
 
 if [ -n "$opt_X" ] ; then
-    TARFILES="$(echo $TARDIR/[a-wyz]*.t?z)"
+    TARFILES="$(echo $TARDIR/[a-wyz]*.t*z)"
 else
-    TARFILES="$(echo $TARDIR/*.t?z)"
+    TARFILES="$(echo $TARDIR/*.t*z)"
 fi
 
 cleanup()
@@ -105,7 +105,7 @@ extract()
     cd "$DESTDIR"
 
     if [ -z "$opt_f" -a -f etc/release ] && \
-		tar xqzfO $TARDIR/base.t?z ./etc/release 2>/dev/null | \
+		tar xqzfO $TARDIR/base.t*z ./etc/release 2>/dev/null | \
 		cmp -s etc/release - ; then
 	echo "$HOST:$DESTDIR etc/release version matches ($TARDIR)"
 	cleanup
@@ -131,7 +131,7 @@ extract()
 
     # Must extract kernel first
     for tarfile in $KERN_TARFILES; do
-        kern=$(echo $tarfile | sed -e 's:.*/kern-::' -e 's:\.t.z$::')
+        kern=$(echo $tarfile | sed -e 's:.*/kern-::' -e 's:\.t.*z$::')
                         	run "cd kernels && tar xzpf $tarfile"
                         	run "mv kernels/netbsd kernels/$kern"
                         	run "gzip -9 kernels/$kern"
@@ -167,7 +167,7 @@ extract()
                         	run "tar xzpf $tarfile"
         done
 
-				run "usr/sbin/postinstall -s $TARDIR/etc.t?z -d $DESTDIR fix || true"
+				run "usr/sbin/postinstall -s $TARDIR/etc.t*z -d $DESTDIR fix || true"
 				run "(cd dev && ./MAKEDEV all)"
 				run "rm -rf kernels.old"
 
