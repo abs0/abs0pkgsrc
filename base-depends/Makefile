@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.42
+DISTNAME=	base-depends-1.43
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -22,8 +22,10 @@ DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
 DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
+.if ${OPSYS} == NetBSD && ${MACHINE_ARCH} == x86_64
 DEPENDS+= xenkernel411>0:../../sysutils/xenkernel411
 DEPENDS+= xentools411>0:../../sysutils/xentools411
+.endif
 
 DEPENDS+= htop>0:../../sysutils/htop
 
@@ -32,7 +34,8 @@ DEPENDS+= git-base>0:../../devel/git-base
 DEPENDS+= git-docs>0:../../devel/git-docs
 
 # Net tools
-DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
+#XXX DEPENDS+= inadyn>0:../../net/inadyn			# Dynamic DNS
+DEPENDS+= ddclient>0:../../net/ddclient			# Dynamic DNS
 DEPENDS+= mtr>0:../../net/mtr				# Better traceroute
 DEPENDS+= netcat>0:../../net/netcat
 DEPENDS+= nginx>0:../../www/nginx-devel			# http/proxy server
