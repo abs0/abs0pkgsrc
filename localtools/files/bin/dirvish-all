@@ -11,6 +11,7 @@ HOME=$(eval echo ~$USER)
 MASTER_CONF=/etc/dirvish/master.conf
 RUNALL_CONF=/etc/dirvish/runall
 
+echo $(date '+%H:%M'): "dirvish-expire"
 dirvish-expire --quiet $@
 
 CONFLIST="$(echo $RUNALL_CONF*)"
