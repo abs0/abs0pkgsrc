@@ -28,7 +28,7 @@ find_latest_directory()
 parseurl()
     {
     url=$1
-    echo $url | awk -v arch=`uname -m` -F/ '
+    echo $url | awk -v arch=$machine_arch -F/ '
 	{
 	if ($6 == "HEAD")
 	    { print "tag=current" }
@@ -69,9 +69,10 @@ txz_name()
       echo "$@" | sed 's/\.tgz$/.txz/'
 }
 
-while getopts ht: f; do
+while getopts hm:t: f; do
     case $f in
 	h) opt_h=1				;;
+	m) opt_m="$OPTARG"			;;
 	t) opt_t="$OPTARG"			;;
     esac
 done
@@ -79,8 +80,9 @@ shift $(expr $OPTIND - 1)
 
 if [ -n "$opt_h" ] ; then
 	echo "Usage: nbgetdaily [opts] [url]
-opts:   -h     This help
-	-t tag Set OS tag to download (default to running OS)
+opts:   -h      This help
+	-t tag  Set OS tag to download (default to running OS)
+	-t mach Set machine arch (default from uname -m: $(uname -m))
 ";
     exit
 fi
@@ -97,6 +99,12 @@ if [ -n "$1" ] ; then
 	    ;;
     esac
 else
+    if [ -n "$opt_m" ]; then
+        machine_arch=$opt_m
+    else
+        machine_arch=$(uname -m)
+    fi
+
     if [ -n "$opt_t" ]; then
         case "$t" in
           netbsd-* | head)
