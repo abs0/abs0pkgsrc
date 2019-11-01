@@ -36,8 +36,8 @@ while [ $# != 0 ]; do
 	-h )	opt_h=1 ;;		# Help
 	-k )	opt_k=-k ;;		# Keep going
 	-l )	opt_l=1 ;;		# List
-	-R )	opt_R=1;;		# Skip rolling replace
-	-r )	opt_r=-r; opt_R=1 ;;	# Force remove before install
+	-R )	opt_R=-R; opt_r=1;;	# Force remove before install
+	-r )	opt_r=-r;;		# Skip rolling replace
 	-s )	opt_s=-s ;;		# Source (default)
 	-u )	opt_u=1 ;;		# Run cvs Update
 	-v )	opt_v=-v ;;		# Verbose
@@ -53,15 +53,15 @@ Usage: pkgsrc-update [opts] [hosts]
 opts
 	-D def	Set extra defines for pkg_chk
 	-P dir	Set packages dir
+	-R	Rotate /usr/pkg to /usr/OLDpkg (implies -r)
 	-U def	Unset extra defines for pkg_chk
 	-b	Use binary packages
 	-h	This help
 	-k	Keep going on errors (for -b)
-        -R	Skip rolling replace
 	-l	List packages that would be copied/installed (only for remote)
-	-r	Rotate /usr/pkg to /usr/OLDpkg (implies -R)
 	-u    	Run cvs Update
 	-v    	Verbose
+        -r	Skip rolling replace
 
 END
     exit
@@ -149,7 +149,7 @@ install_from_stream()
     pax -r $opt_v
     echo -n " (install)"
 
-    if [ -n "$opt_r" ] ; then
+    if [ -n "$opt_R" ] ; then
 	rotate_away_usr_pkg
     else
 	pkg_add -uf pkg_chk
@@ -248,7 +248,7 @@ stream_to_remote_hosts()
 	    ssh $h "rm -rf $PKG_UPDATE_SPOOL ; mkdir -p $PKG_UPDATE_SPOOL"
 	    scp $PKGSRC/local/pkgsrc-update $h:$PKG_UPDATE_SPOOL/pkgsrc-update
 	    scp $PKGCHK_CONF $h:$PKG_UPDATE_SPOOL/pkgchk.conf
-	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkgsrc-update -I $opt_r $opt_v
+	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkgsrc-update -I $opt_R $opt_v
 	fi
     done
     }
@@ -321,7 +321,7 @@ if [ $# != 0 ] ; then
     exit
 fi
 
-if [ -n "$opt_r" -a $(id -u) != 0 ] ; then
+if [ -n "$opt_R" -a $(id -u) != 0 ] ; then
     as_root $0 "$saved_args"
     exit
 fi
@@ -333,19 +333,19 @@ if [ -n "$opt_D" ]; then
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -D $opt_D"
 fi
 
-if [ -n "$opt_r" ] ; then
+if [ -n "$opt_R" ] ; then
     if [ -n "$opt_b" -a -d /usr/pkg/sbin ] ; then
 	# Try to reduce time without packages to a minimum
 	# Before deleting anything, work out what packages will be needed
 	determine_PKGBINDIR
-	pkg_delete -r cpuflags	|| true
+	#XXX pkg_delete -r cpuflags	|| true
 	pkg_delete -r pkg_chk	|| true
 	pkg_delete -r pkg_rolling-replace || true
-	pkg_check_install cpuflags devel/cpuflags /usr/pkg/bin/cpuflags
+	#XXX pkg_check_install cpuflags devel/cpuflags /usr/pkg/bin/cpuflags
 	determine_PKGBINDIR
 	pkg_check_install pkg_chk pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
-	opt_r_PKGS=$(pkg_chk $PKG_CHK_FLAGS -P $PKGBINDIR -lb $opt_k)
-	if [ -z "$opt_r_PKGS" ] ; then
+	opt_R_PKGS=$(pkg_chk $PKG_CHK_FLAGS -P $PKGBINDIR -lb $opt_k)
+	if [ -z "$opt_R_PKGS" ] ; then
 	    fatal "No packages found?"
 	fi
     fi
@@ -388,14 +388,14 @@ determine_PKGBINDIR
 PKG_CHK_FLAGS="$PKG_CHK_FLAGS -P $PKGBINDIR"
 
 if [ -n "$opt_b" ] ; then
-    pkg_check_install cpuflags	devel/cpuflags		/usr/pkg/bin/cpuflags
+    #XXX pkg_check_install cpuflags	devel/cpuflags		/usr/pkg/bin/cpuflags
     pkg_check_install pkg_chk	pkgtools/pkg_chk	/usr/pkg/sbin/pkg_chk
 
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -b"
 
-    if [ -n "$opt_r_PKGS" ] ; then
+    if [ -n "$opt_R_PKGS" ] ; then
 	cd $PKGBINDIR
-	pkg_add $opt_r_PKGS
+	pkg_add $opt_R_PKGS
 	postrun
 	exit
     fi
@@ -429,11 +429,11 @@ else	# $opt_s
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -s -L $LOG"
 
     # XXX maybe continue on error if -k ?
-    if [ -n "$opt_s" -a -z "$opt_R" ]; then
+    if [ -n "$opt_s" -a -z "$opt_r" ]; then
         pkg_check_install pkg_rolling-replace pkgtools/pkg_rolling-replace /usr/pkg/bin/pkg_rolling-replace
         nice -n 20 pkg_rolling-replace -Bsu
     fi
-    if [ -z "$opt_r" -a -x /usr/pkg/sbin/pkg_chk ] ; then
+    if [ -z "$opt_R" -a -x /usr/pkg/sbin/pkg_chk ] ; then
 	echo "pkg_chk -Br"
 	pkg_chk -Br -P $PKGBINDIR
     else
@@ -441,9 +441,9 @@ else	# $opt_s
     fi
 
     if [ -d $PKGBINDIR ] ; then
-        as_root chown -R $USER $PKGBINDIR
+        as_root chown -R $USER $PKGBINDIR || true
     fi
-    pkg_check_install cpuflags		devel/cpuflags	 /usr/pkg/bin/cpuflags
+    #XXX pkg_check_install cpuflags		devel/cpuflags	 /usr/pkg/bin/cpuflags
     pkg_check_install pkg_chk		pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
 
     if [ -n "$later_pkg_chk_remove" ] ; then
