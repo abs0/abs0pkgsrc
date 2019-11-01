@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	tao-depends-1.07
+DISTNAME=	tao-depends-1.08
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,7 +14,7 @@ META_PACKAGE=	yes
 
 .if ${OPSYS} == NetBSD
 DEPENDS+= openjdk8>0:../../lang/openjdk8
-DEPENDS+= openjdk-bin>0:../../lang/openjdk-bin
+DEPENDS+= openjdk11>0:../../lang/openjdk11
 DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= bfg>0:../../devel/bfg
