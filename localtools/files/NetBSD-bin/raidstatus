@@ -1,28 +1,35 @@
-#!/usr/bin/env perl
+#!/usr/pkg/bin/perl
+use strict;
+use warnings;
+my $err;
 my $disks = `sysctl -n hw.disknames`;
 for my $disk (split(' ', $disks)) {
   next if $disk !~ /^raid/;
+  print "$disk:";
   open(RAIDCTL, "raidctl -s $disk|") || die "raidctl failed: $!";
   my %status;
-  my $other = '';
+  my $issue = '';
   while (<RAIDCTL>) {
     chomp;
     if(m#^\s{4}\s*+(?:/dev/)?(\S+): (\S.*)#) {
        push (@{$status{$2}}, $1);
     }
     if(m#^(Parity status: (.*))# && $2 ne 'clean') {
-       print " $1";
+       $issue .= " ($1)";
     }
     if(m#^((Reconstruction|Parity Re-write|Copyback)(.*))# && $3 ne ' is 100% complete.') {
        my $msg = $1;
        $msg =~ s/\.$//;
-       $other .= " ($msg)";
+       $issue .= " ($msg)";
     }
   }
-  print "$disk:";
   foreach my $status (sort keys %status) {
     print ' ', join(',', sort @{$status{$status}});
-    print ($status eq 'optimal' ? '' : uc(":$status"));
+    if ($status ne 'optimal') {
+      $issue .= ' '. uc("$status");
+    }
   }
-  print "$other\n";
+  print "$issue\n";
+  $err |= $issue ne '';
 }
+exit $err;
