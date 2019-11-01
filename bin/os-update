@@ -99,31 +99,10 @@ cleanup()
     fi
     }
 
-extract()
+# Assumes TARFILES set
+update_kernels()
     {
-    DESTDIR=$1
-    cd "$DESTDIR"
-
-    if [ -z "$opt_f" -a -f etc/release ] && \
-		tar xqzfO $TARDIR/base.t*z ./etc/release 2>/dev/null | \
-		cmp -s etc/release - ; then
-	echo "$HOST:$DESTDIR etc/release version matches ($TARDIR)"
-	cleanup
-	return
-    fi
-
-    if [ -n "$opt_d" -o ! -d $DESTDIR/etc ] ; then
-	extract_etc=1
-    else
-	extract_etc=
-    fi
-
     KERN_TARFILES="$(echo $TARFILES | fmt 1 | grep '/kern-[^/]*$')"
-    if [ -n "$extract_etc" ] ; then
-	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | grep -v '/kern-[^/]*$')"
-    else
-	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | egrep -v '/(kern-|etc\.)[^/]*$')"
-    fi
 
     [ -d kernels.old ] &&	run "rm -rf kernels.old"
     [ -d kernels ] &&		run "mv kernels kernels.old"
@@ -142,23 +121,36 @@ extract()
 	KERNEL=kernels/GENERIC.gz
     fi
 
-    case $KERNEL in
-      *DOM0*)
-        DOM0_KERNEL=$KERNEL
-        KERNEL=kernels/GENERIC.gz
-        ;;
-      *)
-        DOM0_KERNEL=kernels/XEN3_DOM0.gz
-        ;;
-    esac
-
     [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
 				run "cp $KERNEL netbsd.new"
 				run "mv netbsd.new netbsd"
-    [ -f netbsd.dom0 ] &&	run "ln -f netbsd.dom0 onetbsd.dom0"
-    if [ -f netbsd.dom0 ] ; then
-				run "gzcat $DOM0_KERNEL > netbsd.dom0.new"
-				run "mv netbsd.dom0.new netbsd.dom0"
+    }
+
+update_system()
+    {
+    DESTDIR=$1
+    cd "$DESTDIR"
+
+    if [ -z "$opt_f" -a -f etc/release ] && \
+		tar xqzfO $TARDIR/base.t*z ./etc/release 2>/dev/null | \
+		cmp -s etc/release - ; then
+	echo "$HOST:$DESTDIR etc/release version matches ($TARDIR)"
+	cleanup
+	return
+    fi
+
+    update_kernels
+
+    if [ -n "$opt_d" -o ! -d $DESTDIR/etc ] ; then
+	extract_etc=1
+    else
+	extract_etc=
+    fi
+
+    if [ -n "$extract_etc" ] ; then
+	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | grep -v '/kern-[^/]*$')"
+    else
+	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | egrep -v '/(kern-|etc\.)[^/]*$')"
     fi
 
     if [ -z "$opt_K" ] ; then
@@ -204,11 +196,11 @@ if [ -n "$1" ] ; then
     done
 else
     [ -n "$opt_D" ] &&	run "rm -f $opt_D/os-update"
-    extract $DESTDIR
+    update_system $DESTDIR
 
     if [ -f $DESTDIR/altroot/netbsd ] || mount | grep -q ' on /altroot ' ; then
 	DESTDIR=$DESTDIR/altroot
-	extract $DESTDIR
+	update_system $DESTDIR
     fi
 fi
 
