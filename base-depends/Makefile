@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.43
+DISTNAME=	base-depends-1.44
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -23,8 +23,9 @@ DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
 .if ${OPSYS} == NetBSD && ${MACHINE_ARCH} == x86_64
-DEPENDS+= xenkernel411>0:../../sysutils/xenkernel411
-DEPENDS+= xentools411>0:../../sysutils/xentools411
+DEPENDS+= qemu-nvmm>0:../../wip/qemu-nvmm-netbsd-9
+.else
+DEPENDS+= qemu>0:../../emulators/qemu
 .endif
 
 DEPENDS+= htop>0:../../sysutils/htop

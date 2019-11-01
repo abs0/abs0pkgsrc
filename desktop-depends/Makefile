@@ -41,9 +41,6 @@ DEPENDS+= xsel>0:../../x11/xsel
 DEPENDS+= xosd>0:../../x11/xosd
 DEPENDS+= conky>0:../../sysutils/conky
 
-# Lower priority
-DEPENDS+= qemu>0:../../emulators/qemu
-DEPENDS+= haxm>0:../../emulators/haxm
 DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= tigervnc>0:../../net/tigervnc
 DEPENDS+= open-vm-tools>0:../../sysutils/open-vm-tools
