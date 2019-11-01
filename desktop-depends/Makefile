@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.47
+DISTNAME=	desktop-depends-1.48
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -43,7 +43,12 @@ DEPENDS+= conky>0:../../sysutils/conky
 
 DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= tigervnc>0:../../net/tigervnc
+
+# Broken assumption that time_t is 32 bits on i386
+.if ${OPSYS} == NetBSD && ${MACHINE} == amd64
 DEPENDS+= open-vm-tools>0:../../sysutils/open-vm-tools
+.endif
+
 DEPENDS+= xcowsay>0:../../games/xcowsay
 DEPENDS+= mpv>0:../../multimedia/mpv
 DEPENDS+= xfce4-screenshooter>0:../../x11/xfce4-screenshooter
