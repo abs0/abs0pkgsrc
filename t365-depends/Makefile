@@ -11,7 +11,7 @@ COMMENT=	Meta package for t365 depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql11>0:../../databases/postgresql11
+DEPENDS+= postgresql12>0:../../databases/postgresql12
 
 DEPENDS+= p5-Module-Install>0:../../devel/p5-Module-Install
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql

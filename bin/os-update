@@ -24,6 +24,12 @@ VERSION=$(case "$VERSION" in
     *) echo $VERSION | sed 's/\..*//' ;;
 esac)
 
+# libarchive requires -U to avoid overwriting in place
+case "$VERSION" in
+  9.*) taropt="U" ;;
+  *)   taropt="" ;;
+esac
+
 start=$(date +%s)
 
 while getopts D:KXbd:fghk:nst:u f; do

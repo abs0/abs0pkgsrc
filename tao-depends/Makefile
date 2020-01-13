@@ -20,7 +20,7 @@ DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= bfg>0:../../devel/bfg
 .endif
 
-DEPENDS+= postgresql11>0:../../databases/postgresql11
+DEPENDS+= postgresql12>0:../../databases/postgresql12
 #@ DEPENDS+= couchdb>0:../../databases/couchdb
 
 .include "../../mk/bsd.pkg.mk"
