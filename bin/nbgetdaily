@@ -106,8 +106,8 @@ else
     fi
 
     if [ -n "$opt_t" ]; then
-        case "$t" in
-          netbsd-* | head)
+        case "$opt_t" in
+          netbsd-* | HEAD)
             rev=$opt_t
             ;;
           *)
