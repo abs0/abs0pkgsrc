@@ -22,8 +22,8 @@ DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
 DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
-.if ${OPSYS} == NetBSD && ${MACHINE_ARCH} == x86_64
-DEPENDS+= qemu-nvmm>0:../../wip/qemu-nvmm-netbsd-9
+.if ${OPSYS} == NetBSD && ${MACHINE_ARCH} == x86_64 && empty(OS_VERSION:M[2-8].*)
+DEPENDS+= qemu-nvmm>0:../../wip/qemu-nvmm
 .else
 DEPENDS+= qemu>0:../../emulators/qemu
 .endif
@@ -46,6 +46,7 @@ DEPENDS+= ttcp>0:../../benchmarks/ttcp
 DEPENDS+= iperf3>0:../../net/iperf3			# Benchmark
 DEPENDS+= mosh>0:../../net/mosh				# remote shell
 DEPENDS+= openvpn>0:../../net/openvpn			# VPN
+DEPENDS+= socat>0:../../net/socat			# Pipe <> sockets
 
 # Archivers/convertors
 DEPENDS+= p7zip>0:../../archivers/p7zip
