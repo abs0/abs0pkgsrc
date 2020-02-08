@@ -36,8 +36,8 @@ while [ $# != 0 ]; do
 	-h )	opt_h=1 ;;		# Help
 	-k )	opt_k=-k ;;		# Keep going
 	-l )	opt_l=1 ;;		# List
-	-R )	opt_R=-R; opt_r=1;;	# Force remove before install
-	-r )	opt_r=-r;;		# Skip rolling replace
+	-r )	opt_r=-r ;;		# Force remove before install
+	-R )	opt_R=-R;;		# Rolling replace
 	-s )	opt_s=-s ;;		# Source (default)
 	-u )	opt_u=1 ;;		# Run cvs Update
 	-v )	opt_v=-v ;;		# Verbose
@@ -53,7 +53,7 @@ Usage: pkgsrc-update [opts] [hosts]
 opts
 	-D def	Set extra defines for pkg_chk
 	-P dir	Set packages dir
-	-R	Rotate /usr/pkg to /usr/OLDpkg (implies -r)
+	-r	Rotate /usr/pkg to /usr/OLDpkg
 	-U def	Unset extra defines for pkg_chk
 	-b	Use binary packages
 	-h	This help
@@ -61,7 +61,7 @@ opts
 	-l	List packages that would be copied/installed (only for remote)
 	-u    	Run cvs Update
 	-v    	Verbose
-        -r	Skip rolling replace
+        -R	Use rolling replace
 
 END
     exit
@@ -149,7 +149,7 @@ install_from_stream()
     pax -r $opt_v
     echo -n " (install)"
 
-    if [ -n "$opt_R" ] ; then
+    if [ -n "$opt_r" ] ; then
 	rotate_away_usr_pkg
     else
 	pkg_add -uf pkg_chk
@@ -248,7 +248,7 @@ stream_to_remote_hosts()
 	    ssh $h "rm -rf $PKG_UPDATE_SPOOL ; mkdir -p $PKG_UPDATE_SPOOL"
 	    scp $PKGSRC/local/pkgsrc-update $h:$PKG_UPDATE_SPOOL/pkgsrc-update
 	    scp $PKGCHK_CONF $h:$PKG_UPDATE_SPOOL/pkgchk.conf
-	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkgsrc-update -I $opt_R $opt_v
+	    pax -w $PKGLIST | ssh $h $PKG_UPDATE_SPOOL/pkgsrc-update -I $opt_r $opt_v
 	fi
     done
     }
@@ -290,6 +290,12 @@ fi
 # Before update
 if [ -n "$opt_s" ] ; then
     determine_and_wipe_WRKOBJDIR
+
+    # Work around firefox and thunderbird processes hanging
+    # /var/obj/pkg/www/firefox/work/build/_virtualenvs/init/bin/python /var/obj/pkg/www/firefox/work/firefox-68.0.1/configure.py --enable-application=browser --prefix=/usr/pkg --target=x86_64--netbsd --host=x86_64--netbsd --enable-default-toolkit=cairo-gtk3 --enable-release --enable-webrender=build --disable-tests --enable-system-pixman --enable-system-ffi --with-system-icu --with-system-nss --with-system-nspr --with-system-zlib --with-system-bz2 --with-system-libevent=/usr --disable-crashreporter --disable-necko-wifi --enable-chrome-format=flat --disable-libjpeg-turbo --with-system-webp --disable-gconf --disable-icf --disable-updater --disable-alsa --with-oss --disable-jemalloc --disable-debug-symbols --enable-optimize=-O2 --enable-install-strip --disable-debug --disable-pulseaudio --enable-dbus --enable-official-branding --disable-webrtc
+    # /var/obj/pkg/mail/thunderbird/work/build/_virtualenv/bin/python /var/obj/pkg/mail/thunderbird/work/thunderbird-60.8.0/configure.py --enable-application=comm/mail --disable-webrtc --prefix=/usr/pkg --target=x86_64--netbsd --host=x86_64--netbsd --enable-default-toolkit=cairo-gtk3 --enable-pie --disable-tests --with-pthreads --enable-system-pixman --enable-system-ffi --with-system-icu --with-system-nss --with-system-nspr --with-system-zlib --with-system-bz2 --with-system-libevent=/usr --disable-crashreporter --disable-necko -wifi --enable-chrome-format=flat --disable-gconf --disable-icf --disable-updater --disable-alsa --with-oss --disable-jemalloc --disable-debug --enable-optimize=-O2 --enable-install-strip --disable-pulseaudio --enable-calendar --enable-dbus --enable-official-brandin
+    pgrep -fl '_virtualenv.*/python.*configure.py' || true
+    pkill -f '_virtualenv.*/python.*configure.py' || true
 fi
 
 # Update source tree & rebuild vulnerability-list as needed
@@ -321,7 +327,7 @@ if [ $# != 0 ] ; then
     exit
 fi
 
-if [ -n "$opt_R" -a $(id -u) != 0 ] ; then
+if [ -n "$opt_r" -a $(id -u) != 0 ] ; then
     as_root $0 "$saved_args"
     exit
 fi
@@ -333,7 +339,7 @@ if [ -n "$opt_D" ]; then
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -D $opt_D"
 fi
 
-if [ -n "$opt_R" ] ; then
+if [ -n "$opt_r" ] ; then
     if [ -n "$opt_b" -a -d /usr/pkg/sbin ] ; then
 	# Try to reduce time without packages to a minimum
 	# Before deleting anything, work out what packages will be needed
@@ -344,8 +350,8 @@ if [ -n "$opt_R" ] ; then
 	#XXX pkg_check_install cpuflags devel/cpuflags /usr/pkg/bin/cpuflags
 	determine_PKGBINDIR
 	pkg_check_install pkg_chk pkgtools/pkg_chk /usr/pkg/sbin/pkg_chk
-	opt_R_PKGS=$(pkg_chk $PKG_CHK_FLAGS -P $PKGBINDIR -lb $opt_k)
-	if [ -z "$opt_R_PKGS" ] ; then
+	opt_r_PKGS=$(pkg_chk $PKG_CHK_FLAGS -P $PKGBINDIR -lb $opt_k)
+	if [ -z "$opt_r_PKGS" ] ; then
 	    fatal "No packages found?"
 	fi
     fi
@@ -374,7 +380,7 @@ if [ $(uname) != NetBSD -a ! -x /usr/pkg/bin/bmake ] ; then
 	echo "bootstrap build complete"
     else
         echo "Installing binary bootstrap"
-        as_root tar xpzf $bootstrap -C /
+        as_root tar xpUzf $bootstrap -C /
         if [ ! -d /usr/pkg/bin ] ; then
 	    fatal "/usr/pkg/bin not extracted from $bootstrap"
         fi
@@ -393,9 +399,9 @@ if [ -n "$opt_b" ] ; then
 
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -b"
 
-    if [ -n "$opt_R_PKGS" ] ; then
+    if [ -n "$opt_r_PKGS" ] ; then
 	cd $PKGBINDIR
-	pkg_add $opt_R_PKGS
+	pkg_add $opt_r_PKGS
 	postrun
 	exit
     fi
@@ -429,11 +435,11 @@ else	# $opt_s
     PKG_CHK_FLAGS="$PKG_CHK_FLAGS -s -L $LOG"
 
     # XXX maybe continue on error if -k ?
-    if [ -n "$opt_s" -a -z "$opt_r" ]; then
+    if [ -n "$opt_s" -a -n "$opt_R" ]; then
         pkg_check_install pkg_rolling-replace pkgtools/pkg_rolling-replace /usr/pkg/bin/pkg_rolling-replace
         nice -n 20 pkg_rolling-replace -Bsu
     fi
-    if [ -z "$opt_R" -a -x /usr/pkg/sbin/pkg_chk ] ; then
+    if [ -n "$opt_r" -a -x /usr/pkg/sbin/pkg_chk ] ; then
 	echo "pkg_chk -Br"
 	pkg_chk -Br -P $PKGBINDIR
     else
