@@ -1,0 +1,90 @@
+#!/usr/pkg/bin/perl
+use strict;
+use warnings;
+
+$ENV{PATH} .= ':/usr/pkg/sbin';
+
+my $err;
+my $disks = `sysctl -n hw.disknames`;
+
+my %status;
+
+for my $disk (split(' ', $disks)) {
+  my $issue;
+  if ($disk =~ /^raid/) {
+    $issue = raidstatus($disk);
+  } elsif ($disk =~ /^sd/) {
+    $issue = sdstatus($disk);
+  } elsif ($disk =~ /^wd/) {
+    $issue = wdstatus($disk);
+  } else {
+    next;
+  }
+  print "$disk: " . ($issue ? "** $issue" : 'ok') . "\n";
+  $err |= $issue ne '';
+}
+zfsstatus();
+exit $err;
+
+sub raidstatus {
+  my $disk = shift;
+  open(RAIDCTL, "raidctl -s $disk|") || die "raidctl failed: $!";
+  my $issue = '';
+  while (<RAIDCTL>) {
+    chomp;
+    if(m#^\s{4}\s*+(?:/dev/)?(\S+): (\S.*)#) {
+       push (@{$status{$2}}, $1);
+    }
+    if(m#^(Parity status: (.*))# && $2 ne 'clean') {
+       $issue .= " ($1)";
+    }
+    if(m#^((Reconstruction|Parity Re-write|Copyback)(.*))# && $3 ne ' is 100% complete.') {
+       my $msg = $1;
+       $msg =~ s/\.$//;
+       $issue .= " ($msg)";
+    }
+  }
+  foreach my $status (sort keys %status) {
+    if ($status ne 'optimal') {
+      $issue .= ' ' . join(',', sort @{$status{$status}}) . ' '. uc("$status");
+    }
+  }
+  return $issue;
+}
+
+sub sdstatus {
+  my $disk = shift;
+  open(SMARTCTL, "smartctl -H /dev/r$disk|") || die "smartctl failed: $!";
+  my $status;
+  while (<SMARTCTL>) {
+    if (/SMART Health Status: (.*)/) {
+      $status = $1;
+    }
+  }
+  return !defined $status 
+    ? 'no status'
+    : $status eq 'OK' ? '' : 'SMART ' . $status;
+}
+
+sub wdstatus {
+  my $disk = shift;
+  open(SMARTCTL, "smartctl -H /dev/r$disk|") || die "smartctl failed: $!";
+  my $status;
+  while (<SMARTCTL>) {
+    if (/SMART overall-health self-assessment test result: (.*)/) {
+      $status = $1;
+    }
+  }
+  return !defined $status 
+    ? 'no status'
+    : $status eq 'PASSED' ? '' : 'SMART ' . $status;
+}
+
+sub zfsstatus {
+  open(ZPOOL, "zpool list|") || die "zpool failed: $!";
+  my @zpool = <ZPOOL>;
+  if (@zpool == 1 && $zpool[0] eq "no pools available\n") {
+    return '';
+  }
+  print @zpool;
+}
