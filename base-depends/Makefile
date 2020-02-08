@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.44
+DISTNAME=	base-depends-1.45
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -22,11 +22,7 @@ DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
 DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 # VM
-.if ${OPSYS} == NetBSD && ${MACHINE_ARCH} == x86_64 && empty(OS_VERSION:M[2-8].*)
-DEPENDS+= qemu-nvmm>0:../../wip/qemu-nvmm
-.else
 DEPENDS+= qemu>0:../../emulators/qemu
-.endif
 
 DEPENDS+= htop>0:../../sysutils/htop
 
@@ -55,6 +51,10 @@ DEPENDS+= unrar>0:../../archivers/unrar
 DEPENDS+= zip>0:../../archivers/zip
 DEPENDS+= rdfind>0:../../sysutils/rdfind
 DEPENDS+= poppler-utils>0:../../print/poppler-utils	# pdfseparate etc
+
+.if ${OPSYS} == NetBSD
+DEPENDS+= smartmontools>0:../../sysutils/smartmontools
+.endif
 
 # DVD/CD/media tools
 DEPENDS+= abcde>0:../../audio/abcde
