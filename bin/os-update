@@ -34,38 +34,38 @@ start=$(date +%s)
 
 while getopts D:KXbd:fghk:nst:u f; do
     case $f in
-	D) opt_D="$OPTARG"; TARDIR="$OPTARG"	;;
-	K) opt_K=1				;;
-	X) opt_X=1				;;
-	b) opt_b=1				;;
-	d) opt_d="$OPTARG"; DESTDIR="$OPTARG"	;;
-	f) opt_f=-f				;;
-	g) opt_g=1				;;
-	h) opt_h=1				;;
-	k) KERNEL="kernels/$OPTARG.gz"		;;
-	n) opt_n=1				;;
-	t) VERSION="$OPTARG"			;;
-	s) opt_s=1				;;
-	u) opt_u=-u				;;
+        D) opt_D="$OPTARG"; TARDIR="$OPTARG"    ;;
+        K) opt_K=1                              ;;
+        X) opt_X=1                              ;;
+        b) opt_b=1                              ;;
+        d) opt_d="$OPTARG"; DESTDIR="$OPTARG"   ;;
+        f) opt_f=-f                             ;;
+        g) opt_g=1                              ;;
+        h) opt_h=1                              ;;
+        k) KERNEL="kernels/$OPTARG.gz"          ;;
+        n) opt_n=1                              ;;
+        t) VERSION="$OPTARG"                    ;;
+        s) opt_s=1                              ;;
+        u) opt_u=-u                             ;;
     esac
 done
 shift $(expr $OPTIND - 1)
 
 if [ -n "$opt_h" ] ; then
-	echo "Usage: os-update [opts] [hosts]
+        echo "Usage: os-update [opts] [hosts]
 opts:   -D dir Read source tarfiles and script from dir, and delete after
         -X     Exclude X distribution
-	-K     Just install kernels
-	-b     Install from binaries (default)
-	-d dir Full distribution (including etc set)
-	-f     Force (ignore value of /etc/release)
-	-g     Get directly from nycdn.netbsd.org (use nbgetdaily)
-	-h     This help
-	-k nam Override name of kernel to install
-	-n     No write (do not actually make any changes)
-	-t tag Set OS tag to build
-	-s     Rebuild from source
-	-u     Run build with -u (and do not delete before or after build)
+        -K     Just install kernels
+        -b     Install from binaries (default)
+        -d dir Full distribution (including etc set)
+        -f     Force (ignore value of /etc/release)
+        -g     Get directly from nycdn.netbsd.org (use nbgetdaily)
+        -h     This help
+        -k nam Override name of kernel to install
+        -n     No write (do not actually make any changes)
+        -t tag Set OS tag to build
+        -s     Rebuild from source
+        -u     Run build with -u (and do not delete before or after build)
 ";
     exit
 fi
@@ -76,8 +76,8 @@ fi
 
 if [ -n "$opt_s" ] ; then
     if ! nice -n 20 nbbuild $opt_u -t $VERSION ; then
-	echo nbbuild failed
-	exit 1
+        echo nbbuild failed
+        exit 1
     fi
 fi
 
@@ -85,8 +85,8 @@ if [ -z "$TARDIR" ] ; then
     ETCTAR_MATCH="$FILEDIR/$VERSION-$MACHINE-*/etc.t*z"
     TARDIR=$(ls $ETCTAR_MATCH | sed -n -e 's:/etc\.t.*z::' -e '$p')
     if [ -z "$TARDIR" ] ; then
-	echo "Unable to locate $ETCTAR_MATCH"
-	exit 1
+        echo "Unable to locate $ETCTAR_MATCH"
+        exit 1
     fi
 fi
 
@@ -99,9 +99,9 @@ fi
 cleanup()
     {
     if [ -n "$opt_D" ]; then
-	for tarfile in $TARFILES ; do
-	    run "rm -f $tarfile"
-	done
+        for tarfile in $TARFILES ; do
+            run "rm -f $tarfile"
+        done
     fi
     }
 
@@ -110,26 +110,26 @@ update_kernels()
     {
     KERN_TARFILES="$(echo $TARFILES | fmt 1 | grep '/kern-[^/]*$')"
 
-    [ -d kernels.old ] &&	run "rm -rf kernels.old"
-    [ -d kernels ] &&		run "mv kernels kernels.old"
-    				run "mkdir -p kernels"
+    [ -d kernels.old ] &&       run "rm -rf kernels.old"
+    [ -d kernels ] &&           run "mv kernels kernels.old"
+                                run "mkdir -p kernels"
 
     # Must extract kernel first
     for tarfile in $KERN_TARFILES; do
         kern=$(echo $tarfile | sed -e 's:.*/kern-::' -e 's:\.t.*z$::')
-                        	run "cd kernels && tar xzpf $tarfile"
-                        	run "mv kernels/netbsd kernels/$kern"
-                        	run "gzip -9 kernels/$kern"
+                                run "cd kernels && tar xzp${taropt}f $tarfile"
+                                run "mv kernels/netbsd kernels/$kern"
+                                run "gzip -9 kernels/$kern"
     done
 
     if [ -z "$opt_n" -a ! -f $KERNEL ] ; then
-	echo "**** Unable to locate $KERNEL"
-	KERNEL=kernels/GENERIC.gz
+        echo "**** Unable to locate $KERNEL"
+        KERNEL=kernels/GENERIC.gz
     fi
 
-    [ -f netbsd ] &&		run "ln -f netbsd onetbsd"
-				run "cp $KERNEL netbsd.new"
-				run "mv netbsd.new netbsd"
+    [ -f netbsd ] &&            run "ln -f netbsd onetbsd"
+                                run "cp $KERNEL netbsd.new"
+                                run "mv netbsd.new netbsd"
     }
 
 update_system()
@@ -138,44 +138,44 @@ update_system()
     cd "$DESTDIR"
 
     if [ -z "$opt_f" -a -f etc/release ] && \
-		tar xqzfO $TARDIR/base.t*z ./etc/release 2>/dev/null | \
-		cmp -s etc/release - ; then
-	echo "$HOST:$DESTDIR etc/release version matches ($TARDIR)"
-	cleanup
-	return
+                tar xzqfO $TARDIR/base.t*z ./etc/release 2>/dev/null | \
+                cmp -s etc/release - ; then
+        echo "$HOST:$DESTDIR etc/release version matches ($TARDIR)"
+        cleanup
+        return
     fi
 
     update_kernels
 
     if [ -n "$opt_d" -o ! -d $DESTDIR/etc ] ; then
-	extract_etc=1
+        extract_etc=1
     else
-	extract_etc=
+        extract_etc=
     fi
 
     if [ -n "$extract_etc" ] ; then
-	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | grep -v '/kern-[^/]*$')"
+        OTHER_TARFILES="$(echo $TARFILES | fmt 1 | grep -v '/kern-[^/]*$')"
     else
-	OTHER_TARFILES="$(echo $TARFILES | fmt 1 | egrep -v '/(kern-|etc\.)[^/]*$')"
+        OTHER_TARFILES="$(echo $TARFILES | fmt 1 | egrep -v '/(kern-|etc\.)[^/]*$')"
     fi
 
     if [ -z "$opt_K" ] ; then
 
         for tarfile in $OTHER_TARFILES ; do
-                        	run "tar xzpf $tarfile"
+                                run "tar xzp${taropt}f $tarfile"
         done
 
-				run "usr/sbin/postinstall -s $TARDIR/etc.t*z -d $DESTDIR fix || true"
-				run "(cd dev && ./MAKEDEV all)"
-				run "rm -rf kernels.old"
+                                run "usr/sbin/postinstall -s $TARDIR/etc.t*z -d $DESTDIR fix || true"
+                                run "(cd dev && ./MAKEDEV all)"
+                                run "rm -rf kernels.old"
 
         if [ -n "$extract_etc" ] ; then
-				run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db etc/ttys etc/group $DESTDIR || true"
+                                run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db etc/ttys etc/group $DESTDIR || true"
         fi
 
         if [ ! -f boot ] ; then
-				run "cp -p usr/mdec/boot boot"
-				echo "*** Run installboot, check ssh keys, rc.conf, fstab ***"
+                                run "cp -p usr/mdec/boot boot"
+                                echo "*** Run installboot, check ssh keys, rc.conf, fstab ***"
         fi
     fi
 
@@ -186,27 +186,27 @@ run()
     {
     echo "$HOST:$DESTDIR $@"
     if [ -z "$opt_n" ] ; then
-	if [ -x /usr/bin/id -a $(id -u) != 0 ] ; then
-	    sudo -H sh -c "$*"
-	else
-	    sh -c "$*"
-	fi
+        if [ -x /usr/bin/id -a $(id -u) != 0 ] ; then
+            sudo -H sh -c "$*"
+        else
+            sh -c "$*"
+        fi
     fi
     }
 
 if [ -n "$1" ] ; then
     for host ; do
-	echo
-	run scp /pkgsrc/local/os-update $TARDIR/* $host:/var/run
-	run ssh $host /var/run/os-update $opt_f -D /var/run
+        echo
+        run scp /pkgsrc/local/os-update $TARDIR/* $host:/var/run
+        run ssh $host /var/run/os-update $opt_f -D /var/run
     done
 else
-    [ -n "$opt_D" ] &&	run "rm -f $opt_D/os-update"
+    [ -n "$opt_D" ] &&  run "rm -f $opt_D/os-update"
     update_system $DESTDIR
 
     if [ -f $DESTDIR/altroot/netbsd ] || mount | grep -q ' on /altroot ' ; then
-	DESTDIR=$DESTDIR/altroot
-	update_system $DESTDIR
+        DESTDIR=$DESTDIR/altroot
+        update_system $DESTDIR
     fi
 fi
 
