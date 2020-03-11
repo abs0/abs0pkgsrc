@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.44
+DISTNAME=	tickets-depends-1.45
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,9 +10,6 @@ META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
-.if ${OPSYS} == NetBSD
-DEPENDS+= gradle>0:../../devel/gradle
-.endif
 .if ${OPSYS} == NetBSD || ${OPSYS} == Darwin
 DEPENDS+= mysql-server>=5.7:../../databases/mysql57-server
 .endif
