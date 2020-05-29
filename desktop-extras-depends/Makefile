@@ -14,7 +14,7 @@ DEPENDS+= encodings>0:../../fonts/encodings
 
 .include "../../mk/bsd.prefs.mk"
 
-DEPENDS+= jwm>0:../../wm/jwm
+DEPENDS+= gpxsee>0:../../geography/gpxsee
 
 # Useful multimedia desktop tools
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
@@ -32,20 +32,16 @@ DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
 DEPENDS+= ffplay4>0:../../multimedia/ffplay4
-DEPENDS+= gst-plugins0.10-pulse>0:../../audio/gst-plugins0.10-pulse
-DEPENDS+= libao-pulse>0:../../audio/libao-pulse
-DEPENDS+= mencoder>0:../../multimedia/mencoder
 DEPENDS+= easytag>0:../../audio/easytag
 
 DEPENDS+= wireshark>0:../../net/wireshark
-DEPENDS+= gpxsee>0:../../geography/gpxsee
 
 # musepack / libmpcdec conflict
 # DEPENDS+= kodi>0:../../multimedia/kodi
 
 # Misc lesser priority
+DEPENDS+= jwm>0:../../wm/jwm
 DEPENDS+= netsurf>0:../../www/netsurf
-DEPENDS+= arandr>0:../../x11/arandr
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= oneko>0:../../x11/oneko
 DEPENDS+= pidgin>0:../../chat/pidgin

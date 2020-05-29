@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.48
+DISTNAME=	desktop-depends-1.49
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -13,7 +13,6 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # High priorities - build first
-DEPENDS+= firefox>0:../../www/firefox
 DEPENDS+= openbox>0:../../wm/openbox
 DEPENDS+= dmenu>0:../../x11/dmenu
 
@@ -44,13 +43,19 @@ DEPENDS+= conky>0:../../sysutils/conky
 DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= tigervnc>0:../../net/tigervnc
 
+# VM - also pulls in a lot of display dependencies
+DEPENDS+= qemu>0:../../emulators/qemu
+
 # Broken assumption that time_t is 32 bits on i386
 .if ${OPSYS} == NetBSD && ${MACHINE} == amd64
 DEPENDS+= open-vm-tools>0:../../sysutils/open-vm-tools
 .endif
 
+DEPENDS+= arandr>0:../../x11/arandr
 DEPENDS+= xcowsay>0:../../games/xcowsay
 DEPENDS+= mpv>0:../../multimedia/mpv
-DEPENDS+= xfce4-screenshooter>0:../../x11/xfce4-screenshooter
+DEPENDS+= xscreensaver>0:../../x11/xscreensaver
+DEPENDS+= lximage-qt>0:../../graphics/lximage-qt
+DEPENDS+= pcmanfm-qt>0:../../sysutils/pcmanfm-qt
 
 .include "../../mk/bsd.pkg.mk"
