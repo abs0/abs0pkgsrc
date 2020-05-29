@@ -69,8 +69,9 @@ txz_name()
       echo "$@" | sed 's/\.tgz$/.txz/'
 }
 
-while getopts hm:t: f; do
+while getopts d:hm:t: f; do
     case $f in
+	d) opt_d="$OPTARG"			;;
 	h) opt_h=1				;;
 	m) opt_m="$OPTARG"			;;
 	t) opt_t="$OPTARG"			;;
@@ -81,6 +82,7 @@ shift $(expr $OPTIND - 1)
 if [ -n "$opt_h" ] ; then
 	echo "Usage: nbgetdaily [opts] [url]
 opts:   -h      This help
+	-d dir  set dated dir - eg 202003080400Z
 	-t tag  Set OS tag to download (default to running OS)
 	-t mach Set machine arch (default from uname -m: $(uname -m))
 ";
@@ -107,6 +109,9 @@ else
 
     if [ -n "$opt_t" ]; then
         case "$opt_t" in
+          current | head)
+            rev=HEAD
+            ;;
           netbsd-* | HEAD)
             rev=$opt_t
             ;;
@@ -120,7 +125,11 @@ else
 
     echo -n "Latest: "
     urlbase=https://nycdn.netbsd.org/pub/NetBSD-daily/$rev
-    dir=$(find_latest_directory $urlbase)
+    if [ -n "$opt_d" ]; then
+        dir=$opt_d
+    else
+        dir=$(find_latest_directory $urlbase)
+    fi
     if [ -z "$dir" ];then
         urlbase=https://nyftp.netbsd.org/pub/NetBSD-daily/$rev
         dir=$(find_latest_directory $urlbase)
