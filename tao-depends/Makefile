@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	tao-depends-1.09
+DISTNAME=	tao-depends-1.10
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -21,5 +21,6 @@ DEPENDS+= bfg>0:../../devel/bfg
 
 DEPENDS+= postgresql12>0:../../databases/postgresql12
 #@ DEPENDS+= couchdb>0:../../databases/couchdb
+DEPENDS+= apache-maven>0:../../devel/apache-maven
 
 .include "../../mk/bsd.pkg.mk"
