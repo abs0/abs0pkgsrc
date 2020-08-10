@@ -1,0 +1,2 @@
+#!/bin/sh -e
+exec /pkgsrc/local/bin/nbgetdaily "$@"
