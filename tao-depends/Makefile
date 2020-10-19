@@ -19,7 +19,7 @@ DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= bfg>0:../../devel/bfg
 .endif
 
-DEPENDS+= postgresql12>0:../../databases/postgresql12
+DEPENDS+= postgresql13>0:../../databases/postgresql13
 #@ DEPENDS+= couchdb>0:../../databases/couchdb
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 
