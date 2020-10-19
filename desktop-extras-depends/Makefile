@@ -41,6 +41,7 @@ DEPENDS+= wireshark>0:../../net/wireshark
 
 # Misc lesser priority
 DEPENDS+= jwm>0:../../wm/jwm
+DEPENDS+= featherpad>0:../../editors/featherpad
 DEPENDS+= netsurf>0:../../www/netsurf
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= oneko>0:../../x11/oneko

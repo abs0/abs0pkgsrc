@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.49
+DISTNAME=	desktop-depends-1.50
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -57,5 +57,6 @@ DEPENDS+= mpv>0:../../multimedia/mpv
 DEPENDS+= xscreensaver>0:../../x11/xscreensaver
 DEPENDS+= lximage-qt>0:../../graphics/lximage-qt
 DEPENDS+= pcmanfm-qt>0:../../sysutils/pcmanfm-qt
+DEPENDS+= screengrab>0:../../graphics/screengrab
 
 .include "../../mk/bsd.pkg.mk"
