@@ -207,15 +207,15 @@ postrun()
 
 rotate_away_usr_pkg()
     {
-    echo rm -rf /usr/OLDpkg
-    as_root rm -rf /usr/OLDpkg
-    sync
-    echo mv /usr/pkg /usr/OLDpkg
-    [ -d /usr/pkg ]             && as_root mv /usr/pkg           /usr/OLDpkg
-    as_root mkdir -p /usr/OLDpkg/db
-    [ -d /var/db/pkg ]	        && as_root mv /var/db/pkg        /usr/OLDpkg/db
-    [ -d /var/db/pkg.refcount ] && as_root mv /var/db/pkg.refcount /usr/OLDpkg/db
-    as_root mkdir -p /usr/pkg /var/db/pkg /var/db/pkg.refcount
+    if [ -d /usr/OLDpkg ] ; then
+        echo rm -rf /usr/OLDpkg
+        as_root rm -rf /usr/OLDpkg
+        sync
+    fi
+    if [ -d /usr/pkg ] ; then
+        echo mv /usr/pkg /usr/OLDpkg
+        as_root mv /usr/pkg /usr/OLDpkg
+    fi
     }
 
 show_var()
@@ -427,7 +427,7 @@ else	# $opt_s
     PKGTOOLS_VER=$(pkg_info -V)
     if [ $PKGTOOLS_REQD -gt $PKGTOOLS_VER ] ; then
 	echo "Updating pkg_install"
-	rm -rf /var/db/pkg/pkg_install-*
+	rm -rf /usr/pkg/pkgdb/pkg_install-*
 	(cd /pkgsrc/pkgtools/pkg_install && ${MAKE} clean && ${MAKE} install)
     fi
 
