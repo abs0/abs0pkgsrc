@@ -166,7 +166,7 @@ update_system()
         done
 
                                 run "usr/sbin/postinstall -s $TARDIR/etc.t*z -d $DESTDIR fix || true"
-                                run "chroot $DESTDIR /etc/rc.d/fccache start"
+                                run "chroot $DESTDIR /etc/rc.d/fccache onestart"
                                 run "(cd dev && ./MAKEDEV all)"
                                 run "rm -rf kernels.old"
 
