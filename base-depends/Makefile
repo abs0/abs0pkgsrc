@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.46
+DISTNAME=	base-depends-1.47
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,7 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 .if ${OPSYS} == NetBSD
-DEPENDS+= sudo>0:../../security/sudo
+DEPENDS+= doas>0:../../security/doas
 .endif
 
 DEPENDS+= zsh>0:../../shells/zsh

@@ -351,7 +351,7 @@ sub record {
     if ( $opt{n} ) { $cmd .= ' -dummy'; }
     $cmd .= " $args";
 
-    if ( $< != 0 ) { $cmd = "sudo $cmd"; }
+    if ( $< != 0 ) { $cmd = "doas $cmd"; }
     verbose("$cmd\n");
     open( DVDRECORD, "$cmd 2>&1|" ) || fatal("$cmd failed: $!");
     $| = 1;
@@ -378,7 +378,7 @@ sub image_du {
 
 sub run_root_cmd {
     my ($cmd) = @_;
-    if ( $< != 0 ) { $cmd = "sudo $cmd"; }
+    if ( $< != 0 ) { $cmd = "doas $cmd"; }
     run_cmd($cmd);
 }
 

@@ -73,7 +73,7 @@ fi
 as_root()
 {
     if [ $(id -u) != 0 ] ; then
-	sudo -H "$@"
+	doas "$@"
     else
 	"$@"
     fi
