@@ -1,4 +1,4 @@
-DISTNAME=	localtools-2.115
+DISTNAME=	localtools-2.116
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -29,6 +29,7 @@ REPLACE_PERL+=	bin/* NetBSD-bin/*
 
 DEPENDS+=	optipng>0:../../graphics/optipng
 DEPENDS+=	p5-Modern-Perl>0:../../devel/p5-Modern-Perl
+DEPENDS+=	p5-JSON-Parse>0:../../converters/p5-JSON-Parse
 
 PLIST_SRC=	${WRKDIR}/PLIST
 WRKSRC=		${WRKDIR}
