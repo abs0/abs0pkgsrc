@@ -39,6 +39,8 @@ DEPENDS+= wireshark>0:../../net/wireshark
 # musepack / libmpcdec conflict
 # DEPENDS+= kodi>0:../../multimedia/kodi
 
+DEPENDS+= lxqt>0:../../meta-pkgs/lxqt
+
 # Misc lesser priority
 DEPENDS+= jwm>0:../../wm/jwm
 DEPENDS+= featherpad>0:../../editors/featherpad
