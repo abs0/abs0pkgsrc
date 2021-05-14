@@ -72,8 +72,8 @@ if( $?tcsh ) then
     set	notify
     set	promptbase="%m %B%c4%b)%h"
     bindkey -b ^w backward-delete-word
-    complete pkg_delete 'p@*@`ls /var/db/pkg`@'
-    complete pkg_info 'p@*@`ls /var/db/pkg`@'
+    complete pkg_delete 'p@*@`ls /usr/pkg/pkgdb/pkg`@'
+    complete pkg_info 'p@*@`ls /usr/pkg/pkgdb/pkg`@'
     complete perldoc 'p@*@`perlmodules`@'
     complete dd 'c/[io]f=/f/'
     unset	autologout
