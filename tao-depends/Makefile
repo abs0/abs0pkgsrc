@@ -1,6 +1,4 @@
-# $NetBSD$
-
-DISTNAME=	tao-depends-1.10
+DISTNAME=	tao-depends-1.11
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -12,15 +10,12 @@ META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
-.if ${OPSYS} == NetBSD
-DEPENDS+= openjdk8>0:../../lang/openjdk8
 DEPENDS+= openjdk11>0:../../lang/openjdk11
 DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= bfg>0:../../devel/bfg
-.endif
 
 DEPENDS+= postgresql13>0:../../databases/postgresql13
-#@ DEPENDS+= couchdb>0:../../databases/couchdb
+DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 
 .include "../../mk/bsd.pkg.mk"
