@@ -14,13 +14,13 @@ DEPENDS+= spamassassin>0:../../mail/spamassassin
 DEPENDS+= imapsync>0:../../mail/imapsync
 
 # Webmail
-DEPENDS+= ap24-php73>0:../../www/ap-php
-DEPENDS+= php73-pgsql>0:../../databases/php-pgsql
-DEPENDS+= php73-roundcube>0:../../mail/roundcube
-DEPENDS+= php73-roundcube-plugin-enigma>0:../../mail/roundcube-plugin-enigma
-DEPENDS+= php73-roundcube-plugin-password>0:../../mail/roundcube-plugin-password
-DEPENDS+= php73-roundcube-plugin-zipdownload>0:../../mail/roundcube-plugin-zipdownload
-DEPENDS+= php73-zip>0:../../archivers/php-zip
+DEPENDS+= ap24-php74>0:../../www/ap-php
+DEPENDS+= php74-pgsql>0:../../databases/php-pgsql
+DEPENDS+= php74-roundcube>0:../../mail/roundcube
+DEPENDS+= php74-roundcube-plugin-enigma>0:../../mail/roundcube-plugin-enigma
+DEPENDS+= php74-roundcube-plugin-password>0:../../mail/roundcube-plugin-password
+DEPENDS+= php74-roundcube-plugin-zipdownload>0:../../mail/roundcube-plugin-zipdownload
+DEPENDS+= php74-zip>0:../../archivers/php-zip
 DEPENDS+= spawn-fcgi>0:../../www/spawn-fcgi
 
 .include "../../mk/bsd.pkg.mk"
