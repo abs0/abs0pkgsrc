@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.45
+DISTNAME=	tickets-depends-1.46
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,10 +10,12 @@ META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
-.if ${OPSYS} == NetBSD || ${OPSYS} == Darwin
+DEPENDS+= openjdk11>0:../../lang/openjdk11
+DEPENDS+= openjdk8>0:../../lang/openjdk8
 DEPENDS+= mysql-server>=5.7:../../databases/mysql57-server
-.endif
 DEPENDS+= innotop>0:../../databases/innotop
+
+DEPENDS+= gradle>0:../../devel/gradle
 
 # For member.cgi & friends
 # DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
