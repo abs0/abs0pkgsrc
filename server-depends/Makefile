@@ -16,7 +16,7 @@ DEPENDS+= mysql-server>=5.7:../../databases/mysql57-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= dirvish>0:../../sysutils/dirvish
-DEPENDS+= py37-certbot>0:../../security/py-certbot
+DEPENDS+= py39-certbot>0:../../security/py-certbot
 DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
