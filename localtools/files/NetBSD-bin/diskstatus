@@ -9,82 +9,105 @@ my $disks = `sysctl -n hw.disknames`;
 
 my %status;
 
-for my $disk (split(' ', $disks)) {
-  my $issue;
-  if ($disk =~ /^raid/) {
-    $issue = raidstatus($disk);
-  } elsif ($disk =~ /^sd/) {
-    $issue = sdstatus($disk);
-  } elsif ($disk =~ /^wd/) {
-    $issue = wdstatus($disk);
-  } else {
-    next;
-  }
-  print "$disk: " . ($issue ? "** $issue" : 'ok') . "\n";
-  $err |= $issue ne '';
+for my $disk ( split( ' ', $disks ) ) {
+    my $status;
+    if ( $disk =~ /^raid/ ) {
+        $status = raidstatus($disk);
+    }
+    elsif ( $disk =~ /^[sw]d/ ) {
+        $status = smartstatus($disk);
+    }
+    else {    # Nothing for ld
+        next;
+    }
+    print "$disk: " . ( $status =~ /^ok/ ? $status : "** $status" ) . "\n";
+    $err |= $status !~ /^ok/;
 }
 zfsstatus();
 exit $err;
 
 sub raidstatus {
-  my $disk = shift;
-  open(RAIDCTL, "raidctl -s $disk|") || die "raidctl failed: $!";
-  my $issue = '';
-  while (<RAIDCTL>) {
-    chomp;
-    if(m#^\s{4}\s*+(?:/dev/)?(\S+): (\S.*)#) {
-       push (@{$status{$2}}, $1);
+    my $disk = shift;
+    open( RAIDCTL, "raidctl -s $disk|" ) || die "raidctl failed: $!";
+    my $issue = '';
+    while (<RAIDCTL>) {
+        chomp;
+        if (m#^\s{4}\s*+(?:/dev/)?(\S+): (\S.*)#) {
+            push( @{ $status{$2} }, $1 );
+        }
+        if ( m#^(Parity status: (.*))# && $2 ne 'clean' ) {
+            $issue .= " ($1)";
+        }
+        if ( m#^((Reconstruction|Parity Re-write|Copyback)(.*))#
+            && $3 ne ' is 100% complete.' )
+        {
+            my $msg = $1;
+            $msg =~ s/\.$//;
+            $issue .= " ($msg)";
+        }
     }
-    if(m#^(Parity status: (.*))# && $2 ne 'clean') {
-       $issue .= " ($1)";
+    foreach my $status ( sort keys %status ) {
+        if ( $status ne 'optimal' ) {
+            $issue .= ' '
+              . join( ',', sort @{ $status{$status} } ) . ' '
+              . uc("$status");
+        }
     }
-    if(m#^((Reconstruction|Parity Re-write|Copyback)(.*))# && $3 ne ' is 100% complete.') {
-       my $msg = $1;
-       $msg =~ s/\.$//;
-       $issue .= " ($msg)";
-    }
-  }
-  foreach my $status (sort keys %status) {
-    if ($status ne 'optimal') {
-      $issue .= ' ' . join(',', sort @{$status{$status}}) . ' '. uc("$status");
-    }
-  }
-  return $issue;
+    return $issue ? $issue : 'ok';
 }
 
-sub sdstatus {
-  my $disk = shift;
-  open(SMARTCTL, "smartctl -H /dev/r$disk|") || die "smartctl failed: $!";
-  my $status;
-  while (<SMARTCTL>) {
-    if (/SMART Health Status: (.*)/) {
-      $status = $1;
+sub smartstatus {
+    my $disk = shift;
+    my $status;
+    for ( my $loop = 0 ; $loop < 2 ; ++$loop ) {
+        open( SMARTCTL, "smartctl -H /dev/r$disk|" )
+          || die "smartctl failed: $!";
+        while (<SMARTCTL>) {
+            if (/SMART overall-health self-assessment test result: (.*)/) {
+                $status = $1;
+            }
+            elsif (/SMART Health Status: (.*)/) {
+                $status = $1;
+            }
+        }
+      close(SMARTCTL);
+        last if defined $status && $status ne 'UNKNOWN!';
     }
-  }
-  return !defined $status 
-    ? 'no status'
-    : $status eq 'OK' ? '' : 'SMART ' . $status;
+    $status =
+        !defined $status                       ? 'no status'
+      : $status eq 'PASSED' || $status eq 'OK' ? 'ok'
+      :                                          'smart health:' . $status;
+    return $status . smartrealloc($disk);
 }
 
-sub wdstatus {
-  my $disk = shift;
-  open(SMARTCTL, "smartctl -H /dev/r$disk|") || die "smartctl failed: $!";
-  my $status;
-  while (<SMARTCTL>) {
-    if (/SMART overall-health self-assessment test result: (.*)/) {
-      $status = $1;
+sub smartrealloc {
+    my $disk   = shift;
+    my $status = '';
+    open( ATACTL, "atactl $disk smart status|" ) || die "atactl failed: $!";
+    while (<ATACTL>) {
+        if (/Reallocated sector count\s+(\d+)/ && $1 > 0) {
+            $status = " [$1]";
+        }
     }
-  }
-  return !defined $status 
-    ? 'no status'
-    : $status eq 'PASSED' ? '' : 'SMART ' . $status;
+    close(ATACTL);
+    return $status;
+}
+
+sub command_output {
+    open( CMD, '-|', @_ ) || die "@_ failed: $!";
+    my @output = <CMD>;
+    return @output;
 }
 
 sub zfsstatus {
-  open(ZPOOL, "zpool list|") || die "zpool failed: $!";
-  my @zpool = <ZPOOL>;
-  if (@zpool == 1 && $zpool[0] eq "no pools available\n") {
-    return '';
-  }
-  print @zpool;
+    my @list = command_output( 'zpool', 'list' );
+    if ( @list == 1 && $list[0] eq "no pools available\n" ) {
+        return;
+    }
+    print @list;
+
+    my @status = command_output( 'zpool', 'status', '-x' );
+    if ( @status != 1 || $status[0] ne "all pools are healthy\n" ) {
+        print @status;
+    }
 }
