@@ -12,7 +12,7 @@ META_PACKAGE=	yes
 
 DEPENDS+= openjdk11>0:../../lang/openjdk11
 DEPENDS+= openjdk8>0:../../lang/openjdk8
-DEPENDS+= mysql-server>=5.7:../../databases/mysql57-server
+DEPENDS+= mariadb-server>0:../../databases/mariadb105-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= gradle>0:../../devel/gradle

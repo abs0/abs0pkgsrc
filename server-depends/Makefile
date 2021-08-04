@@ -12,7 +12,7 @@ META_PACKAGE=	yes
 
 DEPENDS+= samba>=4:../../net/samba4
 
-DEPENDS+= mysql-server>=5.7:../../databases/mysql57-server 
+DEPENDS+= mariadb-server>0:../../databases/mariadb105-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= dirvish>0:../../sysutils/dirvish
@@ -20,6 +20,10 @@ DEPENDS+= py39-certbot>0:../../security/py-certbot
 DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
+DEPENDS+= age>0:../../security/age
+
+# In case need to work with python
+DEPENDS+= py39-pip>0:../../devel/py-pip
 
 # VM - also pulls in a lot of display dependencies
 DEPENDS+= qemu>0:../../emulators/qemu
