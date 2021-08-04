@@ -7,8 +7,6 @@ $ENV{PATH} .= ':/usr/pkg/sbin';
 my $err;
 my $disks = `sysctl -n hw.disknames`;
 
-my %status;
-
 for my $disk ( split( ' ', $disks ) ) {
     my $status;
     if ( $disk =~ /^raid/ ) {
@@ -28,6 +26,7 @@ exit $err;
 
 sub raidstatus {
     my $disk = shift;
+    my %status;
     open( RAIDCTL, "raidctl -s $disk|" ) || die "raidctl failed: $!";
     my $issue = '';
     while (<RAIDCTL>) {
