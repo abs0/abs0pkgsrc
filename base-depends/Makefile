@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.47
+DISTNAME=	base-depends-1.48
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -47,6 +47,7 @@ DEPENDS+= unrar>0:../../archivers/unrar
 DEPENDS+= zip>0:../../archivers/zip
 DEPENDS+= rdfind>0:../../sysutils/rdfind
 DEPENDS+= poppler-utils>0:../../print/poppler-utils	# pdfseparate etc
+DEPENDS+= pdfgrep>0:../../textproc/pdfgrep
 
 .if ${OPSYS} == NetBSD
 DEPENDS+= smartmontools>0:../../sysutils/smartmontools
