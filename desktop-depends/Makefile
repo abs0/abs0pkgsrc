@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.50
+DISTNAME=	desktop-depends-1.52
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -26,6 +26,7 @@ DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
 DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= ubuntu-fonts>0:../../fonts/ubuntu-fonts
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
+DEPENDS+= twemoji-color-font-ttf>0:../../fonts/twemoji-color-font-ttf
 
 # Medium priority
 DEPENDS+= slim>0:../../x11/slim
@@ -39,6 +40,7 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= xsel>0:../../x11/xsel
 DEPENDS+= xosd>0:../../x11/xosd
 DEPENDS+= conky>0:../../sysutils/conky
+DEPENDS+= feh>0:../../graphics/feh
 
 DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= tigervnc>0:../../net/tigervnc
