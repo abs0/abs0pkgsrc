@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.46
+DISTNAME=	tickets-depends-1.47
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -12,7 +12,7 @@ META_PACKAGE=	yes
 
 DEPENDS+= openjdk11>0:../../lang/openjdk11
 DEPENDS+= openjdk8>0:../../lang/openjdk8
-DEPENDS+= mariadb-server>0:../../databases/mariadb105-server
+DEPENDS+= mariadb-server>0:../../databases/mariadb106-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= gradle>0:../../devel/gradle

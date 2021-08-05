@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.02
+DISTNAME=	server-depends-1.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -12,7 +12,7 @@ META_PACKAGE=	yes
 
 DEPENDS+= samba>=4:../../net/samba4
 
-DEPENDS+= mariadb-server>0:../../databases/mariadb105-server
+DEPENDS+= mariadb-server>0:../../databases/mariadb106-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= dirvish>0:../../sysutils/dirvish
