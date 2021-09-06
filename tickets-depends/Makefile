@@ -18,7 +18,7 @@ DEPENDS+= innotop>0:../../databases/innotop
 DEPENDS+= gradle>0:../../devel/gradle
 
 # For member.cgi & friends
-# DEPENDS+= fcgiwrap>0:../../wip/fcgiwrap
+# DEPENDS+= fcgiwrap>0:../../www/fcgiwrap
 # DEPENDS+= p5-DateTime-Format-Strptime>0:../../time/p5-DateTime-Format-Strptime
 # DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
 # DEPENDS+= p5-UUID-Tiny>0:../../devel/p5-UUID-Tiny
