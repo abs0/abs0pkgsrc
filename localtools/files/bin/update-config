@@ -62,14 +62,6 @@ if [ -f /etc/nut/ups.conf ] ; then
     done
 fi
 
-if [ -x /usr/sbin/rndc -a ! -h /etc/rndc.key ] ; then
-    echo "update-config: rndc-confgen -a: "
-    rndc-confgen -a -r /dev/urandom
-    mkdir -p /var/chroot/named/etc
-    mv	/etc/rndc.key /var/chroot/named/etc/rndc.key
-    ln -sf /var/chroot/named/etc/rndc.key /etc
-fi
-
 if pkg_info -e munin-node > /dev/null; then
     mkdir -p /etc/munin/plugins
     if [ -z "$(ls /etc/munin/plugins)" ] ; then
