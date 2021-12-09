@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.61
+DISTNAME=	desktop-extras-depends-1.62
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -32,7 +32,6 @@ DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
 DEPENDS+= ffplay4>0:../../multimedia/ffplay4
-DEPENDS+= easytag>0:../../audio/easytag
 
 DEPENDS+= wireshark>0:../../net/wireshark
 
