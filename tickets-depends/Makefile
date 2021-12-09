@@ -4,7 +4,7 @@ MASTER_SITES=	# empty
 
 MAINTAINER=	abs@social-events.net
 HOMEPAGE=	http://www.social-events.net/
-COMMENT=	Meta package for Social Events tickets server depends
+COMMENT=	Meta package for tickets server depends
 
 META_PACKAGE=	yes
 
