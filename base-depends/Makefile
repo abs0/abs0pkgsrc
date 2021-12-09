@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.48
+DISTNAME=	base-depends-1.49
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -22,6 +22,7 @@ DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
 DEPENDS+= p5-Text-Glob>0:../../textproc/p5-Text-Glob
 
 DEPENDS+= htop>0:../../sysutils/htop
+DEPENDS+= neofetch>0:../../sysutils/neofetch
 
 # Source controls
 DEPENDS+= git-base>0:../../devel/git-base
