@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.47
+DISTNAME=	tickets-depends-1.48
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,7 +25,7 @@ DEPENDS+= gradle>0:../../devel/gradle
 # DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 
 # Used by tickets tools
-DEPENDS+= p5-DBD-mysql>0:../../databases/p5-DBD-mysql
+DEPENDS+= p5-DBD-MariaDB>0:../../databases/p5-DBD-MariaDB
 DEPENDS+= p5-Array-Compare>0:../../devel/p5-Array-Compare
 DEPENDS+= p5-Moose>0:../../devel/p5-Moose
 DEPENDS+= p5-Rose-DB-Object>0:../../databases/p5-Rose-DB-Object
