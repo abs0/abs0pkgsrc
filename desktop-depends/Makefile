@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.52
+DISTNAME=	desktop-depends-1.53
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -23,6 +23,7 @@ DEPENDS+= dmenu>0:../../x11/dmenu
 
 # additional fonts
 DEPENDS+= ja-sazanami-ttf>0:../../fonts/ja-sazanami-ttf
+DEPENDS+= alee-ttf>0:../../fonts/alee-ttf
 DEPENDS+= ms-ttf>0:../../fonts/ms-ttf
 DEPENDS+= ubuntu-fonts>0:../../fonts/ubuntu-fonts
 DEPENDS+= vera-ttf>0:../../fonts/vera-ttf
