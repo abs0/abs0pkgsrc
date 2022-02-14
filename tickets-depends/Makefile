@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.48
+DISTNAME=	tickets-depends-1.49
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -16,6 +16,9 @@ DEPENDS+= mariadb-server>0:../../databases/mariadb106-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= gradle>0:../../devel/gradle
+
+# Used by makebundle for widget.js
+DEPENDS+= sassc>0:../../www/sassc
 
 # For member.cgi & friends
 # DEPENDS+= fcgiwrap>0:../../www/fcgiwrap
