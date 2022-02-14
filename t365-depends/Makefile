@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	t365-depends-1.03
+DISTNAME=	t365-depends-1.04
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,7 @@ COMMENT=	Meta package for t365 depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql13>0:../../databases/postgresql13
+DEPENDS+= postgresql14>0:../../databases/postgresql14
 
 DEPENDS+= p5-Module-Install>0:../../devel/p5-Module-Install
 DEPENDS+= p5-DBD-postgresql>0:../../databases/p5-DBD-postgresql

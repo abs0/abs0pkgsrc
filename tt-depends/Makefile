@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	tt-depends-1.09
+DISTNAME=	tt-depends-1.10
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,7 @@ COMMENT=	Meta package for tt depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql13>0:../../databases/postgresql13
+DEPENDS+= postgresql14>0:../../databases/postgresql14
 
 DEPENDS+= p5-Catalyst-Devel>0:../../www/p5-Catalyst-Devel
 DEPENDS+= p5-Catalyst-Plugin-Session-State-Cookie>0:../../www/p5-Catalyst-Plugin-Session-State-Cookie

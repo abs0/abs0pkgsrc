@@ -1,4 +1,6 @@
-DISTNAME=	tao-depends-1.11
+# $NetBSD$
+
+DISTNAME=	tao-depends-1.12
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,7 +16,7 @@ DEPENDS+= openjdk11>0:../../lang/openjdk11
 DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= bfg>0:../../devel/bfg
 
-DEPENDS+= postgresql13>0:../../databases/postgresql13
+DEPENDS+= postgresql14>0:../../databases/postgresql14
 DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 
