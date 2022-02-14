@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.03
+DISTNAME=	server-depends-1.04
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -21,6 +21,7 @@ DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= age>0:../../security/age
+DEPENDS+= easy-rsa>0:../../security/easy-rsa
 
 # In case need to work with python
 DEPENDS+= py39-pip>0:../../devel/py-pip
