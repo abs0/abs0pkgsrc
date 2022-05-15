@@ -328,7 +328,9 @@ if [ $# != 0 ] ; then
 fi
 
 if [ -n "$opt_r" -a $(id -u) != 0 ] ; then
-    as_root $0 "$saved_args"
+    # Use sh -c in case pkgrsc_update does not have +x
+    # Will unfortunately break if saved_args includes whitespace/special chars
+    as_root sh -c "$0 $saved_args"
     exit
 fi
 
