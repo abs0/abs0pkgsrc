@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.62
+DISTNAME=	desktop-extras-depends-1.63
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -48,7 +48,6 @@ DEPENDS+= glx-utils>0:../../graphics/glx-utils
 DEPENDS+= oneko>0:../../x11/oneko
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
-DEPENDS+= xscreensaver-demo>0:../../x11/xscreensaver-demo
 DEPENDS+= yed>0:../../editors/yed
 # DEPENDS+= adobe-flash-player>=0:../../multimedia/adobe-flash-player
 DEPENDS+= qdirstat>=0:../../sysutils/qdirstat
