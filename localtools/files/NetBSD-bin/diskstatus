@@ -4,7 +4,7 @@ use warnings;
 
 $ENV{PATH} .= ':/usr/pkg/sbin';
 
-my $err;
+my $err = 0;
 my $disks = `sysctl -n hw.disknames`;
 
 for my $disk ( split( ' ', $disks ) ) {
