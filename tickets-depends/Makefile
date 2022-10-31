@@ -27,6 +27,9 @@ DEPENDS+= sassc>0:../../www/sassc
 # DEPENDS+= p5-UUID-Tiny>0:../../devel/p5-UUID-Tiny
 # DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 
+# Used by main tickets script
+DEPENDS+= p5-File-Slurp>0:../../devel/p5-File-Slurp
+
 # Used by tickets tools
 DEPENDS+= p5-DBD-MariaDB>0:../../databases/p5-DBD-MariaDB
 DEPENDS+= p5-Array-Compare>0:../../devel/p5-Array-Compare
