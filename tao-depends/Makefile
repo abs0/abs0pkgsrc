@@ -20,7 +20,7 @@ DEPENDS+= postgresql15>0:../../databases/postgresql15
 DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 
-DEPENDS+= py39-brotli>0:../../archivers/py-brotli
-DEPENDS+= py39-fonttools>0:../../fonts/py-fonttools
+DEPENDS+= py310-brotli>0:../../archivers/py-brotli
+DEPENDS+= py310-fonttools>0:../../fonts/py-fonttools
 
 .include "../../mk/bsd.pkg.mk"
