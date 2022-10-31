@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.49
+DISTNAME=	base-depends-1.50
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -60,7 +60,7 @@ DEPENDS+= cdrtools>0:../../sysutils/cdrtools
 DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 
 DEPENDS+= get_iplayer>0:../../net/get_iplayer # get_iplayer needs ffmpeg
-DEPENDS+= ffmpeg4>0:../../multimedia/ffmpeg4
+DEPENDS+= ffmpeg5>0:../../multimedia/ffmpeg5
 
 DEPENDS+= renameutils>0:../../sysutils/renameutils
 

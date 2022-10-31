@@ -31,7 +31,7 @@ DEPENDS+= simh>0:../../emulators/simh
 DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
-DEPENDS+= ffplay4>0:../../multimedia/ffplay4
+DEPENDS+= ffplay5>0:../../multimedia/ffplay5
 
 DEPENDS+= wireshark>0:../../net/wireshark
 
