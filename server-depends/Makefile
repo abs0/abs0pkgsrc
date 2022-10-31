@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.04
+DISTNAME=	server-depends-1.06
 CATEGORIES=	local
 MASTER_SITES=	# empty
 

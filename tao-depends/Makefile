@@ -16,7 +16,7 @@ DEPENDS+= openjdk11>0:../../lang/openjdk11
 DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= bfg>0:../../devel/bfg
 
-DEPENDS+= postgresql14>0:../../databases/postgresql14
+DEPENDS+= postgresql15>0:../../databases/postgresql15
 DEPENDS+= gradle>0:../../devel/gradle
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 

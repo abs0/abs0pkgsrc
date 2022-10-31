@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.49
+DISTNAME=	tickets-depends-1.50
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
