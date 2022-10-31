@@ -23,6 +23,8 @@ DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= age>0:../../security/age
 DEPENDS+= easy-rsa>0:../../security/easy-rsa
 
+DEPENDS+= cups>0:../../print/cups
+
 # In case need to work with python
 DEPENDS+= py39-pip>0:../../devel/py-pip
 
