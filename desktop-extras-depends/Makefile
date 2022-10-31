@@ -27,7 +27,7 @@ DEPENDS+= sql-workbench>0:../../databases/sql-workbench
 # Emulators
 DEPENDS+= dc-tools>0:../../sysutils/dc-tools
 DEPENDS+= gxemul>0:../../emulators/gxemul
-DEPENDS+= simh>0:../../emulators/simh
+DEPENDS+= open-simh>0:../../emulators/open-simh
 DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
