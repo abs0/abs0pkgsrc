@@ -5,7 +5,7 @@ download_sets()
     downloadbase=$1
     dir=$2
     cd $dir
-    sets=$(ftp -o - $downloadbase | sed -n 's/.*<a href="\([^"]*z\)".*/\1/p')
+    sets=$(ftp -o - $downloadbase | sed -n 's/.*<a href="\([^"]*z\)".*/\1/p' | grep -v debug)
     if [ -z "$sets" ]; then
         echo "No sets found in $downloadbase"
         rmdir $dir
