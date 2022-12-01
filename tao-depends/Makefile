@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	tao-depends-1.12
+DISTNAME=	tao-depends-1.13
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,6 +11,9 @@ COMMENT=	Meta package for TAO dev/server depends
 META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
+
+# For IntelliJ
+DEPENDS+= openjdk17>0:../../lang/openjdk17
 
 DEPENDS+= openjdk11>0:../../lang/openjdk11
 DEPENDS+= geckodriver>0:../../www/geckodriver

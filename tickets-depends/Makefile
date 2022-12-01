@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.50
+DISTNAME=	tickets-depends-1.51
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,8 +10,14 @@ META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
+# For IntelliJ
+DEPENDS+= openjdk17>0:../../lang/openjdk17
+
 DEPENDS+= openjdk11>0:../../lang/openjdk11
+
+# For j2me scanme
 DEPENDS+= openjdk8>0:../../lang/openjdk8
+
 DEPENDS+= mariadb-server>0:../../databases/mariadb106-server
 DEPENDS+= innotop>0:../../databases/innotop
 
