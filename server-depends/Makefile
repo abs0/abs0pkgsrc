@@ -22,7 +22,6 @@ DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= age>0:../../security/age
 DEPENDS+= easy-rsa>0:../../security/easy-rsa
-DEPENDS+= zenmap>0:../../net/zenmap
 
 DEPENDS+= cups>0:../../print/cups
 
