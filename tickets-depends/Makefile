@@ -1,9 +1,9 @@
-DISTNAME=	tickets-depends-1.51
+DISTNAME=	tickets-depends-1.52
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
-MAINTAINER=	abs@social-events.net
-HOMEPAGE=	http://www.social-events.net/
+MAINTAINER=	abs@task-tickets.com
+HOMEPAGE=	http://www.task-tickets.com/
 COMMENT=	Meta package for tickets server depends
 
 META_PACKAGE=	yes
@@ -13,15 +13,14 @@ META_PACKAGE=	yes
 # For IntelliJ
 DEPENDS+= openjdk17>0:../../lang/openjdk17
 
+# For main ticketing system
 DEPENDS+= openjdk11>0:../../lang/openjdk11
+DEPENDS+= mariadb-server>0:../../databases/mariadb106-server
 
 # For j2me scanme
 DEPENDS+= openjdk8>0:../../lang/openjdk8
 
-DEPENDS+= mariadb-server>0:../../databases/mariadb106-server
-DEPENDS+= innotop>0:../../databases/innotop
-
-DEPENDS+= gradle>0:../../devel/gradle
+DEPENDS+= gng>0:../../devel/gng
 
 # Used by makebundle for widget.js
 DEPENDS+= sassc>0:../../www/sassc
