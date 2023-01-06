@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.53
+DISTNAME=	desktop-depends-1.54
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -41,6 +41,7 @@ DEPENDS+= xbattbar>0:../../sysutils/xbattbar
 DEPENDS+= xsel>0:../../x11/xsel
 DEPENDS+= xosd>0:../../x11/xosd
 DEPENDS+= conky>0:../../sysutils/conky
+DEPENDS+= clipit>0:../../x11/clipit
 DEPENDS+= feh>0:../../graphics/feh
 
 DEPENDS+= rdesktop>=0:../../net/rdesktop
