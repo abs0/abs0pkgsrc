@@ -23,7 +23,7 @@ export EXINIT="map \f !}fmt 76 77|$EXINIT"
 case "$UNAME" in
     NetBSD)
 	export EXINIT="set extended filec=	|$EXINIT"
-	export LC_CTYPE=en_US.UTF-8
+	export LC_CTYPE=C.UTF-8
 	;;
 esac
 

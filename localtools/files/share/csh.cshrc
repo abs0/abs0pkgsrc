@@ -20,7 +20,7 @@ setenv EXINIT	"map \f !}fmt 76 77|$EXINIT"
 
 if ($OSTYPE == NetBSD) then
     setenv PTHREAD_DIAGASSERT AeL
-    setenv LC_CTYPE	en_US.UTF-8
+    setenv LC_CTYPE	C.UTF-8
     setenv EXINIT	"set extended filec=	|$EXINIT"
 endif
 
