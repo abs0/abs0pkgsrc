@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.15
+DISTNAME=	tao-depends-1.16
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,8 +10,12 @@ META_PACKAGE=	yes
 
 .include "../../mk/bsd.prefs.mk"
 
-# For main TrainAsONE system
+# For IntelliJ
 DEPENDS+= openjdk17>0:../../lang/openjdk17
+DEPENDS+= java-jna>0:../../devel/java-jna
+DEPENDS+= nodejs>0:../../lang/nodejs
+
+# For main TrainAsONE system
 DEPENDS+= postgresql15>0:../../databases/postgresql15
 
 DEPENDS+= apache-maven>0:../../devel/apache-maven

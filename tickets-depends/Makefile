@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.52
+DISTNAME=	tickets-depends-1.53
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -12,6 +12,8 @@ META_PACKAGE=	yes
 
 # For IntelliJ
 DEPENDS+= openjdk17>0:../../lang/openjdk17
+DEPENDS+= java-jna>0:../../devel/java-jna
+DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main ticketing system
 DEPENDS+= openjdk11>0:../../lang/openjdk11
