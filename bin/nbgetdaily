@@ -83,8 +83,8 @@ if [ -n "$opt_h" ] ; then
 	echo "Usage: nbgetdaily [opts] [url]
 opts:   -h      This help
 	-d dir  set dated dir - eg 202003080400Z
+	-m mach Set machine arch (default from uname -m: $(uname -m))
 	-t tag  Set OS tag to download (default to running OS)
-	-t mach Set machine arch (default from uname -m: $(uname -m))
 ";
     exit
 fi
