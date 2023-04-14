@@ -4,7 +4,7 @@
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 PATH=$PATH:/usr/local/bin:/usr/pkg/bin:/usr/local/sbin:/usr/pkg/sbin
 
-if pgrep -f '/bin/sh.*dirvish-all' | grep -qvF "$$" ; then
+if pgrep -f '/bin/sh.*dirvish-all$' | grep -qvF "$$" ; then
     echo "existing dirvish-all process running - skipping run"
     pgrep -lf '/dirvish'
     exit 0
