@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.50
+DISTNAME=	base-depends-1.51
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -67,5 +67,7 @@ DEPENDS+= renameutils>0:../../sysutils/renameutils
 # Security
 DEPENDS+= gnupg2>0:../../security/gnupg2
 DEPENDS+= mozilla-rootcerts-openssl>0:../../security/mozilla-rootcerts-openssl
+
+DEPENDS+= pkgin>0:../../pkgtools/pkgin
 
 .include "../../mk/bsd.pkg.mk"
