@@ -23,7 +23,7 @@ DEPENDS+= bfg>0:../../devel/bfg
 DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= gng>0:../../devel/gng
 
-DEPENDS+= py310-brotli>0:../../archivers/py-brotli
-DEPENDS+= py310-fonttools>0:../../fonts/py-fonttools
+DEPENDS+= py311-brotli>0:../../archivers/py-brotli
+DEPENDS+= py311-fonttools>0:../../fonts/py-fonttools
 
 .include "../../mk/bsd.pkg.mk"

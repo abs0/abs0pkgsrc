@@ -16,7 +16,7 @@ DEPENDS+= mariadb-server>0:../../databases/mariadb106-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= dirvish>0:../../sysutils/dirvish
-DEPENDS+= py310-certbot>0:../../security/py-certbot
+DEPENDS+= py311-certbot>0:../../security/py-certbot
 DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
@@ -26,7 +26,7 @@ DEPENDS+= easy-rsa>0:../../security/easy-rsa
 DEPENDS+= cups>0:../../print/cups
 
 # In case need to work with python
-DEPENDS+= py310-pip>0:../../devel/py-pip
+DEPENDS+= py311-pip>0:../../devel/py-pip
 
 # VM - also pulls in a lot of display dependencies
 DEPENDS+= qemu>0:../../emulators/qemu
