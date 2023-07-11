@@ -24,6 +24,7 @@ DEPENDS+= age>0:../../security/age
 DEPENDS+= easy-rsa>0:../../security/easy-rsa
 
 DEPENDS+= cups>0:../../print/cups
+DEPENDS+= brlaser>0:../../print/brlaser
 
 # In case need to work with python
 DEPENDS+= py311-pip>0:../../devel/py-pip
