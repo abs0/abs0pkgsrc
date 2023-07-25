@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.51
+DISTNAME=	base-depends-1.52
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,6 +25,7 @@ DEPENDS+= htop>0:../../sysutils/htop
 DEPENDS+= neofetch>0:../../sysutils/neofetch
 
 # Source controls
+DEPENDS+= mercurial>0:../../devel/mercurial
 DEPENDS+= git-base>0:../../devel/git-base
 DEPENDS+= git-docs>0:../../devel/git-docs
 
