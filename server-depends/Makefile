@@ -1,12 +1,12 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.08
+DISTNAME=	server-depends-1.09
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.absd.org/
-COMMENT=	Meta package for generic "server" toools
+COMMENT=	Meta package for generic "server" tools
 
 META_PACKAGE=	yes
 
@@ -22,9 +22,6 @@ DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= age>0:../../security/age
 DEPENDS+= easy-rsa>0:../../security/easy-rsa
-
-DEPENDS+= cups>0:../../print/cups
-DEPENDS+= brlaser>0:../../print/brlaser
 
 # In case need to work with python
 DEPENDS+= py311-pip>0:../../devel/py-pip

@@ -10,6 +10,7 @@ SUBDIR+=	desktop-extras-depends
 SUBDIR+=	kde-subset
 SUBDIR+=	localtools
 SUBDIR+=	mail-depends
+SUBDIR+=	print-depends
 SUBDIR+=	server-depends
 SUBDIR+=	t365-depends
 SUBDIR+=	tao-depends
