@@ -52,11 +52,6 @@ foreach my $drive (@drives) {
     }
 }
 
-if ( chkconfig('apache') ) {
-    $plugins{apache_accesses}  = 'apache_accesses';
-    $plugins{apache_processes} = 'apache_processes';
-}
-
 if ( chkconfig('exim') ) {
     $plugins{exim_mailqueue} = 'exim_mailqueue';
 }

@@ -79,7 +79,6 @@ if( $?tcsh ) then
     unset	autologout
     if ( $uid == 0 ) then
 	complete	ndc	  'p/1/(reload)/'
-	complete	apachectl 'p/1/(configtest graceful)/'
     endif
 else
     set	promptbase="`hostname`)\!"

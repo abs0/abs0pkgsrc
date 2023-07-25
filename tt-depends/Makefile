@@ -27,7 +27,6 @@ DEPENDS+= p5-Catalyst-Engine-HTTP-Prefork>0:../../www/p5-Catalyst-Engine-HTTP-Pr
 DEPENDS+= p5-Template-Plugin-Number-Format>0:../../textproc/p5-Template-Plugin-Number-Format
 
 DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
-DEPENDS+= ap24-fcgid>0:../../www/ap2-fcgid
 
 # Needed by additional scripts
 DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
