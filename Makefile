@@ -15,5 +15,6 @@ SUBDIR+=	t365-depends
 SUBDIR+=	tao-depends
 SUBDIR+=	tickets-depends
 SUBDIR+=	tt-depends
+SUBDIR+=	vm-depends
 
 .include "../mk/bsd.pkg.subdir.mk"

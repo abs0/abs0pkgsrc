@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.55
+DISTNAME=	desktop-depends-1.56
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -46,14 +46,6 @@ DEPENDS+= feh>0:../../graphics/feh
 
 DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= tigervnc>0:../../net/tigervnc
-
-# VM - also pulls in a lot of display dependencies
-DEPENDS+= qemu>0:../../emulators/qemu
-
-# Broken assumption that time_t is 32 bits on i386
-.if ${OPSYS} == NetBSD && ${MACHINE} == amd64
-DEPENDS+= open-vm-tools>0:../../sysutils/open-vm-tools
-.endif
 
 DEPENDS+= arandr>0:../../x11/arandr
 DEPENDS+= xcowsay>0:../../games/xcowsay

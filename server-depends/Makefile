@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.07
+DISTNAME=	server-depends-1.08
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -28,8 +28,5 @@ DEPENDS+= brlaser>0:../../print/brlaser
 
 # In case need to work with python
 DEPENDS+= py311-pip>0:../../devel/py-pip
-
-# VM - also pulls in a lot of display dependencies
-DEPENDS+= qemu>0:../../emulators/qemu
 
 .include "../../mk/bsd.pkg.mk"
