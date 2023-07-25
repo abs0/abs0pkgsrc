@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.54
+DISTNAME=	desktop-depends-1.55
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -33,7 +33,7 @@ DEPENDS+= twemoji-color-font-ttf>0:../../fonts/twemoji-color-font-ttf
 DEPENDS+= slim>0:../../x11/slim
 DEPENDS+= xdotool>0:../../x11/xdotool
 DEPENDS+= slim-themes>0:../../graphics/slim-themes
-DEPENDS+= gimp>0:../../graphics/gimp
+DEPENDS+= gimp-devel>0:../../graphics/gimp-devel
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= zathura-pdf-poppler>0:../../print/zathura-pdf-poppler
 DEPENDS+= synergy>0:../../net/synergy
