@@ -415,8 +415,8 @@ if [ -n "$opt_b" ] ; then
 else	# $opt_s
 
     MAKE_JOBS=$(sysctl -n hw.ncpu)
-    if [ "$MAKE_JOBS" -gt 9 ]; then
-       MAKE_JOBS=8
+    if [ "$MAKE_JOBS" -gt 20 ]; then
+       MAKE_JOBS=20
     elif [ "$MAKE_JOBS" -gt 4 ]; then
        MAKE_JOBS=$(($MAKE_JOBS - 2))
     elif [ "$MAKE_JOBS" -gt 1 ]; then
