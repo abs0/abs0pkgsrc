@@ -11,12 +11,23 @@ my $result = GetOptions(
     'dry-run|n' => \$dry_run,
     'help'      => \$help_and_usage,
 );
+if ($help_and_usage) {
+    print "Help...\n";
+    exit;
+}
 
+my @basedirs;
+if (@ARGV) {
+    @basedirs = @ARGV;
+}
+else {
+    my $pkgdir = '/pkgsrc/packages';
+    chdir($pkgdir) || die("chdir $pkgdir failed: $!");
+    opendir( DIR, '.' );
+    @basedirs = grep( !-l $_ && -d "$_/All", readdir(DIR) );
+    closedir(DIR);
+}
 
-chdir('/pkgsrc/packages') || die("chdir failed: $!");
-opendir( DIR, '.' );
-my @basedirs = grep( !-l $_ && -d "$_/All", readdir(DIR) );
-closedir(DIR);
 foreach my $dir (@basedirs) {
     cleanup($dir);
 }
@@ -25,7 +36,8 @@ exit 0;
 sub cleanup {
     my $dir = shift;
     my %packages;
-    my $alldir = $dir . '/All';
+    my $alldir = $dir;
+    $alldir .= '/All' if $dir !~ m#/All$#;
     opendir( DIR, $alldir );
     my @packagefiles = readdir(DIR);
     closedir(DIR);
@@ -35,31 +47,36 @@ sub cleanup {
     }
     foreach my $package ( sort keys %packages ) {
         while ( @{ $packages{$package} } > 1 ) {
-            my $pkg1 = shift @{$packages{$package}};
-            my $pkg2 = shift @{$packages{$package}};
-	    my $pmatch1 = $pkg1;
-	    $pmatch1 =~ s/-(\d)/>$1/;
+            my $pkg1    = shift @{ $packages{$package} };
+            my $pkg2    = shift @{ $packages{$package} };
+            my $pmatch1 = $pkg1;
+            $pmatch1 =~ s/-(\d)/>$1/;
             $pmatch1 =~ s/\.tgz$//;
             my $pmatch2 = $pkg2;
             $pmatch2 =~ s/\.tgz$//;
-	    my $res = system('pkg_admin','pmatch',$pmatch1,$pmatch2);
-	    my $keep;
-	    my $kill;
-	    if ($res == 0) {
-		$kill = $pkg1;
-		$keep = $pkg2;
-	    } elsif ($res == 256 ) {
-		$keep = $pkg1;
-		$kill = $pkg2;
-	    } else {
-		die("pkg_admin pmatch failed");
-	    }
-	    unshift(@{$packages{$package}}, $keep);
+            my $res = system( 'pkg_admin', 'pmatch', $pmatch1, $pmatch2 );
+            my $keep;
+            my $kill;
+
+            if ( $res == 0 ) {
+                $kill = $pkg1;
+                $keep = $pkg2;
+            }
+            elsif ( $res == 256 ) {
+                $keep = $pkg1;
+                $kill = $pkg2;
+            }
+            else {
+                die("pkg_admin pmatch failed");
+            }
+            unshift( @{ $packages{$package} }, $keep );
             if ($dry_run) {
-	      print "$alldir/$kill ($keep)\n";
-            } else {
-	      print "rm $alldir/$kill ($keep)\n";
-	      unlink("$alldir/$kill") || die "unlink($alldir/$kill) failed: $!";
+                print "$alldir/$kill ($keep)\n";
+            }
+            else {
+                print "rm $alldir/$kill ($keep)\n";
+                unlink("$alldir/$kill")
+                  || die "unlink($alldir/$kill) failed: $!";
             }
         }
     }
