@@ -4,10 +4,10 @@ use warnings;
 
 $ENV{PATH} .= ':/usr/pkg/sbin';
 
-my $err = 0;
+my $err   = 0;
 my $disks = `sysctl -n hw.disknames`;
 
-for my $disk ( split( ' ', $disks ) ) {
+for my $disk ( sort split( ' ', $disks ) ) {
     my $status;
     if ( $disk =~ /^raid/ ) {
         $status = raidstatus($disk);
@@ -15,11 +15,20 @@ for my $disk ( split( ' ', $disks ) ) {
     elsif ( $disk =~ /^[sw]d/ ) {
         $status = smartstatus($disk);
     }
+    elsif ( $disk =~ /^ld/ ) {
+        $status = 'ok';
+    }
     else {    # Nothing for ld
         next;
     }
-    print "$disk: " . ( $status =~ /^ok/ ? $status : "** $status" ) . "\n";
-    $err |= $status !~ /^ok/;
+    my $ok = $status =~ s/^ok\s*//;
+
+    my $wedges = wedges($disk);
+    $status = "$wedges $status" if $wedges;
+    $status = "** $status **" if !$ok;
+
+    print "$disk: $status\n";
+    $err |= !$ok;
 }
 zfsstatus();
 exit $err;
@@ -58,8 +67,11 @@ sub raidstatus {
 sub smartstatus {
     my $disk = shift;
     my $status;
+    my $temp;
+    my $maxTemp;
+    my $realloc;
     for ( my $loop = 0 ; $loop < 2 ; ++$loop ) {
-        open( SMARTCTL, "smartctl -H /dev/r$disk|" )
+        open( SMARTCTL, "smartctl -x /dev/r$disk|" )
           || die "smartctl failed: $!";
         while (<SMARTCTL>) {
             if (/SMART overall-health self-assessment test result: (.*)/) {
@@ -68,28 +80,44 @@ sub smartstatus {
             elsif (/SMART Health Status: (.*)/) {
                 $status = $1;
             }
+            elsif (/Current Temperature:\s+(\S.*) Celsius/) {
+                $temp = $1;
+            }
+            elsif (m#Min/Max recommended Temperature:\s+\d+/(\S.*) Celsius#) {
+                $maxTemp = $1;
+            } elsif ( /Reallocated_Sector_Ct.*\s+(\d+)/ && $1 > 0 ) {
+                $realloc = $1;
+            }
         }
-      close(SMARTCTL);
+        close(SMARTCTL);
         last if defined $status && $status ne 'UNKNOWN!';
     }
     $status =
         !defined $status                       ? 'no status'
       : $status eq 'PASSED' || $status eq 'OK' ? 'ok'
       :                                          'smart health:' . $status;
-    return $status . smartrealloc($disk);
+    if ( $temp && $maxTemp ) {
+        $status = 'hot' if $temp > $maxTemp;
+        $status .= " ($temp/${maxTemp}C)";
+    }
+    elsif ($temp) {
+        $status .= " (${temp}C)";
+    }
+    if ($realloc) {
+        $status .= " [$realloc]";
+    }
+    return $status;
 }
 
-sub smartrealloc {
-    my $disk   = shift;
-    my $status = '';
-    open( ATACTL, "atactl $disk smart status|" ) || die "atactl failed: $!";
-    while (<ATACTL>) {
-        if (/Reallocated sector count\s+(\d+)/ && $1 > 0) {
-            $status = " [$1]";
-        }
+sub wedges {
+    my $disk = shift;
+    my @wedges;
+    open( DKCTL, "dkctl $disk listwedges|" ) || die "dkctl failed: $!";
+    while (<DKCTL>) {
+        push( @wedges, $1 ) if /\w+: (\S+),/;
     }
-    close(ATACTL);
-    return $status;
+    close(SMARTCTL);
+    return join(',', @wedges);
 }
 
 sub command_output {
