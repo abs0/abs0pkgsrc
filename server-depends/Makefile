@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.09
+DISTNAME=	server-depends-1.11
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,10 +17,12 @@ DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= dirvish>0:../../sysutils/dirvish
 DEPENDS+= py311-certbot>0:../../security/py-certbot
+DEPENDS+= py311-magic-wormhole>0:../../net/py-magic-wormhole
 DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= age>0:../../security/age
+DEPENDS+= siege>0:../../www/siege
 DEPENDS+= easy-rsa>0:../../security/easy-rsa
 
 # In case need to work with python
