@@ -32,18 +32,20 @@ esac
 
 start=$(date +%s)
 
-while getopts D:KXbd:fghk:nst:u f; do
+while getopts D:KXbd:fghk:nqst:u f; do
     case $f in
         D) opt_D="$OPTARG"; TARDIR="$OPTARG"    ;;
         K) opt_K=1                              ;;
         X) opt_X=1                              ;;
         b) opt_b=1                              ;;
+        c) opt_c=c                              ;;
         d) opt_d="$OPTARG"; DESTDIR="$OPTARG"   ;;
         f) opt_f=-f                             ;;
         g) opt_g=1                              ;;
         h) opt_h=1                              ;;
         k) KERNEL="kernels/$OPTARG.gz"          ;;
         n) opt_n=1                              ;;
+        q) opt_q=1                              ;;
         t) VERSION="$OPTARG"                    ;;
         s) opt_s=1                              ;;
         u) opt_u=-u                             ;;
@@ -55,15 +57,17 @@ if [ -n "$opt_h" ] ; then
         echo "Usage: os-update [opts] [hosts]
 opts:   -D dir Read source tarfiles and script from dir, and delete after
         -X     Exclude X distribution
-        -K     Just install kernels
+        -K     Exclude kernels
         -b     Install from binaries (default)
-        -d dir Full distribution (including etc set)
+        -c     Copy config from /etc (only with non / -d)
+        -d dir Full distribution
         -f     Force (ignore value of /etc/release)
-        -g     Get directly from nycdn.netbsd.org (use nbgetdaily)
+        -g     Get latest directly from nycdn.netbsd.org (use nbgetdaily)
         -h     This help
         -k nam Override name of kernel to install
         -n     No write (do not actually make any changes)
         -t tag Set OS tag to build
+        -q     Quiet (less output while progressing)
         -s     Rebuild from source
         -u     Run build with -u (and do not delete before or after build)
 ";
@@ -145,9 +149,11 @@ update_system()
         return
     fi
 
-    update_kernels
+    if [ -z "$opt_K" ] ; then
+        update_kernels
+    fi
 
-    if [ -n "$opt_d" -o ! -d $DESTDIR/etc ] ; then
+    if [ ! -d $DESTDIR/etc ] ; then
         extract_etc=1
     else
         extract_etc=
@@ -159,25 +165,25 @@ update_system()
         OTHER_TARFILES="$(echo $TARFILES | fmt 1 | egrep -v '/(kern-|etc\.)[^/]*$')"
     fi
 
-    if [ -z "$opt_K" ] ; then
 
-        for tarfile in $OTHER_TARFILES ; do
-                                run "tar xzp${taropt}f $tarfile"
-        done
+    for tarfile in $OTHER_TARFILES ; do
+                            run "tar xzp${taropt}f $tarfile"
+    done
 
-                                run "usr/sbin/postinstall -s $TARDIR/etc.t*z -d $DESTDIR fix || true"
-                                run "chroot $DESTDIR /etc/rc.d/fccache onestart"
-                                run "(cd dev && ./MAKEDEV all)"
-                                run "rm -rf kernels.old"
+    if [ -z "$extract_etc" ] ; then
+                            run "usr/sbin/postinstall -s $TARDIR/etc.t*z -d $DESTDIR fix || true"
+    fi
+                            run "(cd dev && ./MAKEDEV all)"
+                            run "chroot $DESTDIR /etc/rc.d/fccache onestart"
+                            run "rm -rf kernels.old"
 
-        if [ -n "$extract_etc" ] ; then
-                                run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/rc.conf.common etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db etc/ttys etc/group $DESTDIR || true"
-        fi
+    if [ -n "$extract_etc" -a -n "$opt_c" ] ; then
+                            run "cd / ; pax -rvw etc/rc.conf etc/fstab etc/ssh/sshd_config etc/master.passwd etc/passwd etc/pwd.db etc/spwd.db etc/ttys etc/group $DESTDIR || true"
+    fi
 
-        if [ ! -f boot ] ; then
-                                run "cp -p usr/mdec/boot boot"
-                                echo "*** Run installboot, check ssh keys, rc.conf, fstab ***"
-        fi
+    if [ ! -f boot ] ; then
+                            run "cp -p usr/mdec/boot boot"
+                            verbose "*** Run installboot, check ssh keys, rc.conf, fstab ***"
     fi
 
     cleanup
@@ -185,13 +191,20 @@ update_system()
 
 run()
     {
-    echo "$HOST:$DESTDIR $@"
+    verbose "$HOST:$DESTDIR $@"
     if [ -z "$opt_n" ] ; then
         if [ -x /usr/bin/id -a $(id -u) != 0 ] ; then
             doas sh -c "$*"
         else
             sh -c "$*"
         fi
+    fi
+    }
+
+verbose()
+    {
+    if [ -z "$opt_q" ] ; then
+        echo "$*"
     fi
     }
 
@@ -211,7 +224,9 @@ else
     fi
 fi
 
-elapsed=$(($(date +%s) - $start))
-printf "Elapsed: %d:%02d\n" $(($elapsed / 60)) $(($elapsed % 60))
+if [ -z "$opt_q" ] ; then
+    elapsed=$(($(date +%s) - $start))
+    printf "Elapsed: %d:%02d\n" $(($elapsed / 60)) $(($elapsed % 60))
+fi
 
 exit 0
