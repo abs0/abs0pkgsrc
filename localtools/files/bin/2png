@@ -23,7 +23,7 @@ opts:	-9 Try much harder to compress
 	-v Verbose
 
 2png uses GraphicsMagick to convert the files specified to .png (if
-not already in that format), then optipng to optimise the size.
+not already in that format), then oxipng to optimise the size.
 The resultant file should be pixel for pixel identical to the
 source.
 
@@ -91,10 +91,10 @@ sub convert2png {
         progress( ' -> ' . size( -s $tmpfile ) );
     }
 
-    my @optipng = ( 'optipng', '-fix', '-o', ( $opt{9} ? '7' : '5' ) );
-    push( @optipng, '-q' ) if !$opt{v};
-    push( @optipng, $tmpfile );
-    die "**** @optipng failed" if system(@optipng);
+    my @oxipng = ( 'oxipng', '-Zsa', '-o', ( $opt{9} ? 'max' : '4' ) );
+    push( @oxipng, '-q' ) if !$opt{v};
+    push( @oxipng, $tmpfile );
+    die "**** @oxipng failed" if system(@oxipng);
 
     utime $oldmtime, $oldmtime, $tmpfile if $opt{t};
     my $newsize = -s $tmpfile;

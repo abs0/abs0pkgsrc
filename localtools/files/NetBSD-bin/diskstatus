@@ -7,7 +7,7 @@ $ENV{PATH} .= ':/usr/pkg/sbin';
 my $err   = 0;
 my $disks = `sysctl -n hw.disknames`;
 
-for my $disk ( sort split( ' ', $disks ) ) {
+for my $disk ( sort devicesort split( ' ', $disks ) ) {
     my $status;
     if ( $disk =~ /^raid/ ) {
         $status = raidstatus($disk);
@@ -32,6 +32,14 @@ for my $disk ( sort split( ' ', $disks ) ) {
 }
 zfsstatus();
 exit $err;
+
+sub devicesort {
+    my @a = $a =~ /^(\w+)(\d+)$/;
+    my @b = $b =~ /^(\w+)(\d+)$/;
+    return (@a && @b)
+        ? $a[0] cmp $b[0] || $a[1] <=> $b[1]
+        : $a cmp $b;
+}
 
 sub raidstatus {
     my $disk = shift;
