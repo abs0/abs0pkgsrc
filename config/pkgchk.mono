@@ -26,7 +26,7 @@ mail/roundcube			webmail		# Webmail
 mail/squirrelmail		*
 
 #	Server fun
-databases/postgresql15		*
+databases/postgresql16		*
 net/mrstat			*
 mail/majordomo			*
 security/sudo			*
