@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.55
+DISTNAME=	tickets-depends-1.56
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,7 +25,9 @@ DEPENDS+= openjdk8>0:../../lang/openjdk8
 # For testing
 DEPENDS+= openjdk21>0:../../lang/openjdk21
 
+# Useful tools
 DEPENDS+= gng>0:../../devel/gng
+DEPENDS+= visualvm>0:../../devel/visualvm
 
 # Used by makebundle for widget.js
 DEPENDS+= sassc>0:../../www/sassc
