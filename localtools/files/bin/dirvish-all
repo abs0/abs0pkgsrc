@@ -4,12 +4,6 @@
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 PATH=$PATH:/usr/local/bin:/usr/pkg/bin:/usr/local/sbin:/usr/pkg/sbin
 
-if pgrep -f '/bin/sh.*dirvish-all$' | grep -qvF "$$" ; then
-    echo "existing dirvish-all process running - skipping run"
-    pgrep -lf '/dirvish'
-    exit 0
-fi
-
 # We must have the correct HOME for ssh to work. This is an issue with cron
 # which can call us with HOME=/var/log
 HOME=$(eval echo ~$USER)
