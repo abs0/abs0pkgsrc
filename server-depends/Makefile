@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.12
+DISTNAME=	server-depends-1.13
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,6 +25,7 @@ DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= age>0:../../security/age
 DEPENDS+= siege>0:../../www/siege
 DEPENDS+= easy-rsa>0:../../security/easy-rsa
+DEPENDS+= ircII>0:../../chat/ircII
 
 # In case need to work with python
 DEPENDS+= py311-pip>0:../../devel/py-pip
