@@ -1,4 +1,4 @@
-DISTNAME=	localtools-2.122
+DISTNAME=	localtools-2.123
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -22,8 +22,9 @@ BINSRC=bin
 
 BINSCRIPTS!=(cd ${FILESDIR} ; find ${BINSRC} -type f | egrep -v '\.orig$$' )
 SHAREFILES!=(cd ${FILESDIR}/share ; find * -type f | egrep -v '\.orig$$' )
+RCDFILES!=(cd ${FILESDIR} ; find rc.d -type f | egrep -v '\.orig$$' )
 
-SHAREDIR=	share/local
+LOCALSHAREDIR=	share/local
 USE_TOOLS+=	perl:run tar
 REPLACE_PERL+=	bin/* NetBSD-bin/*
 
@@ -34,7 +35,8 @@ DEPENDS+=	p5-JSON-Parse>0:../../converters/p5-JSON-Parse
 PLIST_SRC=	${WRKDIR}/PLIST
 WRKSRC=		${WRKDIR}
 
-INSTALLATION_DIRS= bin ${SHAREDIR} ${SHAREDIR}/examples/rc.d
+INSTALLATION_DIRS+= bin ${LOCALSHAREDIR} ${LOCALSHAREDIR}/examples/rc.d
+INSTALLATION_DIRS+= share/examples/rc.d
 
 do-extract:
 	tar cf - -C ${FILESDIR} . | tar xf - -C ${WRKSRC}
@@ -44,7 +46,10 @@ do-build:
 	@${ECHO} bin/`basename ${f}` >> ${PLIST_SRC}
 .endfor
 .for f in ${SHAREFILES}
-	@${ECHO} ${SHAREDIR}/${f} >> ${PLIST_SRC}
+	@${ECHO} ${LOCALSHAREDIR}/${f} >> ${PLIST_SRC}
+.endfor
+.for f in ${RCDFILES}
+	@${ECHO} share/examples/${f} >> ${PLIST_SRC}
 .endfor
 
 do-install:
@@ -52,7 +57,10 @@ do-install:
 	${INSTALL_SCRIPT} ${WRKSRC}/${f} ${DESTDIR}${PREFIX}/bin/`basename ${f}`
 .endfor
 .for f in ${SHAREFILES}
-	${INSTALL_DATA} ${WRKSRC}/share/${f} ${DESTDIR}${PREFIX}/${SHAREDIR}/${f}
+	${INSTALL_DATA} ${WRKSRC}/share/${f} ${DESTDIR}${PREFIX}/${LOCALSHAREDIR}/${f}
+.endfor
+.for f in ${RCDFILES}
+	${INSTALL_SCRIPT} ${WRKSRC}/${f} ${DESTDIR}${PREFIX}/share/examples/${f}
 .endfor
 
 .include "../../mk/bsd.pkg.mk"
