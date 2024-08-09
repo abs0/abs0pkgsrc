@@ -1,0 +1,13 @@
+#! /bin/sh
+#
+# PROVIDE: wgnet
+# REQUIRE: DAEMON
+
+$_rc_subr_loaded . /etc/rc.subr
+
+name=wgnet
+rcvar=$name
+command="/usr/pkg/bin/${name}"
+
+load_rc_config $name
+run_rc_command "$1"

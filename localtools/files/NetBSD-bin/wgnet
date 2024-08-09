@@ -1,0 +1,63 @@
+#!/bin/sh -e
+PATH=/usr/pkg/bin:$PATH
+
+extract_conf()
+{
+    conf_file="$1"
+    conf_localip=$( awk '/localip=/{gsub(".*=","");print}' "$conf_file")
+    if [ -z "$conf_localip" ]; then
+        fail "Unable to extract localip from $conf_file"
+    fi
+    conf_tun="$(echo $conf_file | sed -e 's:.*wireguard.::' -e 's:.conf$::')"
+    case "$conf_tun" in
+        tun*) ;;
+        *) fail "Unable to extract tun from $conf_file ($conf_tun)" ;;
+    esac
+}
+
+fail()
+{
+    echo "**** $@"
+    exit 1
+}
+
+start()
+{
+    ifconfig $conf_tun create $conf_localip
+    # XXX always assuming a /24 for the tail net
+    net="$(echo $conf_localip | sed 's:\.[0-9]*$:.0:')"
+    route add -net $net -netmask 255.255.255.0 $conf_localip
+    wireguard-go $conf_tun
+    wg setconf $conf_tun $conf_file
+    wg
+}
+
+stop()
+{
+    while pgrep -fq "wireguard-go $conf_tun" ; do
+        echo "Kill wireguard-go $conf_tun"
+        pkill -9 -f "wireguard-go $conf_tun"
+        sleep 0.1
+    done
+    if ifconfig $conf_tun > /dev/null 2>&1 ; then
+        echo "Destroy $conf_tun"
+        ifconfig $conf_tun destroy
+    fi
+}
+
+if [ $(id -u) != 0 ]; then
+    exec doas $0 "$@"
+fi
+
+for conf in /etc/wireguard*.conf ; do
+    extract_conf $conf
+
+    case "$1" in
+      stop) stop ;;
+      status) wg ;;
+      start | restart | '') stop; start ;;
+      * ) echo "Unknown option: $1"; exit ;;
+    esac
+
+done
+

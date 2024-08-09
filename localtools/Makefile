@@ -1,4 +1,4 @@
-DISTNAME=	localtools-2.120
+DISTNAME=	localtools-2.122
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty

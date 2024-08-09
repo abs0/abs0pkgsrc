@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.13
+DISTNAME=	server-depends-1.14
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -20,6 +20,7 @@ DEPENDS+= py311-certbot>0:../../security/py-certbot
 DEPENDS+= py311-magic-wormhole>0:../../net/py-magic-wormhole
 DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= wireguard-go>0:../../net/wireguard-go
+DEPENDS+= wireguard-tools>0:../../net/wireguard-tools
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= age>0:../../security/age
