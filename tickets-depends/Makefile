@@ -17,7 +17,7 @@ DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main ticketing system
 DEPENDS+= openjdk11>0:../../lang/openjdk11
-DEPENDS+= mariadb-server>0:../../databases/mariadb1011-server
+DEPENDS+= mariadb-server>0:../../databases/mariadb10117-server
 
 # For j2me scanme
 DEPENDS+= openjdk8>0:../../lang/openjdk8
