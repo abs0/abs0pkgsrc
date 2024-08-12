@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.14
+DISTNAME=	server-depends-1.15
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -16,8 +16,8 @@ DEPENDS+= mariadb-server>0:../../databases/mariadb10117-server
 DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= dirvish>0:../../sysutils/dirvish
-DEPENDS+= py311-certbot>0:../../security/py-certbot
-DEPENDS+= py311-magic-wormhole>0:../../net/py-magic-wormhole
+DEPENDS+= py312-certbot>0:../../security/py-certbot
+DEPENDS+= py312-magic-wormhole>0:../../net/py-magic-wormhole
 DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= wireguard-go>0:../../net/wireguard-go
 DEPENDS+= wireguard-tools>0:../../net/wireguard-tools
@@ -29,6 +29,6 @@ DEPENDS+= easy-rsa>0:../../security/easy-rsa
 DEPENDS+= ircII>0:../../chat/ircII
 
 # In case need to work with python
-DEPENDS+= py311-pip>0:../../devel/py-pip
+DEPENDS+= py312-pip>0:../../devel/py-pip
 
 .include "../../mk/bsd.pkg.mk"
