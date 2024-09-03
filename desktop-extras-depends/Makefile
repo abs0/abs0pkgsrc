@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.64
+DISTNAME=	desktop-extras-depends-1.65
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -10,11 +10,9 @@ COMMENT=	Meta package for desktop install
 
 META_PACKAGE=	yes
 
-DEPENDS+= encodings>0:../../fonts/encodings
-
 .include "../../mk/bsd.prefs.mk"
 
-DEPENDS+= gpxsee>0:../../geography/gpxsee
+DEPENDS+= encodings>0:../../fonts/encodings
 
 # Useful multimedia desktop tools
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
@@ -42,14 +40,15 @@ DEPENDS+= wireshark>0:../../net/wireshark
 DEPENDS+= lxqt>0:../../meta-pkgs/lxqt
 
 # Misc lesser priority
-DEPENDS+= jwm>0:../../wm/jwm
 DEPENDS+= featherpad>0:../../editors/featherpad
-DEPENDS+= netsurf>0:../../www/netsurf
 DEPENDS+= glx-utils>0:../../graphics/glx-utils
+DEPENDS+= gpxsee>0:../../geography/gpxsee
+DEPENDS+= jwm>0:../../wm/jwm
 DEPENDS+= oneko>0:../../x11/oneko
+DEPENDS+= picom>0:../../x11/picom
 DEPENDS+= pidgin>0:../../chat/pidgin
+DEPENDS+= qdirstat>=0:../../sysutils/qdirstat
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= yed>0:../../editors/yed
-DEPENDS+= qdirstat>=0:../../sysutils/qdirstat
 
 .include "../../mk/bsd.pkg.mk"
