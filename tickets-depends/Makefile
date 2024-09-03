@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.56
+DISTNAME=	tickets-depends-1.57
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,7 +17,7 @@ DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main ticketing system
 DEPENDS+= openjdk11>0:../../lang/openjdk11
-DEPENDS+= mariadb-server>0:../../databases/mariadb10117-server
+DEPENDS+= mariadb-server>0:../../databases/mariadb114-server
 
 # For j2me scanme
 DEPENDS+= openjdk8>0:../../lang/openjdk8
