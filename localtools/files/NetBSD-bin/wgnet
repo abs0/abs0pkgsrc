@@ -29,7 +29,7 @@ start()
     route add -net $net -netmask 255.255.255.0 $conf_localip
     wireguard-go $conf_tun
     wg setconf $conf_tun $conf_file
-    wg
+    wg show $conf_tun | grep interface | sed 's/^/wg /'
 }
 
 stop()

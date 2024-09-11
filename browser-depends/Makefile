@@ -25,6 +25,4 @@ DEPENDS+= midori>0:../../www/midori
 DEPENDS+= netsurf>0:../../www/netsurf
 DEPENDS+= otter-browser>0:../../www/otter-browser
 
-DEPENDS+= firefox102>0:../../www/firefox102
-
 .include "../../mk/bsd.pkg.mk"
