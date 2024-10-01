@@ -8,6 +8,11 @@ extract_conf()
     if [ -z "$conf_localip" ]; then
         fail "Unable to extract localip from $conf_file"
     fi
+    conf_nets=$(awk '/ *AllowedIPs *= */{gsub(".*= *","");if(!/\/32$/){print}}' "$conf_file")
+    if [ -z "$conf_nets" ]; then
+        fail "Unable to extract allowed nets from $conf_file"
+    fi
+
     conf_tun="$(echo $conf_file | sed -e 's:.*wireguard.::' -e 's:.conf$::')"
     case "$conf_tun" in
         tun*) ;;
@@ -24,9 +29,9 @@ fail()
 start()
 {
     ifconfig $conf_tun create $conf_localip
-    # XXX always assuming a /24 for the tail net
-    net="$(echo $conf_localip | sed 's:\.[0-9]*$:.0:')"
-    route add -net $net -netmask 255.255.255.0 $conf_localip
+    for net in $conf_nets ; do
+        route add -net $net $conf_localip
+    done
     wireguard-go $conf_tun
     wg setconf $conf_tun $conf_file
     wg show $conf_tun | grep interface | sed 's/^/wg /'
