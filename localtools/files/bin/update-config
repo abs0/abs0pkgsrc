@@ -1,57 +1,7 @@
 #!/bin/sh -e
 # $Id: update-config,v 1.33 2008/11/18 21:45:32 abs Exp $
 
-# Copy src onto dest if src exists and dest does not or is different
-cmpcp()
-    {
-    src=$1
-    dest=$2
-    if [ -f $src ] ; then
-	if [ ! -f $dest ] || ! cmp -s $src $dest ; then
-	    echo "Copy $src $dest"
-	    cp -p $src $dest
-	fi
-    fi
-    }
-
-# Ceate symlink if specified package installed
-sl()
-    {
-    src=$1
-    dest=$2
-    pkg=$3
-
-    if [ -e $src -o -e $dest ]; then
-	mkdir -p $(dirname $src)
-	if [ ! -e $src ] ; then
-	    mv $dest $src
-	    echo "update-config: Move $dest $src"
-	fi
-	if [ ! -h $dest ] ; then
-	    mkdir -p $(dirname $dest)
-	    echo "update-config: Symlink $src $dest"
-	    rm -rf $dest
-	    ln -sf $src $dest
-	fi
-	if ! pkg_info -e $pkg > /dev/null; then
-	    echo  "*** WARNING: $src present but $pkg not installed"
-	fi
-    fi
-    }
-
 PATH=/usr/pkg/bin:/usr/pkg/sbin:$PATH
-
-sl /etc/bugzilla		/usr/pkg/share/bugzilla		bugzilla
-sl /etc/mediawiki/LocalSettings.php /usr/pkg/share/mediawiki/LocalSettings.php mediawiki
-sl /etc/mediawiki/extensions 	/usr/pkg/share/mediawiki/extensions mediawiki
-sl /etc/mediawiki/images 	/usr/pkg/share/mediawiki/images mediawiki
-sl /etc/roundcube		/usr/pkg/share/roundcube/config	roundcube
-sl /etc/kdm/kdmrc		/usr/pkg/etc/kdm/kdmrc		kde-workspace4
-sl /etc/php.ini			/usr/pkg/etc/php.ini		php
-
-if [ -x /usr/pkg/bin/nspluginwrapper ] ; then
-    nspluginwrapper -a -i
-fi
 
 if [ -f /etc/nut/ups.conf ] ; then
     for tty in $(sed 's/#.*//' /etc/nut/ups.conf | \
@@ -60,14 +10,6 @@ if [ -f /etc/nut/ups.conf ] ; then
 	chgrp nut $tty
 	chmod 660 $tty
     done
-fi
-
-if pkg_info -e munin-node > /dev/null; then
-    mkdir -p /etc/munin/plugins
-    if [ -z "$(ls /etc/munin/plugins)" ] ; then
-	echo "update-config: Run munin-node-configure"
-	munin-node-configure --shell | sh
-    fi
 fi
 
 if [ -c /dev/putter ] ; then
