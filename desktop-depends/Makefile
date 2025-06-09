@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.56
+DISTNAME=	desktop-depends-1.58
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -31,28 +31,36 @@ DEPENDS+= twemoji-color-font-ttf>0:../../fonts/twemoji-color-font-ttf
 
 # Medium priority
 DEPENDS+= slim>0:../../x11/slim
-DEPENDS+= xdotool>0:../../x11/xdotool
 DEPENDS+= slim-themes>0:../../graphics/slim-themes
-DEPENDS+= gimp-devel>0:../../graphics/gimp-devel
-DEPENDS+= meld>0:../../devel/meld
-DEPENDS+= zathura-pdf-poppler>0:../../print/zathura-pdf-poppler
-DEPENDS+= synergy>0:../../net/synergy
 DEPENDS+= xbattbar>0:../../sysutils/xbattbar
-DEPENDS+= xsel>0:../../x11/xsel
-DEPENDS+= xosd>0:../../x11/xosd
-DEPENDS+= conky>0:../../sysutils/conky
-DEPENDS+= clipit>0:../../x11/clipit
-DEPENDS+= feh>0:../../graphics/feh
-
-DEPENDS+= rdesktop>=0:../../net/rdesktop
-DEPENDS+= tigervnc>0:../../net/tigervnc
-
-DEPENDS+= arandr>0:../../x11/arandr
-DEPENDS+= xcowsay>0:../../games/xcowsay
-DEPENDS+= mpv>0:../../multimedia/mpv
 DEPENDS+= xscreensaver>0:../../x11/xscreensaver
+DEPENDS+= xosd>0:../../x11/xosd
+DEPENDS+= clipit>0:../../x11/clipit
+
+# Image handling
+DEPENDS+= flameshot>0:../../graphics/flameshot
+DEPENDS+= feh>0:../../graphics/feh
+DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= lximage-qt>0:../../graphics/lximage-qt
+
+# Remote desktop
+DEPENDS+= freerdp2>=0:../../net/freerdp2
+DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
+DEPENDS+= synergy>0:../../net/synergy
+## DEPENDS+= deskflow>0:../../net/deskflow
+
+# X tools
+DEPENDS+= arandr>0:../../x11/arandr
+DEPENDS+= xdotool>0:../../x11/xdotool
+DEPENDS+= xsel>0:../../x11/xsel
+
+# Other
+DEPENDS+= meld>0:../../devel/meld
+DEPENDS+= mpv>0:../../multimedia/mpv
 DEPENDS+= pcmanfm-qt>0:../../sysutils/pcmanfm-qt
-DEPENDS+= screengrab>0:../../graphics/screengrab
+DEPENDS+= xcowsay>0:../../games/xcowsay
+DEPENDS+= zathura-pdf-poppler>0:../../print/zathura-pdf-poppler
+
+DEPENDS+= wireshark>0:../../net/wireshark
 
 .include "../../mk/bsd.pkg.mk"
