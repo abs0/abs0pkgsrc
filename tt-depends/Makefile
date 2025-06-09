@@ -1,4 +1,4 @@
-DISTNAME=	tt-depends-1.11
+DISTNAME=	tt-depends-1.12
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -9,7 +9,7 @@ COMMENT=	Meta package for tt depends
 META_PACKAGE=	yes
 
 # Ensure installed before any DBD just in case
-DEPENDS+= postgresql16>0:../../databases/postgresql16
+DEPENDS+= postgresql17>0:../../databases/postgresql17
 
 DEPENDS+= p5-Catalyst-Devel>0:../../www/p5-Catalyst-Devel
 DEPENDS+= p5-Catalyst-Plugin-Session-State-Cookie>0:../../www/p5-Catalyst-Plugin-Session-State-Cookie

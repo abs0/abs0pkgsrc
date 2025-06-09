@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.18
+DISTNAME=	tao-depends-1.19
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -16,7 +16,7 @@ DEPENDS+= java-jna>0:../../devel/java-jna
 DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main TrainAsONE system
-DEPENDS+= postgresql16>0:../../databases/postgresql16
+DEPENDS+= postgresql17>0:../../databases/postgresql17
 
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 DEPENDS+= bfg>0:../../devel/bfg
