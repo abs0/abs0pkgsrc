@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.58
+DISTNAME=	tickets-depends-1.59
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,7 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # For IntelliJ
-DEPENDS+= openjdk17>0:../../lang/openjdk17
+DEPENDS+= openjdk21>0:../../lang/openjdk21
 DEPENDS+= java-jna>0:../../devel/java-jna
 DEPENDS+= nodejs>0:../../lang/nodejs
 
@@ -22,25 +22,14 @@ DEPENDS+= mariadb-server>0:../../databases/mariadb118-server
 # For j2me scanme
 DEPENDS+= openjdk8>0:../../lang/openjdk8
 
-# For testing
-DEPENDS+= openjdk21>0:../../lang/openjdk21
-
 # Useful tools
+DEPENDS+= apache-maven>0:../../devel/apache-maven
+DEPENDS+= bfg>0:../../devel/bfg
 DEPENDS+= gng>0:../../devel/gng
 DEPENDS+= visualvm>0:../../devel/visualvm
 
 # Used by makebundle for widget.js
 DEPENDS+= sassc>0:../../www/sassc
-
-# For member.cgi & friends
-# DEPENDS+= fcgiwrap>0:../../www/fcgiwrap
-# DEPENDS+= p5-DateTime-Format-Strptime>0:../../time/p5-DateTime-Format-Strptime
-# DEPENDS+= p5-FCGI>0:../../www/p5-FCGI
-# DEPENDS+= p5-UUID-Tiny>0:../../devel/p5-UUID-Tiny
-# DEPENDS+= p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
-
-# Used by main tickets script
-DEPENDS+= p5-File-Slurp>0:../../devel/p5-File-Slurp
 
 # Used by tickets tools
 DEPENDS+= p5-DBD-MariaDB>0:../../databases/p5-DBD-MariaDB

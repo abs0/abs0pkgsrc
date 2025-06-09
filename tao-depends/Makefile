@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.19
+DISTNAME=	tao-depends-1.20
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,17 +11,18 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # For IntelliJ
-DEPENDS+= openjdk17>0:../../lang/openjdk17
+DEPENDS+= openjdk21>0:../../lang/openjdk21
 DEPENDS+= java-jna>0:../../devel/java-jna
 DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main TrainAsONE system
 DEPENDS+= postgresql17>0:../../databases/postgresql17
 
+# Useful tools
 DEPENDS+= apache-maven>0:../../devel/apache-maven
 DEPENDS+= bfg>0:../../devel/bfg
-DEPENDS+= geckodriver>0:../../www/geckodriver
 DEPENDS+= gng>0:../../devel/gng
+DEPENDS+= visualvm>0:../../devel/visualvm
 
 DEPENDS+= py312-brotli>0:../../archivers/py-brotli
 DEPENDS+= py312-fonttools>0:../../fonts/py-fonttools
