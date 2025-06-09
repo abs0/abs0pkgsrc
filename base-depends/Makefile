@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.55
+DISTNAME=	base-depends-1.56
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -38,6 +38,7 @@ DEPENDS+= ddclient>0:../../net/ddclient			# Dynamic DNS
 DEPENDS+= iperf3>0:../../net/iperf3			# Benchmark
 DEPENDS+= mosh>0:../../net/mosh				# remote shell
 DEPENDS+= mtr>0:../../net/mtr				# Better traceroute
+DEPENDS+= trippy>0:../../net/trippy			# Better traceroute
 DEPENDS+= netcat>0:../../net/netcat
 DEPENDS+= nginx>0:../../www/nginx			# http/proxy server
 DEPENDS+= openvpn>0:../../net/openvpn			# VPN
