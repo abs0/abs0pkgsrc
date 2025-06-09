@@ -1,5 +1,10 @@
 #!/bin/sh -e
+# 2024-10-28
 PATH=/usr/pkg/bin:$PATH
+
+# Expects to find wireguard-go config in /etc/wireguard.tun*.conf
+# Config should include a comment of the form #localip=172.16.2.4
+# to configure the local IP address
 
 extract_conf()
 {
@@ -8,7 +13,7 @@ extract_conf()
     if [ -z "$conf_localip" ]; then
         fail "Unable to extract localip from $conf_file"
     fi
-    conf_nets=$(awk '/ *AllowedIPs *= */{gsub(".*= *","");if(!/\/32$/){print}}' "$conf_file")
+    conf_nets=$(awk '/^ *AllowedIPs *= */{gsub(".*= *","");gsub("#.*","");if(!/\/32$/){print}}' "$conf_file")
     if [ -z "$conf_nets" ]; then
         fail "Unable to extract allowed nets from $conf_file"
     fi
@@ -18,6 +23,10 @@ extract_conf()
         tun*) ;;
         *) fail "Unable to extract tun from $conf_file ($conf_tun)" ;;
     esac
+
+    # echo conf_localip=$conf_localip
+    # echo conf_nets=$conf_nets
+    # echo conf_tun=$conf_tun
 }
 
 fail()
@@ -54,12 +63,12 @@ if [ $(id -u) != 0 ]; then
     exec doas $0 "$@"
 fi
 
-for conf in /etc/wireguard*.conf ; do
+for conf in /etc/wireguard.*.conf ; do
     extract_conf $conf
 
     case "$1" in
       stop) stop ;;
-      status) wg ;;
+      status) pgrep -lf "wireguard-go $conf_tun";;
       start | restart | '') stop; start ;;
       * ) echo "Unknown option: $1"; exit ;;
     esac
