@@ -1,4 +1,4 @@
-DISTNAME=	vm-depends-1.00
+DISTNAME=	vm-depends-1.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,6 +11,7 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 DEPENDS+= qemu>0:../../emulators/qemu
+DEPENDS+= swtpm>0:../../sysutils/swtpm
 
 # Broken assumption that time_t is 32 bits on i386
 .if ${OPSYS} == NetBSD && ${MACHINE} == amd64
