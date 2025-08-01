@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.17
+DISTNAME=	server-depends-1.18
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,7 +18,6 @@ DEPENDS+= innotop>0:../../databases/innotop
 DEPENDS+= age>0:../../security/age
 DEPENDS+= bwm-ng>0:../../net/bwm-ng
 DEPENDS+= dirvish>0:../../sysutils/dirvish
-DEPENDS+= easy-rsa>0:../../security/easy-rsa
 DEPENDS+= fping>0:../../net/fping
 DEPENDS+= gping>0:../../net/gping
 DEPENDS+= ircII>0:../../chat/ircII
@@ -32,6 +31,9 @@ DEPENDS+= tailscale>0:../../net/tailscale
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= wireguard-go>0:../../net/wireguard-go
 DEPENDS+= wireguard-tools>0:../../net/wireguard-tools
+
+# Devel tools
+DEPENDS+= difftastic>0:../../devel/difftastic
 
 # In case need to work with python
 DEPENDS+= py312-pip>0:../../devel/py-pip
