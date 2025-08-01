@@ -1,12 +1,21 @@
 #!/bin/sh -e
 cd /pkgsrc/editors/yed 
-distfile="$(make show-var VARNAME=DISTFILES)"
+distfile=/pkgsrc/distfiles/"$(make show-var VARNAME=DISTFILES)"
 if [ -z "$distfile" ] ; then
     echo "Unable to extract distfile for /pkgsrc/editors/yed"
     exit 1
 fi
-cd /pkgsrc/distfiles
+
+fetch()
+{
 if [ -f "$distfile" ] ; then
     echo "Rename $distfile to $distfile.old"
     mv "$distfile" "$distfile.old"
+fi
+make fetch
+}
+
+if ! fetch > $distfile.log ; then
+    cat $distfile.log
+    exit 1
 fi
