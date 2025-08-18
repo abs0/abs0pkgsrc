@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.18
+DISTNAME=	server-depends-1.19
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -13,7 +13,6 @@ META_PACKAGE=	yes
 DEPENDS+= samba>=4:../../net/samba4
 
 DEPENDS+= mariadb-server>0:../../databases/mariadb118-server
-DEPENDS+= innotop>0:../../databases/innotop
 
 DEPENDS+= age>0:../../security/age
 DEPENDS+= bwm-ng>0:../../net/bwm-ng
