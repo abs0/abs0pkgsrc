@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	browser-depends-1.02
+DISTNAME=	browser-depends-1.03
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -16,11 +16,9 @@ DEPENDS+= firefox>0:../../www/firefox
 
 DEPENDS+= arcticfox>0:../../www/arcticfox
 DEPENDS+= badwolf>0:../../www/badwolf
-# DEPENDS+= basilisk>0:../../www/basilisk
 DEPENDS+= dillo>0:../../www/dillo
 DEPENDS+= elinks>0:../../www/elinks
 DEPENDS+= firefox128>0:../../www/firefox128
-DEPENDS+= firefox52>0:../../www/firefox52
 DEPENDS+= midori>0:../../www/midori
 DEPENDS+= netsurf>0:../../www/netsurf
 DEPENDS+= otter-browser>0:../../www/otter-browser
