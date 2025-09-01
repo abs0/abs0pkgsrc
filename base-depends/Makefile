@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.56
+DISTNAME=	base-depends-1.57
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,6 +18,7 @@ DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
+DEPENDS+= ripgrep>0:../../textproc/ripgrep
 
 # pkgtools
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
