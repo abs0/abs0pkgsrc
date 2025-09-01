@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.58
+DISTNAME=	desktop-depends-1.59
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -40,14 +40,13 @@ DEPENDS+= clipit>0:../../x11/clipit
 # Image handling
 DEPENDS+= flameshot>0:../../graphics/flameshot
 DEPENDS+= feh>0:../../graphics/feh
-DEPENDS+= gimp>0:../../graphics/gimp
+##XXX DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= lximage-qt>0:../../graphics/lximage-qt
 
 # Remote desktop
 DEPENDS+= freerdp2>=0:../../net/freerdp2
 DEPENDS+= tightvncviewer>0:../../net/tightvncviewer
-DEPENDS+= synergy>0:../../net/synergy
-## DEPENDS+= deskflow>0:../../net/deskflow
+DEPENDS+= deskflow>0:../../net/deskflow
 
 # X tools
 DEPENDS+= arandr>0:../../x11/arandr
