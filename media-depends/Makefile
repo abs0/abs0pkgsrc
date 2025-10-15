@@ -1,4 +1,4 @@
-DISTNAME=	media-depends-1.01
+DISTNAME=	media-depends-1.02
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -17,6 +17,7 @@ DEPENDS+= flac2mp3>0:../../audio/flac2mp3
 
 DEPENDS+= mediainfo>0:../../multimedia/mediainfo
 DEPENDS+= get_iplayer>0:../../net/get_iplayer # get_iplayer needs ffmpeg
-DEPENDS+= ffmpeg5>0:../../multimedia/ffmpeg5
+DEPENDS+= ffmpeg7>0:../../multimedia/ffmpeg7
+DEPENDS+= atomicparsley>0:../../multimedia/atomicparsley
 
 .include "../../mk/bsd.pkg.mk"
