@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	server-depends-1.19
+DISTNAME=	server-depends-1.20
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -21,8 +21,8 @@ DEPENDS+= fping>0:../../net/fping
 DEPENDS+= gping>0:../../net/gping
 DEPENDS+= ircII>0:../../chat/ircII
 DEPENDS+= prettyping>0:../../net/prettyping
-DEPENDS+= py312-certbot>0:../../security/py-certbot
-DEPENDS+= py312-magic-wormhole>0:../../net/py-magic-wormhole
+DEPENDS+= py313-certbot>0:../../security/py-certbot
+DEPENDS+= py313-magic-wormhole>0:../../net/py-magic-wormhole
 DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= siege>0:../../www/siege
 DEPENDS+= syncthing>0:../../net/syncthing
@@ -35,6 +35,6 @@ DEPENDS+= wireguard-tools>0:../../net/wireguard-tools
 DEPENDS+= difftastic>0:../../devel/difftastic
 
 # In case need to work with python
-DEPENDS+= py312-pip>0:../../devel/py-pip
+DEPENDS+= py313-pip>0:../../devel/py-pip
 
 .include "../../mk/bsd.pkg.mk"

@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.20
+DISTNAME=	tao-depends-1.21
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -24,7 +24,7 @@ DEPENDS+= bfg>0:../../devel/bfg
 DEPENDS+= gng>0:../../devel/gng
 DEPENDS+= visualvm>0:../../devel/visualvm
 
-DEPENDS+= py312-brotli>0:../../archivers/py-brotli
-DEPENDS+= py312-fonttools>0:../../fonts/py-fonttools
+DEPENDS+= py313-brotli>0:../../archivers/py-brotli
+DEPENDS+= py313-fonttools>0:../../fonts/py-fonttools
 
 .include "../../mk/bsd.pkg.mk"
