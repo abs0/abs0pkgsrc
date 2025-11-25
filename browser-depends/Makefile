@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	browser-depends-1.04
+DISTNAME=	browser-depends-1.05
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -24,5 +24,6 @@ DEPENDS+= midori>0:../../www/midori
 DEPENDS+= netsurf>0:../../www/netsurf
 DEPENDS+= otter-browser>0:../../www/otter-browser
 DEPENDS+= palemoon>0:../../www/palemoon
+DEPENDS+= librewolf>0:../../wip/librewolf
 
 .include "../../mk/bsd.pkg.mk"
