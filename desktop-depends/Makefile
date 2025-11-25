@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.59
+DISTNAME=	desktop-depends-1.60
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -40,7 +40,7 @@ DEPENDS+= clipit>0:../../x11/clipit
 # Image handling
 DEPENDS+= flameshot>0:../../graphics/flameshot
 DEPENDS+= feh>0:../../graphics/feh
-##XXX DEPENDS+= gimp>0:../../graphics/gimp
+DEPENDS+= gimp>0:../../graphics/gimp
 DEPENDS+= lximage-qt>0:../../graphics/lximage-qt
 
 # Remote desktop
