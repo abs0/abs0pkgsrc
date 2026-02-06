@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.57
+DISTNAME=	base-depends-1.58
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,7 +18,6 @@ DEPENDS+= zsh>0:../../shells/zsh
 DEPENDS+= localtools>0:../../local/localtools
 DEPENDS+= dnsmasq>0:../../net/dnsmasq			# DNS cache
 DEPENDS+= the_silver_searcher>0:../../textproc/the_silver_searcher
-DEPENDS+= ripgrep>0:../../textproc/ripgrep
 
 # pkgtools
 DEPENDS+= pkg_alternatives>0:../../pkgtools/pkg_alternatives
@@ -39,7 +38,6 @@ DEPENDS+= ddclient>0:../../net/ddclient			# Dynamic DNS
 DEPENDS+= iperf3>0:../../net/iperf3			# Benchmark
 DEPENDS+= mosh>0:../../net/mosh				# remote shell
 DEPENDS+= mtr>0:../../net/mtr				# Better traceroute
-DEPENDS+= trippy>0:../../net/trippy			# Better traceroute
 DEPENDS+= netcat>0:../../net/netcat
 DEPENDS+= nginx>0:../../www/nginx			# http/proxy server
 DEPENDS+= openvpn>0:../../net/openvpn			# VPN

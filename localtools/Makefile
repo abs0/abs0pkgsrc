@@ -1,4 +1,4 @@
-DISTNAME=	localtools-2.125
+DISTNAME=	localtools-2.127
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -28,7 +28,6 @@ LOCALSHAREDIR=	share/local
 USE_TOOLS+=	perl:run tar
 REPLACE_PERL+=	bin/* NetBSD-bin/*
 
-DEPENDS+=	oxipng>0:../../graphics/oxipng
 DEPENDS+=	p5-Modern-Perl>0:../../devel/p5-Modern-Perl
 DEPENDS+=	p5-JSON-Parse>0:../../converters/p5-JSON-Parse
 
