@@ -1,6 +1,4 @@
-# $NetBSD$
-
-DISTNAME=	server-depends-1.20
+DISTNAME=	server-depends-1.21
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -34,7 +32,11 @@ DEPENDS+= wireguard-tools>0:../../net/wireguard-tools
 # Devel tools
 DEPENDS+= difftastic>0:../../devel/difftastic
 
+DEPENDS+= dpkg>0:../../misc/dpkg
+
 # In case need to work with python
 DEPENDS+= py313-pip>0:../../devel/py-pip
+
+DEPENDS+= gnupg2>0:../../security/gnupg2
 
 .include "../../mk/bsd.pkg.mk"

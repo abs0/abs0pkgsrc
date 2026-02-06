@@ -1,4 +1,4 @@
-DISTNAME=	base-depends-1.58
+DISTNAME=	base-depends-1.59
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -60,7 +60,6 @@ DEPENDS+= rdfind>0:../../sysutils/rdfind
 DEPENDS+= renameutils>0:../../sysutils/renameutils
 
 # Security
-DEPENDS+= gnupg2>0:../../security/gnupg2
 DEPENDS+= mozilla-rootcerts>0:../../security/mozilla-rootcerts
 
 .include "../../mk/bsd.pkg.mk"
