@@ -56,9 +56,9 @@ recompress()
     fi
     echo -n "recompress:";
     for f in *.tgz ; do
-	base=$(echo $f|sed 's/\.tgz$//')
-	echo -n " $base"
-	zcat $f | xz -9    > $base.txz.tmp && mv $base.txz.tmp $base.txz
+	out="$(txz_name $f)"
+	echo -n " $out"
+	zcat $f | xz -9    > $out.tmp && mv $out.tmp $out
 	rm -f $f
     done
     echo
@@ -66,7 +66,7 @@ recompress()
 
 txz_name()
 {
-      echo "$@" | sed 's/\.tgz$/.txz/'
+      echo "$@" | sed 's/\.tgz$/.tar.xz/'
 }
 
 while getopts d:hm:t: f; do
