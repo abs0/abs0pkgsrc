@@ -16,4 +16,8 @@ if [ -c /dev/putter ] ; then
     chmod 660 /dev/putter
 fi
 
+if [ -e /dev/dtyU0 ] ; then
+    chmod 660 /dev/dtyU0
+fi
+
 cp -p /usr/pkg/share/examples/rc.d/* /etc/rc.d
