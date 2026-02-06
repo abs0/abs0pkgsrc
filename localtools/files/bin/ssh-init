@@ -121,7 +121,7 @@ END
     exit
 fi
 
-CANONICAL_AUTH_SOCK=/tmp/.ssh-$USER/sock
+CANONICAL_AUTH_SOCK=/$HOME/.ssh/agent/sock
 
 if [ -n "$opt_r" ] ; then
     auth_sock_canonify
