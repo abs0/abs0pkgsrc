@@ -18,7 +18,8 @@ for my $disk ( sort devicesort split( ' ', $disks ) ) {
     elsif ( $disk =~ /^ld/ ) {
         $status = 'ok';
     }
-    else {    # Nothing for ld
+    else {
+        $status = '?';
         next;
     }
     my $ok = $status =~ s/^ok\s*//;
@@ -75,6 +76,7 @@ sub raidstatus {
 sub smartstatus {
     my $disk = shift;
     my $status;
+    my $capacity;
     my $temp;
     my $maxTemp;
     my $realloc;
@@ -84,6 +86,9 @@ sub smartstatus {
         while (<SMARTCTL>) {
             if (/SMART overall-health self-assessment test result: (.*)/) {
                 $status = $1;
+            }
+            elsif (/User Capacity: .*\[(.*)\].*/) {
+                $capacity = $1;
             }
             elsif (/SMART Health Status: (.*)/) {
                 $status = $1;
@@ -104,6 +109,10 @@ sub smartstatus {
         !defined $status                       ? 'no status'
       : $status eq 'PASSED' || $status eq 'OK' ? 'ok'
       :                                          'smart health:' . $status;
+    if ($capacity) {
+        $capacity =~ s/\.0{1,2} / /;
+        $status .= " {$capacity}";
+    }
     if ( $temp && $maxTemp ) {
         $status = 'hot' if $temp > $maxTemp;
         $status .= " ($temp/${maxTemp}C)";
