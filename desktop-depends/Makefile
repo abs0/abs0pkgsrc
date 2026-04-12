@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-depends-1.60
+DISTNAME=	desktop-depends-1.61
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -56,6 +56,7 @@ DEPENDS+= xsel>0:../../x11/xsel
 # Other
 DEPENDS+= meld>0:../../devel/meld
 DEPENDS+= mpv>0:../../multimedia/mpv
+DEPENDS+= vlc>0:../../multimedia/vlc
 DEPENDS+= pcmanfm-qt>0:../../sysutils/pcmanfm-qt
 DEPENDS+= xcowsay>0:../../games/xcowsay
 DEPENDS+= zathura-pdf-poppler>0:../../print/zathura-pdf-poppler
