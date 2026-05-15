@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.67
+DISTNAME=	desktop-extras-depends-1.68
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -44,7 +44,6 @@ DEPENDS+= oneko>0:../../x11/oneko
 DEPENDS+= picom>0:../../x11/picom
 DEPENDS+= pidgin>0:../../chat/pidgin
 DEPENDS+= qdirstat>=0:../../sysutils/qdirstat
-DEPENDS+= rdesktop>=0:../../net/rdesktop
 DEPENDS+= zenmap>=0:../../net/zenmap
 DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= yed>0:../../editors/yed
