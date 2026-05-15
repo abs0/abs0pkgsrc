@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.61
+DISTNAME=	tickets-depends-1.63
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -14,6 +14,9 @@ META_PACKAGE=	yes
 DEPENDS+= openjdk21>0:../../lang/openjdk21
 DEPENDS+= java-jna>0:../../devel/java-jna
 
+# In case we need to build j2me (which should be never)
+DEPENDS+= openjdk11>0:../../lang/openjdk11
+
 # Some helpful commandline tools
 DEPENDS+= bat>0:../../textproc/bat
 DEPENDS+= entr>0:../../sysutils/entr
@@ -24,6 +27,9 @@ DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main ticketing system
 DEPENDS+= mariadb-server>0:../../databases/mariadb118-server
+
+# Network debugging
+DEPENDS+= mitmproxy>0:../../net/mitmproxy
 
 # Useful tools
 DEPENDS+= apache-maven>0:../../devel/apache-maven
