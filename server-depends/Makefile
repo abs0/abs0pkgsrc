@@ -1,4 +1,4 @@
-DISTNAME=	server-depends-1.22
+DISTNAME=	server-depends-1.23
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -24,7 +24,7 @@ DEPENDS+= py313-magic-wormhole>0:../../net/py-magic-wormhole
 DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= siege>0:../../www/siege
 DEPENDS+= syncthing>0:../../net/syncthing
-DEPENDS+= tailscale>0:../../wip/tailscale
+DEPENDS+= tailscale>0:../../net/tailscale
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= wireguard-go>0:../../net/wireguard-go
 DEPENDS+= wireguard-tools>0:../../net/wireguard-tools
