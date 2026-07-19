@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.68
+DISTNAME=	desktop-extras-depends-1.69
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -49,5 +49,6 @@ DEPENDS+= wistumbler2-gtk>0:../../net/wistumbler2-gtk
 DEPENDS+= yed>0:../../editors/yed
 
 DEPENDS+= lxqt>0:../../meta-pkgs/lxqt
+DEPENDS+= dolphin>0:../../sysutils/dolphin
 
 .include "../../mk/bsd.pkg.mk"
