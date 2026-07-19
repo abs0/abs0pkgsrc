@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.63
+DISTNAME=	tickets-depends-1.64
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -22,8 +22,6 @@ DEPENDS+= bat>0:../../textproc/bat
 DEPENDS+= entr>0:../../sysutils/entr
 DEPENDS+= fzf>0:../../sysutils/fzf
 DEPENDS+= jq>0:../../devel/jq
-
-DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main ticketing system
 DEPENDS+= mariadb-server>0:../../databases/mariadb118-server

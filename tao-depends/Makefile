@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.22
+DISTNAME=	tao-depends-1.23
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -13,7 +13,6 @@ META_PACKAGE=	yes
 # For IntelliJ
 DEPENDS+= openjdk21>0:../../lang/openjdk21
 DEPENDS+= java-jna>0:../../devel/java-jna
-DEPENDS+= nodejs>0:../../lang/nodejs
 
 # For main TrainAsONE system
 DEPENDS+= postgresql17>0:../../databases/postgresql17
