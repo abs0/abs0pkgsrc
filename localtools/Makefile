@@ -1,4 +1,4 @@
-DISTNAME=	localtools-2.130
+DISTNAME=	localtools-2.131
 CATEGORIES=	local
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -28,8 +28,10 @@ LOCALSHAREDIR=	share/local
 USE_TOOLS+=	perl:run tar
 REPLACE_PERL+=	bin/* NetBSD-bin/*
 
-DEPENDS+=	p5-Modern-Perl>0:../../devel/p5-Modern-Perl
+DEPENDS+=	p5-File-Slurp>0:../../devel/p5-File-Slurp
 DEPENDS+=	p5-JSON-Parse>0:../../converters/p5-JSON-Parse
+DEPENDS+=	p5-Modern-Perl>0:../../devel/p5-Modern-Perl
+DEPENDS+=	p5-Text-CSV_XS>0:../../textproc/p5-Text-CSV_XS
 
 PLIST_SRC=	${WRKDIR}/PLIST
 WRKSRC=		${WRKDIR}
