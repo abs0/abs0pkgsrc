@@ -1,12 +1,12 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	desktop-extras-depends-1.69
+DISTNAME=	desktop-extras-depends-1.70
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
 MAINTAINER=	abs@absd.org
 HOMEPAGE=	http://www.absd.org/
-COMMENT=	Meta package for desktop install
+COMMENT=	Meta package for extra desktop packages
 
 META_PACKAGE=	yes
 
@@ -19,13 +19,6 @@ DEPENDS+= wpa_gui>0:../../net/wpa_gui
 # Desktop dev tools
 DEPENDS+= git-gitk>0:../../devel/git-gitk
 DEPENDS+= sql-workbench>0:../../databases/sql-workbench
-
-# Emulators
-DEPENDS+= dc-tools>0:../../sysutils/dc-tools
-DEPENDS+= fs-uae-launcher>0:../../emulators/fs-uae-launcher
-DEPENDS+= gxemul>0:../../emulators/gxemul
-DEPENDS+= open-simh>0:../../emulators/open-simh
-DEPENDS+= tme>0:../../emulators/tme
 
 # Audio/Video
 DEPENDS+= libdvdcss>0:../../multimedia/libdvdcss
