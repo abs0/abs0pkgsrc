@@ -1,4 +1,4 @@
-DISTNAME=	tao-depends-1.23
+DISTNAME=	tao-depends-1.24
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -15,7 +15,7 @@ DEPENDS+= openjdk21>0:../../lang/openjdk21
 DEPENDS+= java-jna>0:../../devel/java-jna
 
 # For main TrainAsONE system
-DEPENDS+= postgresql17>0:../../databases/postgresql17
+DEPENDS+= postgresql18>0:../../databases/postgresql18
 
 # Network debugging
 DEPENDS+= mitmproxy>0:../../net/mitmproxy
