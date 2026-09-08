@@ -1,4 +1,4 @@
-DISTNAME=	server-depends-1.23
+DISTNAME=	server-depends-1.24
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -25,6 +25,7 @@ DEPENDS+= rclone>0:../../net/rclone
 DEPENDS+= siege>0:../../www/siege
 DEPENDS+= syncthing>0:../../net/syncthing
 DEPENDS+= tailscale>0:../../net/tailscale
+DEPENDS+= gatus>0:../../sysutils/gatus
 DEPENDS+= transmission>0:../../net/transmission
 DEPENDS+= wireguard-go>0:../../net/wireguard-go
 DEPENDS+= wireguard-tools>0:../../net/wireguard-tools
