@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.64
+DISTNAME=	tickets-depends-1.65
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,11 +11,13 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # For IntelliJ
-DEPENDS+= openjdk21>0:../../lang/openjdk21
+DEPENDS+= openjdk25>0:../../wip/openjdk25
 DEPENDS+= java-jna>0:../../devel/java-jna
 
-# In case we need to build j2me (which should be never)
+# In case we need to test anuthing with older jdks
+DEPENDS+= openjdk21>0:../../lang/openjdk21
 DEPENDS+= openjdk11>0:../../lang/openjdk11
+DEPENDS+= openjdk8>0:../../lang/openjdk8
 
 # Some helpful commandline tools
 DEPENDS+= bat>0:../../textproc/bat
