@@ -1,4 +1,4 @@
-DISTNAME=	tickets-depends-1.65
+DISTNAME=	tickets-depends-1.66
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -11,7 +11,7 @@ META_PACKAGE=	yes
 .include "../../mk/bsd.prefs.mk"
 
 # For IntelliJ
-DEPENDS+= openjdk25>0:../../wip/openjdk25
+DEPENDS+= openjdk25>0:../../lang/openjdk25
 DEPENDS+= java-jna>0:../../devel/java-jna
 
 # In case we need to test anuthing with older jdks
