@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.112 2009/01/16 14:40:31 wiz Exp $
 
-DISTNAME=	emulator-depends-1.0
+DISTNAME=	emulator-depends-1.01
 CATEGORIES=	local
 MASTER_SITES=	# empty
 
@@ -18,6 +18,6 @@ DEPENDS+= gxemul>0:../../emulators/gxemul
 DEPENDS+= open-simh>0:../../emulators/open-simh
 DEPENDS+= tme>0:../../emulators/tme
 
-DEPENDS+= fs-uae-launcher>0:../../emulators/fs-uae-launcher
+DEPENDS+= fs-uae>0:../../emulators/fs-uae
 
 .include "../../mk/bsd.pkg.mk"
